@@ -22,6 +22,7 @@ format:
     theme: estilos.scss
     toc: true
     number-sections: true
+    lang: es
     language:
       es:
         toc-title-website: "Contenido"
