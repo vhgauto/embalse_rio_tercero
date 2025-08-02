@@ -19,19 +19,19 @@ editor_options:
 
 - Mgtr. Víctor Gauto [<span class="simple-icons--orcid"></span>](https://orcid.org/0000-0001-9960-8558)
 
-# Instituciones
+## Instituciones
 
 :::: {.column-page}
 
 ::: {.eqi-container}
 
-![](img/utn.png){height=75px}
+![](img/utn.png){height=80px}
 
-![](img/unne.png){height=75px}
+![](img/unne.png){height=80px}
 
-![](img/conicet.png){height=75px}
+![](img/fqyn.png){height=80px}
 
-![](img/unc.svg){height=75px}
+![](img/conicet.png){height=80px}
 
 :::
 
@@ -39,13 +39,25 @@ editor_options:
 
 ::: {.eqi-container}
 
-![](img/conae.png){height=75px}
+![](img/unc.svg){height=80px}
 
-![](img/gistaq.png){height=75px}
+![](img/conae.png){height=80px}
 
-![](img/gulich.png){height=75px}
+![](img/gistaq.png){height=80px}
 
-![](img/iidthh.png){height=75px}
+![](img/unrc.png){height=80px}
+
+:::
+
+<br>
+
+::: {.eqi-container}
+
+![](img/icbia.png){height=80px}
+
+![](img/gulich.png){height=80px}
+
+![](img/iidthh.png){height=80px}
 
 :::
 
