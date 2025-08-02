@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="keywords" content="Calidad del agua, Teledetección satelital">
+
+<title>Proyecto Río Tercero</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<link href="./img/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-57a8ca20cbe09cdd4ec06ca9647611ab.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d2a6a7ddc534ef63d519d1693bcba431.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Proyecto Río Tercero</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">Integrantes</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://github.com/vhgauto/embalse_rio_tercero" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contenido</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción"><span class="header-section-number">1</span> Introducción</a></li>
+  <li><a href="#área-de-estudio" id="toc-área-de-estudio" class="nav-link" data-scroll-target="#área-de-estudio"><span class="header-section-number">2</span> Área de estudio</a>
+  <ul class="collapse">
+  <li><a href="#ubicación-geográfica" id="toc-ubicación-geográfica" class="nav-link" data-scroll-target="#ubicación-geográfica"><span class="header-section-number">2.1</span> Ubicación geográfica</a></li>
+  <li><a href="#clima" id="toc-clima" class="nav-link" data-scroll-target="#clima"><span class="header-section-number">2.2</span> Clima</a></li>
+  <li><a href="#región-fitogeográfica" id="toc-región-fitogeográfica" class="nav-link" data-scroll-target="#región-fitogeográfica"><span class="header-section-number">2.3</span> Región fitogeográfica</a>
+  <ul class="collapse">
+  <li><a href="#piso-del-bosque-serrano" id="toc-piso-del-bosque-serrano" class="nav-link" data-scroll-target="#piso-del-bosque-serrano"><span class="header-section-number">2.3.1</span> Piso del Bosque Serrano</a></li>
+  <li><a href="#piso-de-matorral-serrano" id="toc-piso-de-matorral-serrano" class="nav-link" data-scroll-target="#piso-de-matorral-serrano"><span class="header-section-number">2.3.2</span> Piso de Matorral Serrano</a></li>
+  <li><a href="#piso-de-pastizal-serrano" id="toc-piso-de-pastizal-serrano" class="nav-link" data-scroll-target="#piso-de-pastizal-serrano"><span class="header-section-number">2.3.3</span> Piso de Pastizal Serrano</a></li>
+  </ul></li>
+  <li><a href="#población" id="toc-población" class="nav-link" data-scroll-target="#población"><span class="header-section-number">2.4</span> Población</a></li>
+  <li><a href="#hidrografía-y-caracterización-del-sistema-de-drenaje" id="toc-hidrografía-y-caracterización-del-sistema-de-drenaje" class="nav-link" data-scroll-target="#hidrografía-y-caracterización-del-sistema-de-drenaje"><span class="header-section-number">2.5</span> Hidrografía y Caracterización del sistema de drenaje</a>
+  <ul class="collapse">
+  <li><a href="#sub-cuencas-que-conforman-el-área-de-estudio" id="toc-sub-cuencas-que-conforman-el-área-de-estudio" class="nav-link" data-scroll-target="#sub-cuencas-que-conforman-el-área-de-estudio"><span class="header-section-number">2.5.1</span> Sub-cuencas que conforman el área de estudio</a></li>
+  </ul></li>
+  <li><a href="#caracterización-ambiental-del-embalse-río-tercero" id="toc-caracterización-ambiental-del-embalse-río-tercero" class="nav-link" data-scroll-target="#caracterización-ambiental-del-embalse-río-tercero"><span class="header-section-number">2.6</span> Caracterización Ambiental del embalse Río Tercero</a></li>
+  </ul></li>
+  <li><a href="#eutroficación" id="toc-eutroficación" class="nav-link" data-scroll-target="#eutroficación"><span class="header-section-number">3</span> Eutroficación</a></li>
+  <li><a href="#estado-trófico" id="toc-estado-trófico" class="nav-link" data-scroll-target="#estado-trófico"><span class="header-section-number">4</span> Estado trófico</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Proyecto Río Tercero</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Fecha de publicación</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2 de agosto de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+<div>
+  <div class="keywords">
+    <div class="block-title">Palabras clave</div>
+    <p>Calidad del agua, Teledetección satelital</p>
+  </div>
+</div>
+
+</header>
+
+
+<section id="introducción" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introducción</h1>
+<p>La provincia de Córdoba cuenta con una gran diversidad de sistemas acuáticos que son utilizados para satisfacer diversas necesidades del medio ambiente y la sociedad, siendo además indicadores del cambio climático. Entre estos sistemas, se destacan los embalses o cuerpos de agua artificiales, que en la provincia abarcan más de 16000 ha y conforman una reserva con una capacidad máxima de almacenamiento superior a 2600 hm³ de agua. Entre las funciones más destacadas de estos sistemas multipropósitos se destaca el abastecimiento de agua para consumo de gran parte de la provincia, la generación de energía (hidroeléctrica y nuclear), el control de crecidas, la provisión de hábitat, riego, pesca, turismo, actividades recreacionales y conservación de la biodiversidad.</p>
+</section>
+<section id="área-de-estudio" class="level1 page-columns page-full" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Área de estudio</h1>
+<section id="ubicación-geográfica" class="level2 page-columns page-full" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="ubicación-geográfica"><span class="header-section-number">2.1</span> Ubicación geográfica</h2>
+<p>La cuenca del embalse Río Tercero, que posee una superficie aproximada de 3.300 km2, se ubicada en el ámbito de las sierras Pampeanas de la provincia de Córdoba, formando parte del Valle de Calamuchita (figura <a href="#fig-roi" class="quarto-xref">2.1</a>).</p>
+<div class="page-columns page-full">
+<div id="fig-roi" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-roi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fig/Picture1.jpg" class="img-fluid figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.1: Ubicación de la región de interés
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="clima" class="level2 page-columns page-full" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="clima"><span class="header-section-number">2.2</span> Clima</h2>
+<p>El clima de la cuenca es típico de la zona templada, con caracteres específicos de una provincia mediterránea. Puntualmente, responde a la caracterización general para las Sierras de Córdoba realizada por Capitanelli (1979), con variaciones puntuales dependientes de los aspectos geomorfológicos y en donde el relieve es el factor que rige las condiciones hídricas y su variación estacional. Esta cuenca, presenta una temperatura atmosférica media es de 16.5 °C, con los máximos valores registrados en verano (~40.0 °C) y los mínimos en invierno (~-8.0 °C) (Figura 2.a).</p>
+<div class="page-columns page-full">
+<div class="columns page-columns page-full">
+<div id="fig-clima" class="quarto-layout-panel page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-clima-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<div class="quarto-layout-row column-page">
+<div class="column quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-clima" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-ext-diaria" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ext-diaria-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/Picture2.jpg" class="img-fluid figure-img" data-ref-parent="fig-clima">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ext-diaria-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Temperaturas extremas diarias
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="column quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-clima" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-clima-medio" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-clima-medio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/Picture3.jpg" class="img-fluid figure-img" data-ref-parent="fig-clima">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-clima-medio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Valores climatológicos medios (1991-2020)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clima-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.2: Figura clima
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="región-fitogeográfica" class="level2 page-columns page-full" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="región-fitogeográfica"><span class="header-section-number">2.3</span> Región fitogeográfica</h2>
+<p>La cuenca de alimentación del embalse Río Tercero, está comprendida dentro de la Provincia Chaqueña, Dominio Chaqueño, de la Región Neotropical (Cabrera 1976). El Dominio Chaqueño, es una región boscosa que ocupa más de 1000000 de km2 en el centro de América del Sur. En la República Argentina, este dominio se extiende prácticamente desde el Atlántico hasta la cordillera, y desde el límite con Paraguay hasta el norte de Chubut (Figura 3). Su amplio gradiente climático y características geológicas y topográficas únicas generan una gran diversidad de ambientes entre los que se incluyen extensas llanuras, sabanas secas e inundables, esteros, bañados, salitrales y una gran extensión y diversidad de bosques y arbustales (Aguirre et al.&nbsp;2011).</p>
+<div class="page-columns page-full">
+<div id="fig-fitogeo" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-fitogeo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fig/Picture4.jpg" class="img-fluid figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fitogeo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.3: Regiones fitogeográficas de la República Argentina. En el recuadro se caracteriza la zona de estudio
+</figcaption>
+</figure>
+</div>
+</div>
+<section id="piso-del-bosque-serrano" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="piso-del-bosque-serrano"><span class="header-section-number">2.3.1</span> Piso del Bosque Serrano</h3>
+<p>Constituye una franja que se extiende desde los 650 msnm hasta los 850 msnm aproximadamente, hacia ambos lados de los valles de San Ignacio y La Cruz. La cobertura original del bosque era cercana al 25% de la superficie total. Debido a los disturbios a que fuera sometido, la composición florística y estructura original variaron en grado diferente a lo largo de toda el área de estudio, determinando distintas unidades fitofisonómicas: Bosque Serrano moderadamente alterado, Bosque Serrano muy alterado y Mosaico de vegetación leñosa nativa y cultivos.</p>
+</section>
+<section id="piso-de-matorral-serrano" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="piso-de-matorral-serrano"><span class="header-section-number">2.3.2</span> Piso de Matorral Serrano</h3>
+<p>Abarca desde los 800 hasta los 950 msnm aproximadamente. No hay una distinción clara entre el límite del piso de bosque y el matorral, de tal modo que conforma una fisonomía de ecotono. Luego de superar dicho ecotono, el matorral pasa a dominar el paisaje. Este se caracteriza por ser un arbustal bajo, que no supera los 2 m, no espinoso y con predominio de romerillo, romerito y carqueja. Entre estos se entremezclan barba de tigre y espinillos de porte bajo y muy espaciados. Los árboles quedan restringidos a sitios que de alguna manera favorecen su desarrollo o los protegen de su destrucción.</p>
+</section>
+<section id="piso-de-pastizal-serrano" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="piso-de-pastizal-serrano"><span class="header-section-number">2.3.3</span> Piso de Pastizal Serrano</h3>
+<p>Está constituido por:</p>
+<section id="mosaico-de-pastizal-y-matorral-serrano" class="level4" data-number="2.3.3.1">
+<h4 data-number="2.3.3.1" class="anchored" data-anchor-id="mosaico-de-pastizal-y-matorral-serrano"><span class="header-section-number">2.3.3.1</span> Mosaico de pastizal y matorral serrano</h4>
+<p>El cual es considerado como una típica comunidad de ecotono, que está definido entre los 900 y 1.000 msnm, alternando entre pastizales y matorrales bajos difíciles de considerar por separado. También puede ser definido como un pastizal degradado, favorecido por el sobrepastoreo, donde se produce una invasión de las especies no apetecibles sobre los elementos del pastizal.</p>
+</section>
+<section id="pastizal" class="level4" data-number="2.3.3.2">
+<h4 data-number="2.3.3.2" class="anchored" data-anchor-id="pastizal"><span class="header-section-number">2.3.3.2</span> Pastizal</h4>
+<p>Desde los 900 msnm aproximadamente hasta la divisoria de aguas, dominan fisonómicamente los pastizales autóctonos. Por lo general, son zonas muy pastoreadas, donde predominan pajonales con especies de los géneros Stipa y Festuca. Además, se observan manchones de Schyzachirium sp que le dan una tonalidad rojiza al pastizal. En la porción norte de este piso altitudinal se encuentran forestaciones, que han diversificado y transformado el paisaje.</p>
+</section>
+<section id="mosaico-de-roca-aflorante-y-pastizal" class="level4" data-number="2.3.3.3">
+<h4 data-number="2.3.3.3" class="anchored" data-anchor-id="mosaico-de-roca-aflorante-y-pastizal"><span class="header-section-number">2.3.3.3</span> Mosaico de roca aflorante y pastizal</h4>
+<p>En las áreas con este tipo de fisonomía podría considerarse que la cubierta vegetal juega un rol secundario en lo que se refiere a controlar el arrastre por escurrimiento, y en tal sentido es importante su consideración.</p>
+</section>
+<section id="vegetación-de-quebradas-profundas" class="level4" data-number="2.3.3.4">
+<h4 data-number="2.3.3.4" class="anchored" data-anchor-id="vegetación-de-quebradas-profundas"><span class="header-section-number">2.3.3.4</span> Vegetación de quebradas profundas</h4>
+<p>Las quebradas están pobladas de árboles que pueden formar bosquecillos donde predominan tabaquillos, orco-molles, molles; o bien presentarse aislados, asociados a romerillo, romerito, cortaderas, bromeliáceas y gramíneas varias, formando comunidades mixtas.</p>
+</section>
+</section>
+</section>
+<section id="población" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="población"><span class="header-section-number">2.4</span> Población</h2>
+<p>La Tabla 1 presenta la distribución de la población en las localidades de la cuenca del embalse Río Tercero según el Censo Nacional de Población, Hogares y Viviendas realizado por el Instituto Nacional de Estadística y Censo realizado en el año 2022 (INDEC, https://www.indec.gob.ar/). Se enumera un total de 15 localidades, con su respectivo número de habitantes. Entre las localidades con mayor cantidad de habitantes se destacan: Santa Rosa de Calamuchita (19125 habitantes), Villa General Belgrano (11775 hab.), Embalse (9660 hab.), Villa del Dique (5162 hab.) y Villa Rumipal (4015 hab.). Cabe destacar que la mayoría de estas localidades reciben un alto número de turistas durante la temporada de verano, llegando a duplicar el número de habitantes.</p>
+</section>
+<section id="hidrografía-y-caracterización-del-sistema-de-drenaje" class="level2 page-columns page-full" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="hidrografía-y-caracterización-del-sistema-de-drenaje"><span class="header-section-number">2.5</span> Hidrografía y Caracterización del sistema de drenaje</h2>
+<p>El embalse Río Tercero pertenece a un sistema de reservorios encadenados que se origina aguas arribas del mismo. Componen este sistema los embalses: Cerro Pelado, Arroyo Corto, Río Tercero, Cassafousth o Segunda Usina, Reolín o Tercera Usina y el Dique Piedras Moras que completa el sistema (figura <a href="#fig-sist-dique" class="quarto-xref">2.4</a>).</p>
+<div class="page-columns page-full">
+<div id="fig-sist-dique" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sist-dique-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fig/Picture5.png" class="img-fluid figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sist-dique-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.4: Sistema de diques que conforman la cuenca alta del río Tercero
+</figcaption>
+</figure>
+</div>
+</div>
+<p>En cuanto al sistema de drenaje, esta cuenca presenta un diseño íntimamente relacionado a la naturaleza y estructura geológica. Así, en su cuenca alta, la mayor parte del medio receptor se compone de rocas ígneas. Mientras que en la parte media y baja predominan rocas metamórficas, alternando con materiales sedimentarios modernos escasamente distribuidos, particularidad que determina un bajo grado de permeabilidad. Todas estas propiedades determinan la presencia de arroyos de alta pendiente (2 a 8%), con altos caudales y crecientes durante la temporada de lluvias y bajos caudales en otoño-invierno.</p>
+<div id="fig-red-hidro1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-red-hidro1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/Picture6.jpg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-red-hidro1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.5: Red hidrográfica perteneciente al Embalse Río tercero
+</figcaption>
+</figure>
+</div>
+<section id="sub-cuencas-que-conforman-el-área-de-estudio" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="sub-cuencas-que-conforman-el-área-de-estudio"><span class="header-section-number">2.5.1</span> Sub-cuencas que conforman el área de estudio</h3>
+<p>La cuenca del embalse Río Tercero está conformada por cinco sub-cuencas las cuales, de norte a sur, se detallan a continuación (figura <a href="#fig-red-hidro1" class="quarto-xref">2.5</a>):</p>
+<div id="fig-red-hidro2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-red-hidro2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/Picture7.jpg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-red-hidro2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.6: Sub-cuencas que conforman la cuenca del embalse Río Tercero
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="caracterización-ambiental-del-embalse-río-tercero" class="level2 page-columns page-full" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="caracterización-ambiental-del-embalse-río-tercero"><span class="header-section-number">2.6</span> Caracterización Ambiental del embalse Río Tercero</h2>
+<p>El embalse Río Tercero o “Ministro Juan Pistarini” (64° 23’O y 32° 10’S) fue construido durante los años 1927-1934 por los ingenieros Fitz Simon y Posse. En la actualidad el embalse es utilizado para usos múltiples, destacándose la provisión o fuente de agua para consumo humano y animal, riego, generación de energía nuclear e hidroeléctrica, regulación y control de crecidas, actividades recreacionales, náuticas y pesca deportiva.</p>
+<div class="page-columns page-full">
+<div id="fig-tributarios" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-tributarios-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fig/Picture8.jpg" class="img-fluid figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tributarios-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.7: Tributarios del embalse y localidades costeras
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+</section>
+<section id="eutroficación" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Eutroficación</h1>
+<p>Una de las problemáticas más relevantes que afecta a los sistemas acuáticos, tanto en Córdoba como a nivel global, es la eutrofización. Este proceso se define como una secuencia de cambios en los ecosistemas acuáticos, causados por un incremento en la tasa de suministro de nutrientes al agua, principalmente nitrógeno y fósforo, los cuales originan un proceso de deterioro del recurso en forma inmediata (Ryding &amp; Rast 1992). Si bien los procesos eutróficos son parte del ciclo natural de envejecimiento de lagos y embalses, que ocurre de forma lenta e independientemente, la actividad antrópica genera una eutroficación artificial, que es mucho más acelerada y peligrosa (Vasconcelos et al.&nbsp;2006). Así, se origina una desorganización en el normal funcionamiento del ecosistema y se generan una serie de cambios, los cuales acortan la vida útil del cuerpo de agua, afectando los usos y servicios ecosistémicos aportados por estos ambientes. Entre las causas de la eutroficación, se destaca:</p>
+<ul>
+<li>Crecimiento urbano sin el correcto ordenamiento territorial.</li>
+<li>Vertido de efluentes urbanos e industriales sin el correcto tratamiento.</li>
+<li>Aporte directo e indirecto de la actividad agrícola-ganadera (plaguicidas y fertilizantes).</li>
+<li>Aporte de contaminantes por agua de lluvia o materiales atmosféricos.</li>
+<li>Deforestación que genera el aumento de la erosión y la disminución del reciclaje de nutrientes en la cuenca, incrementando su ingreso al cuerpo de agua.</li>
+<li>Incendios forestales y cenizas.</li>
+<li>Descargas térmicas (vertido de efluentes con una temperatura mayor a la del cuerpo de agua). Mientras que las consecuencias más importantes son:</li>
+<li>Crecimiento excesivo de plantas acuáticas, algas y cianobacterias potencialmente tóxicas.</li>
+<li>Incremento en la productividad primaria y en la biomasa.</li>
+<li>Color, olor y sabor desagradables.</li>
+<li>Deterioro o disminución de la calidad del agua para diversos usos.</li>
+<li>Alteración en el equilibrio químico natural del agua.</li>
+<li>Disminución del oxígeno disuelto y de la penetración de la luz.</li>
+<li>Aumento en la concentración de sólidos y nutrientes en la columna de agua, colmatación del sistema.</li>
+<li>Disminución de la biodiversidad.</li>
+<li>Mortandad masiva de peces y de la biota en general.</li>
+<li>Pérdida económicas y de los usos potenciales del recurso.</li>
+</ul>
+</section>
+<section id="estado-trófico" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Estado trófico</h1>
+<p>Para describir la calidad general de un lago o embalse, se usa el término estado trófico. Este término es definido como la tasa de materia orgánica que es proporcionada por o para un cuerpo de agua (Carlson 1984). En otras palabras, el estado trófico es un indicador de la salud del sistema y puede ser clasificado de la siguiente manera (Ryding &amp; Rast, 1992):</p>
+<div id="fig-evolucion-trofica" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-evolucion-trofica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/Picture9.jpg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-evolucion-trofica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4.1: Evolución trófica de un reservorio.
+</figcaption>
+</figure>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Subir</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Proyecto Río Tercero</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
