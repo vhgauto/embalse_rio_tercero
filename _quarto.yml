@@ -22,6 +22,8 @@ format:
     theme: estilos.scss
     toc: true
     toc-location: left
+    bibliography: bibliografia/biblio.bib
+    csl: bibliografia/ieee.csl
     number-sections: true
     lang: es
     language:
