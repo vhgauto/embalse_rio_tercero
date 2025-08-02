@@ -8,6 +8,9 @@ editor_options:
   chunk_output_type: console
 ---
 
+::: {.column-margin}
+:::
+
 # Directores
 
 - Dr. Matías Bonansea [<span class="simple-icons--orcid"></span>](https://orcid.org/0000-0003-1953-2595)
