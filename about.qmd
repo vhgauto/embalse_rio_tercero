@@ -1,0 +1,53 @@
+---
+title: "Equipo de trabajo"
+format:
+  html:
+    toc: false
+    link-external-newwindow: true
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+---
+
+## Directores
+
+- Dr. Matías Bonansea [<span class="simple-icons--orcid"></span>](https://orcid.org/0000-0003-1953-2595)
+
+- Dr. Anabella Ferral [<span class="simple-icons--orcid"></span>](https://orcid.org/0000-0002-9383-7728)
+
+## Becarios
+
+- Mgtr. Víctor Gauto [<span class="simple-icons--orcid"></span>](https://orcid.org/0000-0001-9960-8558)
+
+# Instituciones
+
+:::: {.column-page}
+
+::: {.eqi-container}
+
+![](img/utn.png){height=75px}
+
+![](img/unne.png){height=75px}
+
+![](img/conicet.png){height=75px}
+
+![](img/unc.svg){height=75px}
+
+:::
+
+<br>
+
+::: {.eqi-container}
+
+![](img/conae.png){height=75px}
+
+![](img/gistaq.png){height=75px}
+
+![](img/gulich.png){height=75px}
+
+![](img/iidthh.png){height=75px}
+
+:::
+
+::::
+

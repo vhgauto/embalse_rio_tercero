@@ -1,0 +1,36 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Proyecto Río Tercero"
+  back-to-top-navigation: true
+  search: false
+  page-footer:
+    right: "Proyecto Río Tercero"
+  favicon: img/favicon.png
+  navbar:
+    right:
+      - href: about.qmd
+        text: "Integrantes"
+    tools:
+      - icon: github
+        href: https://github.com/vhgauto/embalse_rio_tercero
+
+format:
+  html:
+    theme: estilos.scss
+    toc: true
+    number-sections: true
+    language:
+      es:
+        toc-title-website: "Contenido"
+        back-to-top: "Subir"
+    link-external-newwindow: true
+    crossrefs-hover: false
+    anchor-sections: true
+crossref:
+  chapters: true
+
+
+
