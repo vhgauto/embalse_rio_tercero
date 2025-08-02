@@ -20,7 +20,7 @@ La provincia de Córdoba cuenta con una gran diversidad de sistemas acuáticos q
 
 La cuenca del embalse Río Tercero, que posee una superficie aproximada de 3.300 km2, se ubicada en el ámbito de las sierras Pampeanas de la provincia de Córdoba, formando parte del Valle de Calamuchita (@fig-roi).
 
-::: {.column-page}
+::: {.column-page-right}
 
 ![Ubicación de la región de interés](fig/Picture1.jpg){#fig-roi}
 
@@ -30,7 +30,7 @@ La cuenca del embalse Río Tercero, que posee una superficie aproximada de 3.300
 
 El clima de la cuenca es típico de la zona templada, con caracteres específicos de una provincia mediterránea. Puntualmente, responde a la caracterización general para las Sierras de Córdoba realizada por Capitanelli (1979), con variaciones puntuales dependientes de los aspectos geomorfológicos y en donde el relieve es el factor que rige las condiciones hídricas y su variación estacional. Esta cuenca, presenta una temperatura atmosférica media es de 16.5 °C, con los máximos valores registrados en verano (~40.0 °C) y los mínimos en invierno (~-8.0 °C) (@fig-ext-diaria).
 
-::: {.column-page}
+::: {.column-page-right}
 
 ::: {.columns}
 
@@ -56,7 +56,7 @@ Figuras climatológicas. Fuente <https://www.smn.gob.ar/estadisticas>
 
 La cuenca de alimentación del embalse Río Tercero, está comprendida dentro de la Provincia Chaqueña, Dominio Chaqueño, de la Región Neotropical (Cabrera 1976). El Dominio Chaqueño, es una región boscosa que ocupa más de 1000000 de km2 en el centro de América del Sur. En la República Argentina, este dominio se extiende prácticamente desde el Atlántico hasta la cordillera, y desde el límite con Paraguay hasta el norte de Chubut (@fig-fitogeo). Su amplio gradiente climático y características geológicas y topográficas únicas generan una gran diversidad de ambientes entre los que se incluyen extensas llanuras, sabanas secas e inundables, esteros, bañados, salitrales y una gran extensión y diversidad de bosques y arbustales (Aguirre et al. 2011). 
 
-::: {.column-page}
+::: {.column-page-right}
 
 ![Regiones fitogeográficas de la República Argentina. En el recuadro se caracteriza la zona de estudio](fig/Picture4.jpg){#fig-fitogeo}
 
@@ -98,7 +98,7 @@ La Tabla 1 presenta la distribución de la población en las localidades de la c
 
 El embalse Río Tercero pertenece a un sistema de reservorios encadenados que se origina aguas arribas del mismo. Componen este sistema los embalses: Cerro Pelado, Arroyo Corto, Río Tercero, Cassafousth o Segunda Usina, Reolín o Tercera Usina y el Dique Piedras Moras que completa el sistema (@fig-sist-dique).
 
-::: {.column-page}
+::: {.column-page-right}
 
 ![Sistema de diques que conforman la cuenca alta del río Tercero](fig/Picture5.png){#fig-sist-dique}
 
@@ -118,7 +118,7 @@ La cuenca del embalse Río Tercero está conformada por cinco sub-cuencas las cu
 
 El embalse Río Tercero o “Ministro Juan Pistarini” (64° 23’O y 32° 10’S) fue construido durante los años 1927-1934 por los ingenieros Fitz Simon y Posse. En la actualidad el embalse es utilizado para usos múltiples, destacándose la provisión o fuente de agua para consumo humano y animal, riego, generación de energía nuclear e hidroeléctrica, regulación y control de crecidas, actividades recreacionales, náuticas y pesca deportiva. 
 
-::: {.column-page}
+::: {.column-page-right}
 
 ![Tributarios del embalse y localidades costeras](fig/Picture8.jpg){#fig-tributarios}
 
