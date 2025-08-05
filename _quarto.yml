@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs
+  render: 
+    - "*.qmd"
+    - "!template_informe.qmd"
 
 website:
   title: "Proyecto Río Tercero"
@@ -13,6 +16,9 @@ website:
     right:
       - href: about.qmd
         text: "Integrantes"
+    left: 
+      - href: informes.qmd
+        text: "Informes"
     tools:
       - icon: github
         href: https://github.com/vhgauto/embalse_rio_tercero
