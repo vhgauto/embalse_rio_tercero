@@ -1,6 +1,7 @@
 ej/
 .vscode/
 /.quarto/
+esri.tif
 
 # History files
 .Rhistory
