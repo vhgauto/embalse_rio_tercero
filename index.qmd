@@ -154,7 +154,7 @@ Para describir la calidad general de un lago o embalse, se usa el término estad
 
 ![Evolución trófica de un reservorio.](fig/Picture9.jpg){#fig-evolucion-trofica}
 
-# Bibliografía
+# Bibliografía {.unnumbered}
 
 ::: {#refs}
 :::
