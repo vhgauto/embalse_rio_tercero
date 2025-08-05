@@ -1,0 +1,115 @@
+---
+title: "INFORME MENSUAL DEL PROGRAMA DE MONITOREO DEL EMBALSE SAN ROQUE Y SU CUENCA"
+format: 
+  typst:
+    lang: es
+    number-sections: false
+    papersize: a4
+    template-partials: 
+      - typst/typst-show.typ
+      - typst/typst-template.typ
+author: 
+  - name: "Matías Bonansea"
+    affiliation: "ICBIA"
+  - name: "Víctor Gauto"
+    affiliation: "GISTAQ"
+execute: 
+  eval: true
+  warning: false
+  echo: false
+params:
+  fecha: 20089
+---
+
+```{r}
+library(tidyverse)
+library(terra)
+library(gt)
+```
+
+```{=typst}
+#show heading: it => [
+  #set align(left)
+  #set text(13pt, weight: "regular", font: "Domine")
+  #block(smallcaps(it.body))
+]
+```
+
+```{=typst} 
+#align(center, text(16pt, font: "Domine")[
+  INFORME: *`{r} toupper(format(as.Date(params$fecha), "%B %Y"))`*
+])
+```
+## FUENTES DE DATOS E INFORMACIÓN
+
+**Diseño**: mediciones en el embalse (azul) y en los ríos tributarios (blanco). En esta ocasión se realiza monitoreo reducido del embalse y no de ríos debido a imprevistos (desperfectos de vehículo y condiciones ventosas).
+
+**Mediciones a campo**: transparencia, temperatura, conductividad, oxígeno disuelto, pH y turbidez. Se agregan observaciones de campo.
+
+## MEDICIONES Y OBSERVACIONES A CAMPO 
+
+```{r}
+#| fig-cap: "Gráfico de ejemplo"
+
+faithful |>
+  as_tibble() |>
+  ggplot(aes(x = eruptions, y = waiting)) +
+  geom_point(color = "darkviolet", alpha = .7, size = 2) +
+  geom_smooth(
+    se = FALSE,
+    method = "loess",
+    formula = y ~ x,
+    color = "darkgreen"
+  ) +
+  labs(x = "Eje x", y = "Eje y") +
+  theme_bw()
+```
+
+## INDICE DE CALIDAD EXPEDITIVO 
+
+::: {#tbl-tabla}
+
+```{r}
+#| output-location: column
+
+head(faithful) |>
+  knitr::kable(
+    format = "pipe",
+    col.names = c("Eruptions", "Waiting")
+  )
+```
+
+Tabla ejemplo
+
+:::
+
+## SERIE DE IMÁGENES SATELITALES 
+
+```{r}
+#| eval: false
+
+p <- data.frame(
+  lat = -32.210506,
+  lon = -64.461328
+)
+
+v <- vect(p, geom = c("lon", "lat"), crs = "EPSG:4326")
+b <- buffer(v, 9000, quadsegs = 500) |>
+  ext() |>
+  vect(crs = "EPSG:4326")
+
+e <- maptiles::get_tiles(
+  b,
+  provider = "Esri.WorldImagery",
+  zoom = 14,
+  crop = TRUE
+)
+```
+
+```{r}
+#| fig-cap: "Imagen satelital"
+#| fig-width: 9
+
+e <- rast("esri.tif")
+plotRGB(e)
+```

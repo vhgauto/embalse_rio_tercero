@@ -1,0 +1,54 @@
+---
+title: "Informes"
+format:
+  html:
+    toc: false
+    number-sections: false
+editor_options: 
+  chunk_output_type: console
+execute: 
+  eval: true
+  echo: false
+  warning: false
+---
+
+::: {.column-margin}
+:::
+
+# Estado de calidad del agua
+
+## 2025
+
+```{r}
+library(tidyverse)
+
+informes_pdf <- list.files("informes/", full.names = TRUE)
+
+fechas_txt <- purrr::map_chr(
+  informes_pdf,
+  ~ stringr::str_remove(.x, "informes/") |>
+    stringr::str_remove(".pdf") %>%
+    paste0(., "-01")
+) |>
+  as.Date() |>
+  # ymd() |>
+  sort() |>
+  rev() |>
+  format("%B de %Y") |>
+  stringr::str_to_sentence()
+
+informes_links <- paste0("[", fechas_txt, "](", informes_pdf, ")")
+```
+
+```{r}
+#| output: asis
+
+purrr::walk(
+  informes_links,
+  ~ cat("- ", .x, "\n")
+)
+```
+
+
+
+
