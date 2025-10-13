@@ -1,0 +1,331 @@
+library(rstac)
+library(terra)
+
+fecha_actual <- read_csv("datos/d.csv", show_col_types = FALSE) |>
+  filter(month(fecha) == mes_actual & year(fecha) == año_actual) |>
+  distinct(fecha) |>
+  pull(fecha)
+
+earthdatalogin::edl_netrc()
+
+s <- stac("https://cmr.earthdata.nasa.gov/stac/LPCLOUD/")
+
+HLS_col <- list("HLSS30_2.0", "HLSL30_2.0")
+
+roi <- terra::vect("vector/roi_embalse.geojson") |>
+  project("EPSG:4326")
+roi_extent <- terra::ext(roi)
+bbox <- c(roi_extent$xmin, roi_extent$ymin, roi_extent$xmax, roi_extent$ymax)
+
+roi_datetime <- paste0(
+  fecha_actual - 2,
+  "T00:00:00Z/",
+  fecha_actual + 2,
+  "T23:59:59Z"
+)
+
+items <- s |>
+  stac_search(
+    collections = HLS_col,
+    bbox = bbox,
+    datetime = roi_datetime,
+    limit = 100
+  ) |>
+  post_request()
+
+f_fecha_item <- function(E) {
+  items$features[[E]]$properties$start_datetime |>
+    str_sub(1, 10) |>
+    ymd()
+}
+
+fechas_items <- map_vec(1:length(items$features), f_fecha_item)
+
+fecha_i <- which.min(abs(fechas_items - fecha_actual))
+
+fecha_hls <- fechas_items[fecha_i]
+
+sf_items <- items_as_sf(items)
+granule_id <- sapply(items$features, function(feature) feature$id)
+fecha_feature <- map_vec(sf_items$datetime, \(Z) ymd(str_sub(Z, 1, 10)))
+sf_items <- cbind(
+  granule = granule_id,
+  fecha_feature = fecha_feature,
+  sf_items
+)
+
+extract_asset_urls <- function(feature) {
+  collection_id <- feature$collection
+  if (collection_id == "HLSS30_2.0") {
+    bands = c("B01", "B02", "B03", "B04", "B8A", "B11", "B12", "Fmask")
+  } else if (collection_id == "HLSL30_2.0") {
+    bands = c("B01", "B02", "B03", "B04", "B05", "B06", "B07", "Fmask")
+  }
+  sapply(bands, function(band) feature$assets[[band]]$href)
+}
+
+asset_urls <- t(sapply(items$features, extract_asset_urls))
+
+bandas_nombres <- c(
+  "aerosol",
+  "blue",
+  "green",
+  "red",
+  "nir",
+  "swir1",
+  "swir2",
+  "fmask"
+)
+colnames(asset_urls) <- bandas_nombres
+sf_items <- cbind(sf_items, asset_urls) |>
+  filter(fecha_feature == fecha_hls)
+
+if (nrow(sf_items) > 1) {
+  sf_items <- dplyr::filter(sf_items, str_detect(granule, "L30"))
+}
+
+setGDALconfig("GDAL_HTTP_UNSAFESSL", value = "YES")
+setGDALconfig("GDAL_HTTP_COOKIEFILE", value = ".rcookies")
+setGDALconfig("GDAL_HTTP_COOKIEJAR", value = ".rcookies")
+setGDALconfig("GDAL_DISABLE_READDIR_ON_OPEN", value = "EMPTY_DIR")
+setGDALconfig("CPL_VSIL_CURL_ALLOWED_EXTENSIONS", value = "TIF")
+
+open_hls <- function(url, roi = NULL, nombre) {
+  # Add VSICURL prefix
+  url <- paste0('/vsicurl/', url)
+  # Retrieve metadata
+  meta <- describe(url)
+  # Check if dataset is Quality Layer (Fmask) - no scaling this asset (int8 datatype)
+  is_fmask <- any(grep("Fmask", meta))
+  # Check if Scale is present in band metadata
+  will_autoscale <- any(grep("Scale:", meta))
+  # Read the raster
+  r <- rast(url)
+  names(r) <- nombre
+  # Apply Scale Factor if necessary
+  if (!will_autoscale && !is_fmask) {
+    print(paste(
+      "No scale factor found in band metadata.",
+      "Applying scale factor of 0.0001 to",
+      basename(url)
+    ))
+    r <- r * 0.0001
+    names(r) <- nombre
+  }
+  # Crop if roi specified
+  if (!is.null(roi)) {
+    # Reproject roi to match crs of r
+    roi_reproj <- project(roi, crs(r))
+    r <- mask(crop(r, roi_reproj), roi_reproj)
+    names(r) <- nombre
+  }
+  return(r)
+}
+
+aerosol_stack <- lapply(
+  sf_items$aerosol,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[1]
+)
+blue_stack <- lapply(
+  sf_items$blue,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[2]
+)
+green_stack <- lapply(
+  sf_items$green,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[3]
+)
+red_stack <- lapply(
+  sf_items$red,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[4]
+)
+nir_stack <- lapply(
+  sf_items$nir,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[5]
+)
+swir1_stack <- lapply(
+  sf_items$swir1,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[6]
+)
+swir2_stack <- lapply(
+  sf_items$swir2,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[7]
+)
+fmask_stack <- lapply(
+  sf_items$fmask,
+  open_hls,
+  roi = roi,
+  nombre = bandas_nombres[8]
+)
+
+selected_bit_nums <- c(1, 2, 3, 4)
+
+build_mask <- function(fmask, selected_bit_nums) {
+  # Create a mask of all zeros
+  mask <- rast(fmask, vals = 0)
+  for (b in selected_bit_nums) {
+    # Apply Bitwise AND to fmask values and selected bit numbers
+    mask_temp <- app(fmask, function(x) bitwAnd(x, bitwShiftL(1, b)) > 0)
+    # Update Mask to maintain only 1 layer with bitwise OR
+    mask <- mask | mask_temp
+  }
+  return(mask)
+}
+
+qmask_stack <- lapply(
+  fmask_stack,
+  build_mask,
+  selected_bit_nums = selected_bit_nums
+)
+
+f_masked <- function(W) {
+  mapply(
+    function(x, y) {
+      mask(x, y, maskvalue = TRUE, updatevalue = NA)
+    },
+    W,
+    qmask_stack,
+    SIMPLIFY = FALSE
+  )
+}
+
+aerosol_masked <- f_masked(aerosol_stack)
+blue_masked <- f_masked(blue_stack)
+green_masked <- f_masked(green_stack)
+red_masked <- f_masked(red_stack)
+nir_masked <- f_masked(nir_stack)
+swir1_masked <- f_masked(swir1_stack)
+swir2_masked <- f_masked(swir2_stack)
+fmask_masked <- f_masked(fmask_stack)
+
+f_recorte <- function(Q) {
+  r <- rast(
+    list(
+      aerosol_masked[[Q]],
+      blue_masked[[Q]],
+      green_masked[[Q]],
+      red_masked[[Q]],
+      nir_masked[[Q]],
+      swir1_masked[[Q]],
+      swir2_masked[[Q]]
+    )
+  )
+}
+
+lista_recortes <- f_recorte(1)
+
+fecha_recorte <- filter(
+  sf_items,
+  str_detect(granule, str_sub(unique(varnames(lista_recortes))[1], 1, 29))
+)$datetime |>
+  str_sub(1, 10) |>
+  gsub(pattern = "-", replacement = "", x = _)
+
+f_write_raster <- function(Y) {
+  writeRaster(Y, paste0("recortes/", fecha_recorte, ".tif"), overwrite = TRUE)
+  print(ymd(fecha_recorte))
+}
+
+f_write_raster(lista_recortes)
+
+# temperatura ------------------------------------------------------------
+
+items_temp <- s |>
+  stac_search(
+    collections = "HLSL30_2.0",
+    bbox = bbox,
+    datetime = roi_datetime,
+    limit = 100
+  ) |>
+  post_request()
+
+sf_items_temp <- items_as_sf(items_temp)
+granule_id_temp <- sapply(items_temp$features, function(feature) feature$id)
+fecha_feature_temp <- map_vec(sf_items_temp$datetime, \(Z) {
+  ymd(str_sub(Z, 1, 10))
+})
+sf_items_temp <- cbind(
+  granule = granule_id_temp,
+  fecha_feature = fecha_feature_temp,
+  sf_items_temp
+)
+
+extract_asset_urls_temp <- function(feature) {
+  # collection_id <- feature$collection
+  # if (collection_id == "HLSS30_2.0") {
+  #   bands = c("B01")
+  # } else if (collection_id == "HLSL30_2.0") {
+  #   bands = c("B10")
+  # }
+  sapply("B10", function(band) feature$assets[[band]]$href)
+}
+
+asset_urls_temp <- t(sapply(items_temp$features, extract_asset_urls_temp))
+colnames(asset_urls_temp) <- "temperatura"
+sf_items_temp <- cbind(sf_items_temp, asset_urls_temp)
+
+open_hls_temp <- function(url, roi = NULL, nombre) {
+  # Add VSICURL prefix
+  url <- paste0('/vsicurl/', url)
+  # Retrieve metadata
+  # meta <- describe(url)
+  # Check if dataset is Quality Layer (Fmask) - no scaling this asset (int8 datatype)
+  # is_fmask <- any(grep("Fmask", meta))
+  # Check if Scale is present in band metadata
+  # will_autoscale <- any(grep("Scale:", meta))
+  # Read the raster
+  r <- rast(url)
+  names(r) <- nombre
+  # Apply Scale Factor if necessary
+  # if (!will_autoscale && !is_fmask) {
+  #   print(paste(
+  #     "No scale factor found in band metadata.",
+  #     "Applying scale factor of 0.0001 to",
+  #     basename(url)
+  #   ))
+  #   r <- r * 0.0001
+  #   names(r) <- nombre
+  # }
+  # Crop if roi specified
+  if (!is.null(roi)) {
+    # Reproject roi to match crs of r
+    roi_reproj <- project(roi, crs(r))
+    r <- mask(crop(r, roi_reproj), roi_reproj)
+    names(r) <- nombre
+  }
+  return(r)
+}
+
+temp_stack <- open_hls_temp(
+  url = sf_items_temp$temperatura,
+  roi = roi,
+  nombre = "temperatura"
+)
+
+temp_masked <- f_masked(temp_stack)[[1]]
+
+fecha_recorte_temp <- filter(
+  sf_items_temp,
+  str_detect(granule, str_sub(unique(varnames(temp_masked))[1], 1, 29))
+)$datetime |>
+  str_sub(1, 10) |>
+  gsub(pattern = "-", replacement = "", x = _)
+
+writeRaster(
+  temp_masked,
+  paste0("recortes/", fecha_recorte_temp, "_temp.tif"),
+  overwrite = TRUE
+)
