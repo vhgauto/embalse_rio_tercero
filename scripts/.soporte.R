@@ -42,10 +42,10 @@ guardar_png <- function(plot, filename, ancho, alto) {
 }
 
 color_estaciones <- c(
-  otoño = alpha("#FFD200", .4),
-  invierno = alpha("#00A8FF", .4),
-  primavera = alpha("#61BB25", .4),
-  verano = alpha("#FF0018", .4)
+  Otoño = alpha("#FFD200", .4),
+  Invierno = alpha("#00A8FF", .4),
+  Primavera = alpha("#61BB25", .4),
+  Verano = alpha("#FF0018", .4)
 )
 
 tamaño_label_est <- 2.5
