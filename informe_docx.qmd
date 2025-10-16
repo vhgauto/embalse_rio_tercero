@@ -63,13 +63,21 @@ El embalse presentó una coloración del agua clara, sin registrarse la presenci
 A partir de los datos aportados por  <https://www.cba.gov.ar/nivel-dediques-y-embalses/>, se determinó que en la fecha de muestreo el embalse presentó una cota de 45.8 m, localizándose 0.72 m por debajo de la cota vertedero (@fig-cota-año). Se estima que, en la fecha monitoreada, el embalse alcanzó una superficie aproximada de 4134 ha, es decir, 366 ha menos que la superficie correspondiente a la cota del vertedero (4500 ha).
 En base al análisis temporal de la cota del embalse generada para el período comprendido entre los años 2010 a 2025, se observa que el nivel actual es la esperable para la época del año (@fig-cota-tendencia).
 
-::: {#fig-cota layout-ncol=1}
+```{r}
+#| label: fig-cota-año
+#| fig-cap: Nivel de cota vertedero del último año
 
-![Nivel de cota vertedero del último año](fig/fig3a.jpg){#fig-cota-año width="50%"}
+source("scripts/figura_cota_año.R")
+g_cota_año
+```
 
-![Tendencia de cota (2010-2025)](fig/fig3b.jpg){#fig-cota-tendencia width="50%"}
+```{r}
+#| label: fig-cota-tendencia
+#| fig-cap: Tendencia de cota (2010-2025)
 
-:::
+source("scripts/figura_cota_tendencia.R")
+g_cota_hist
+```
 
 Se espera que el nivel de agua continúe descendiendo hasta los meses de octubre-noviembre que es cuando alcanza los valores de cota mínimos, para luego aumentar el nivel embalsado producto de la regulación del mismo y las precipitaciones en la cuenca. Esta tendencia coincide con lo que se registra en los demás embalses de la provincia.
 
