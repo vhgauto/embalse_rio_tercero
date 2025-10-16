@@ -8,6 +8,7 @@ cookies.rds
 test*
 fuentes/
 scripts/.test.R
+officedown*
 
 # History files
 .Rhistory
