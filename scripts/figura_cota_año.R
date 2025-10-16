@@ -33,7 +33,7 @@ min_cota_año <- floor(min(d_cota_año$altura)) - .5
 max_cota_año <- ceiling(max(d_cota_año$altura)) + .5
 
 d_fill <- tibble(
-  ymin = seq(min_cota_año, max_cota_año, length.out = 100)
+  ymin = seq(min_cota_año, max_cota_año, length.out = 200)
 ) |>
   mutate(ymax = lag(ymin)) |>
   drop_na() %>%
@@ -100,14 +100,7 @@ g_cota_año <- ggplot() +
 
 guardar_png(
   plot = g_cota_año,
-  filename = paste0(
-    carpeta_fig,
-    "/figura_cota_año_",
-    año_actual,
-    "_",
-    mes_actual,
-    ".png"
-  ),
+  filename = "figura_cota_año",
   ancho = 5,
-  alto = 3
+  alto = 2
 )

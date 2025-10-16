@@ -1,5 +1,5 @@
 library(tidyverse)
-library(gt)
+# library(gt)
 
 parametros_nombre <- c(
   "temperatura",

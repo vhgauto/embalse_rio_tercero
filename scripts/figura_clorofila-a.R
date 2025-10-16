@@ -1,44 +1,22 @@
-d_clo <- read_csv("datos/d.csv", show_col_types = FALSE) |>
-  filter(param == "cla") |>
+d_clo <- filter(d, param == "cla") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
-  mutate(fecha_label = str_to_sentence(format(fecha, "%b %y"))) |>
-  mutate(fecha_label = fct_reorder(as.character(fecha_label), fecha)) |>
-  drop_na(valor)
-
-d_clo_m <- d_clo |>
+  drop_na(valor) |>
   reframe(
-    m = median(valor),
+    clo_m = median(valor, na.rm = TRUE),
+    clo_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )
 
-# d_est <- expand_grid(
-#   mes = c(3, 6, 9, 12),
-#   año = c(año_actual, año_actual - 1)
-# ) |>
-#   mutate(
-#     estacion = case_match(
-#       mes,
-#       3 + 3 ~ "otoño",
-#       6 + 3 ~ "invierno",
-#       9 + 3 ~ "primavera",
-#       3 ~ "verano"
-#     )
-#   ) |>
-#   mutate(fecha = make_date(year = año, month = mes, day = 21)) |>
-#   arrange(fecha) |>
-#   filter(between(fecha, fecha_i, fecha_f)) |>
-#   mutate(fecha_min = lag(fecha, default = min(d_clo$fecha))) |>
-#   mutate(fecha_max = if_else(fecha == min(fecha), min(d_clo$fecha), fecha)) |>
-#   mutate(fecha_max = if_else(fecha_max == min(fecha), fecha, fecha)) |>
-#   rowwise() |>
-#   mutate(fecha_label = fecha_min + (fecha_max - fecha_min) / 2) |>
-#   ungroup() |>
-#   mutate(
-#     estacion_label = if_else(row_number() == 1, "", str_to_sentence(estacion))
-#   ) |>
-#   mutate(fill = color_estaciones[estacion])
-
-g_clo <- ggplot(d_clo, aes(fecha, valor)) +
+g_clo <- ggplot(d_clo, aes(fecha, clo_m)) +
+  geom_segment(
+    aes(color = "a"),
+    x = fecha_i,
+    xend = fecha_f,
+    y = filter(promedio_tbl, param == "cla")$m,
+    yend = filter(promedio_tbl, param == "cla")$m,
+    linetype = "22",
+    linewidth = .5
+  ) +
   geom_rect(
     data = d_est,
     aes(
@@ -50,34 +28,27 @@ g_clo <- ggplot(d_clo, aes(fecha, valor)) +
     ),
     inherit.aes = FALSE
   ) +
-  stat_summary(
-    geom = "errorbar",
-    fun = "median",
-    fun.min = \(x) median(x) - sd(x),
-    fun.max = \(x) median(x) + sd(x),
+  geom_errorbar(
+    aes(ymin = clo_m - clo_sd, ymax = clo_m + clo_sd, color = "b"),
     linewidth = .25,
-    width = 2
+    width = 2,
+    key_glyph = "crossbar"
   ) +
   geom_smooth(
-    data = d_clo_m,
-    aes(fecha, m),
-    inherit.aes = FALSE,
     method = "loess",
     formula = y ~ x,
-    color = "black",
+    se = FALSE,
     linewidth = .4,
-    span = .5
-  ) +
-  stat_summary(
-    geom = "point",
-    fun = median,
     color = "black",
+    span = .5,
+  ) +
+  geom_point(
+    aes(color = "b"),
     size = 1,
     shape = 21,
     fill = "white",
     stroke = 1
   ) +
-  geom_vline(xintercept = d_est$fecha, linetype = 2, linewidth = .2) +
   geom_text(
     data = d_est,
     aes(fecha_label, I(1.01), label = estacion_label),
@@ -96,14 +67,27 @@ g_clo <- ggplot(d_clo, aes(fecha, valor)) +
     breaks = scales::breaks_width(5),
     labels = scales::label_number(big.mark = ".", decimal.mark = ",")
   ) +
+  scale_color_manual(
+    breaks = c("b", "a"),
+    values = c("black", "dodgerblue"),
+    labels = c("Media mensual", "Media período 2015-2024")
+  ) +
   scale_fill_identity() +
   coord_cartesian(clip = "off") +
-  labs(y = "Transparencia del agua (m)", x = NULL) +
+  labs(
+    y = "Concentración de clorofila-a (mg/m<sup>3</sup>)",
+    x = NULL,
+    color = NULL
+  ) +
   theme_bw(base_size = 8, base_family = "Times New Roman") +
   theme(
     plot.margin = margin(10, 5, 5, 5),
-    legend.position = "none",
+    legend.position = "bottom",
+    legend.box.spacing = unit(0, "mm"),
+    legend.key.spacing.x = unit(10, "mm"),
+    legend.margin = margin(0, 0, 0, 0),
     axis.text = element_text(color = "black"),
+    axis.title.y = ggtext::element_markdown(),
     axis.ticks.x = element_line(),
     panel.grid.minor = element_blank(),
     panel.grid.major.x = element_blank(),
@@ -115,14 +99,7 @@ g_clo <- ggplot(d_clo, aes(fecha, valor)) +
 
 guardar_png(
   plot = g_clo,
-  filename = paste0(
-    carpeta_fig,
-    "/figura_clorofila_",
-    año_actual,
-    "_",
-    mes_actual,
-    ".png"
-  ),
+  filename = "figura_clorofila",
   ancho = 5,
   alto = 3
 )

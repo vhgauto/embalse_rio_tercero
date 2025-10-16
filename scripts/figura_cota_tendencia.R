@@ -28,7 +28,7 @@ min_cota <- floor(min(d_cota$altura)) - .5
 max_cota <- ceiling(max(d_cota$altura)) + .5
 
 d_fill <- tibble(
-  ymin = seq(min_cota, max_cota, length.out = 100)
+  ymin = seq(min_cota, max_cota, length.out = 200)
 ) |>
   mutate(ymax = lag(ymin)) |>
   drop_na() %>%
@@ -92,14 +92,7 @@ g_cota_hist <- ggplot() +
 
 guardar_png(
   plot = g_cota_hist,
-  filename = paste0(
-    carpeta_fig,
-    "/figura_cota_historica_",
-    año_actual,
-    "_",
-    mes_actual,
-    ".png"
-  ),
+  filename = "figura_cota_historica",
   ancho = 5,
-  alto = 3
+  alto = 2
 )

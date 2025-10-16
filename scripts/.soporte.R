@@ -15,7 +15,7 @@ update_geom_defaults("text", aes(family = "Times New Roman"))
 mes_actual <- 6
 año_actual <- 2025
 
-carpeta_fig <- paste0("fig/", año_actual, "-", mes_actual)
+carpeta_fig <- paste0("fig/", año_actual, "-", mes_actual, "/")
 
 if (!dir.exists(carpeta_fig)) {
   dir.create(carpeta_fig)
@@ -35,7 +35,15 @@ alto_fig <- 3
 guardar_png <- function(plot, filename, ancho, alto) {
   ggsave(
     plot = plot,
-    filename = filename,
+    filename = paste0(
+      carpeta_fig,
+      filename,
+      "_",
+      año_actual,
+      "_",
+      mes_actual,
+      ".png"
+    ),
     width = ancho,
     height = alto
   )
@@ -95,3 +103,23 @@ d_est <- tibble(
     estacion_label = if_else(fecha_dif < 60, "", estacion)
   ) |>
   mutate(fill = color_estaciones[estacion])
+
+d <- read_csv("datos/d.csv", show_col_types = FALSE)
+
+promedio_tbl <- filter(d, param %in% c("temperatura", "ds", "cla")) |>
+  reframe(
+    m = mean(valor, na.rm = TRUE),
+    .by = c(param, unidad)
+  ) |>
+  mutate(
+    m_label = paste(
+      format(
+        round(m, 1),
+        nsmall = 1,
+        decimal.mark = ",",
+        big.mark = ".",
+        trim = TRUE
+      ),
+      unidad
+    )
+  )

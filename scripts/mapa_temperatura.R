@@ -31,13 +31,7 @@ mapa_temperatura <- ggplot() +
 
 guardar_png(
   plot = mapa_temperatura,
-  filename = paste0(
-    "fig/mapa_temperatura_",
-    año_actual,
-    "_",
-    mes_actual,
-    ".png"
-  ),
+  filename = "mapa_temperatura",
   ancho = 5,
   alto = 5
 )

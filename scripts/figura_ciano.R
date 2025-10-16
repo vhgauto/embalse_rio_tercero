@@ -42,14 +42,7 @@ g_ciano <- ggplot(d_micro, aes(sitio, suma, fill = algas)) +
 
 guardar_png(
   plot = g_ciano,
-  filename = paste0(
-    carpeta_fig,
-    "/figura_ciano_",
-    año_actual,
-    "_",
-    mes_actual,
-    ".png"
-  ),
+  filename = "figura_ciano",
   ancho = 5,
   alto = 3
 )

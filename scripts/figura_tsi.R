@@ -111,7 +111,7 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
     fill = "white",
     stroke = 1
   ) +
-  geom_vline(xintercept = d_est$fecha, linetype = 2, linewidth = .2) +
+  # geom_vline(xintercept = d_est$fecha, linetype = 2, linewidth = .2) +
   geom_text(
     data = d_est,
     aes(fecha_label, I(1.01), label = estacion_label),
@@ -162,14 +162,7 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
 
 guardar_png(
   plot = g_tsi,
-  filename = paste0(
-    carpeta_fig,
-    "/figura_tsi_",
-    año_actual,
-    "_",
-    mes_actual,
-    ".png"
-  ),
+  filename = "figura_tsi",
   ancho = 5,
   alto = 3
 )

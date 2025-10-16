@@ -76,7 +76,7 @@ g_param <- ggplot(d_comp, aes(fecha_label, valor, fill = fecha_label)) +
 
 guardar_png(
   plot = g_param,
-  filename = paste0("fig/parametros_", año_actual, "_", mes_actual, ".png"),
+  filename = "figura_parametros",
   ancho = 5,
   alto = 3
 )
