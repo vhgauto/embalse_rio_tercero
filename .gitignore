@@ -1,7 +1,13 @@
 ej/
 .vscode/
 /.quarto/
+hls/
 esri.tif
+.rcookies
+cookies.rds
+test*
+fuentes/
+scripts/.test.R
 
 # History files
 .Rhistory
