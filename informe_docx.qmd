@@ -16,7 +16,6 @@ format:
     fig-width: 5
     lang: es
     bibliography: bibliografia/biblio.bib
-    csl: bibliografia/ieee.csl
 execute: 
   eval: true
   echo: false
@@ -46,11 +45,34 @@ source("scripts/.soporte.R")
 <!-- | He did not know I saw--- -->
 <!-- ::: -->
 
-En el marco del [Programa]{custom-style="Rojo"} de Monitoreo Sistemático de la Calidad del Agua del Embalse Río Tercero, y a solicitud de la **Autoridad de Cuencas**, el día **19 de junio de 2025** se realizó la campaña de muestreo correspondiente a dicho mes, con el fin de monitorear y determinar el estado trófico y la calidad de sus aguas. 
+En el marco del Programa de Monitoreo Sistemático de la Calidad del Agua del Embalse Río Tercero, y a solicitud de la **Autoridad de Cuencas**, el día **19 de junio de 2025** se realizó la campaña de muestreo correspondiente a dicho mes, con el fin de monitorear y determinar el estado trófico y la calidad de sus aguas. 
 
 En estas campañas se monitorearon 11 sitios de muestreo predeterminados, en los cuales se evaluaron distintas variables físicas, químicas y biológicas a nivel sub-superficial (@fig-localizacion).
 
 ![Localización de sitios de muestreo](fig/fig1.jpg){#fig-localizacion}
+
+```{r}
+#| tbl-cap: Nombre de los sitios de muestreo
+#| label: tbl-localizacion
+
+tibble(
+  x = 1:11,
+  s = c(
+    "Club Almafuerte",
+    "Hoteles",
+    "Garganta",
+    "Entrada Ríos y CNE",
+    "Canal de enfriamiento",
+    "Confluencia ríos",
+    "Ingreso río Grande",
+    "Ingreso río Santa Rosa",
+    "Centro",
+    "Villa del dique",
+    "Presa"
+  )
+) |>
+  knitr::kable(col.names = c("", "Sitios de muestreo (SM)"))
+```
 
 Las campañas de muestreo fueron coordinadas por personal del **Instituto de Ciencia de la Tierra, Biodiversidad y Ambiente (ICBIA, CONICET-UNRC)** y la **Facultad de Ciencias Exactas, Físico-Químicas y Naturales, Universidad Nacional de Río Cuarto (FCEFQyN, UNRC)**. Además, se contó con el apoyo del **Instituto Gulich (IG, UNC-CONAE)**, el **Ministerio de Ambiente y Economía Circular** de la Provincia de Córdoba y la **Fundación Río Ctalamochita**. La embarcación y personal especializado fue aportado por el **Departamento Unidades de Alto Riesgo (DUAR)** perteneciente a la Policía de la Provincia de Córdoba y por la **Dirección de Seguridad Náutica (DSN)** provincial.
 
@@ -61,11 +83,16 @@ El embalse presentó una coloración del agua clara, sin registrarse la presenci
 ![Condición del agua del embalse](fig/fig2.jpg){#fig-condicion-agua}
 
 A partir de los datos aportados por  <https://www.cba.gov.ar/nivel-dediques-y-embalses/>, se determinó que en la fecha de muestreo el embalse presentó una cota de 45.8 m, localizándose 0.72 m por debajo de la cota vertedero (@fig-cota-año). Se estima que, en la fecha monitoreada, el embalse alcanzó una superficie aproximada de 4134 ha, es decir, 366 ha menos que la superficie correspondiente a la cota del vertedero (4500 ha).
+
 En base al análisis temporal de la cota del embalse generada para el período comprendido entre los años 2010 a 2025, se observa que el nivel actual es la esperable para la época del año (@fig-cota-tendencia).
+
+::: {#fig-cotas}
 
 ```{r}
 #| label: fig-cota-año
 #| fig-cap: Nivel de cota vertedero del último año
+#| fig-width: 5
+#| fig-height: 2
 
 source("scripts/figura_cota_año.R")
 g_cota_año
@@ -74,10 +101,16 @@ g_cota_año
 ```{r}
 #| label: fig-cota-tendencia
 #| fig-cap: Tendencia de cota (2010-2025)
+#| fig-width: 5
+#| fig-height: 2
 
 source("scripts/figura_cota_tendencia.R")
 g_cota_hist
 ```
+
+Evolución de la cota del Embalse.
+
+:::
 
 Se espera que el nivel de agua continúe descendiendo hasta los meses de octubre-noviembre que es cuando alcanza los valores de cota mínimos, para luego aumentar el nivel embalsado producto de la regulación del mismo y las precipitaciones en la cuenca. Esta tendencia coincide con lo que se registra en los demás embalses de la provincia.
 
@@ -107,6 +140,8 @@ g_param
 
 La @tbl-calidad-agua muestra las concentraciones de aniones, cationes y nutrientes más importantes  registrados para dicho monitoreo. Para este análisis, se evaluó un sitio representativo de cada Lóbulo del embalse, con el fin de obtener una visión general de la calidad del agua en todo el reservorio. 
 
+{{< pagebreak >}}
+
 ```{r}
 #| label: tbl-calidad-agua
 #| tbl-cap: Determinaciones fisico-químicas básicas obtenidas para el embalse Río Tercero **Junio de 2025**.
@@ -115,9 +150,9 @@ source("scripts/tabla_calidad_agua.R")
 tabla_calidad_md
 ```
 
-A partir del análisis estadístico de los datos medidos a campo, se observó una zonificación en la calidad del agua del embalse. En el Lóbulo Oeste se observaron los valores más elevados de CE y SDT (ANOVA, p-test < 0.05). Esta tendencia también se evidenció en las variables Temp, pH y Turb, aunque sin encontrarse diferencias significativas (ANOVA, p-test > 0.05). 
+A partir del análisis estadístico de los datos medidos a campo, se observó una zonificación en la calidad del agua del embalse. En el Lóbulo Oeste se observaron los valores más elevados de CE y SDT (ANOVA, $p-test < 0.05$). Esta tendencia también se evidenció en las variables Temp, pH y Turb, aunque sin encontrarse diferencias significativas (ANOVA, $p-test > 0.05$). 
 
-Por el contrario, las variables OD, DS, Cl-a y Cl-aCiano evidenciaron registros más elevados en el Lóbulo Este que en el Oeste, aunque no se registraron diferencias estadísticamente significativas (ANOVA, p-test > 0.05). 
+Por el contrario, las variables OD, DS, Cl-a y Cl-a(Ciano) evidenciaron registros más elevados en el Lóbulo Este que en el Oeste, aunque no se registraron diferencias estadísticamente significativas (ANOVA, $p-test > 0.05$). 
 
 El análisis realizado hace suponer una mayor concentración de sólidos en el Lóbulo Oeste del embalse, probablemente asociado al aporte de sedimentos por parte de los ríos tributarios. En contraste, el Lóbulo Este presentó características ópticas compatibles con una mayor productividad primaria y una coloración verdosa del agua. 
 
@@ -129,19 +164,46 @@ En cuanto a la clasificación para distintos usos, el agua del embalse se clasif
 
 A continuación se detalla la dinámica de las principales variables medidas: 
 
-**- Temperatura del agua (Temp)**: Durante el mes de Junio esta variable presentó una media de 15.3 ± 1.6 °C. Al corresponder a la estación climática de Otoño, la temperatura del agua estuvo por debajo de la temperatura media de referencia del embalse registrada para el período 2015-2024 (19.8 ± 5.5 °C) (@fig-temperatura).
+```{r}
+source("scripts/figura_temperatura_agua.R")
+```
+
+**- Temperatura del agua (Temp)**: Durante el mes de Junio esta variable presentó una media de `{r} temp0` ± `{r} temp0_sd` °C. Al corresponder a la estación climática de Otoño, la temperatura del agua estuvo por debajo de la temperatura media de referencia del embalse registrada para el período 2015-2024 (`{r} temp_p` ± `{r} temp_p_sd` °C) (@fig-temperatura).
 
 ```{r}
 #| label: fig-temperatura
 #| fig-cap: Variación temporal de la temperatura del agua del embalse
 
-source("scripts/figura_temperatura_agua.R")
 g_temp
 ```
 
-**- Transparencia del agua (DS)**: La transparencia del agua medida con el disco de Secchi, registró un valor medio de (4.8 ± 0.7 m), con un amplio rango comprendido entre los 3.8 m en el Lóbulo Oeste (SM 7) y 5.5 m en el Lóbulo Este (SM 1 y 11).
+El análisis temporal demostró que los valores registrados durante la presente campaña fueron inferiores a los registrados durante el mes de mayo (`{r} temp1` ± `{r} temp1_sd` °C), pero similares a los registros de Junio del año 2024 (`{r} temp2` ± `{r} temp2_sd` °C).
 
-Se observa una relación directa entre los valores recolectados a campo con aquellos estimados por teledetección (Figura 8). El Lóbulo Oeste presentó los valores más bajos y heterogéneos de transparencia del agua debido al ingreso de sólidos por parte de los ríos tributarios, lo que genera una disminución de la transparencia del agua. Por su parte, el Lóbulo Este presentó los registros más altos y homogéneos de transparencia, lo que coincide con la dinámica general de este reservorio (Bonansea et al. 2019). 
+Respecto a la variación espacial, tanto los datos recolectados a campo como la información aportada por el análisis satelital de una imagen Landsat 8 TIRS del área de estudio (Fecha de adquisición 20 de Junio de 2025), demuestran que los valores bajos y homogéneos se registraron en el Lobulo Este del embalse.  Mientras que el Lobulo Oeste, registró los valores más heterogéneos, lo cual estuvo marcada por el ingreso de flujos de agua con baja temperatura por los ríos tributarios (> 14 °C) y altos valores de temperatura asociados a la pluma térmica generada por el canal de enfriamiento de la central nuclear (< 17 °C) (@fig-mapa-temp).
+
+```{r}
+#| label: fig-mapa-temp
+#| fig-cap: Variación espacial de la temperatura del agua del embalse
+#| fig-width: 5
+#| fig-height: 5
+
+source("scripts/mapa_temperatura.R")
+mapa_temperatura
+```
+
+Como fuente de información adicional se cuenta con una plataforma de medición en tiempo real de variables hidro-metereológicas que pertenece al Gobierno de la Provincia de Córdoba y que es operada por el Observatorio Hidrometeorológico (MAAySP) en cooperación con el Laboratorio de Hidráulica (LH, UNC) (@fig-estacion-hidro). 
+
+![Estación hidro-meteorológica](fig/estacion_hidro_meteo.jpg){#fig-estacion-hidro}
+
+A partir de los datos aportado por esta estación, la cual está ubicada en la zona de la garganta del embalse (SM 3), se constató que durante la campaña de muestreo la columna de agua presentó una estructura térmica prácticamente homogénea, con una diferencia de temperatura de 0.25 °C entre la superficie (14.25 °C) y la zona profunda del embalse (12.4 m de profundidad, 14,0 °C).
+
+**- pH**: Esta variable presento un valor medio de `{r} ph0` ± `{r} ph0_sd`, y un rango comprendido entre `{r} ph0_min` y `{r} ph0_max`. En base a estos datos se determinó que el pH se clasificó como neutro a ligeramente alcalino. Los registros encontrados de esta variable están dentro de los límites recomendados por el Código Alimentario Argentina. Además, el comportamiento de esta variable es normal para el mes analizado, estando en concordancia con los valores medios de referencia registrados para este embalse (`{r} ph_p` ± `{r} ph_p_sd`).
+
+**- Oxígeno disuelto (OD)**: Se registró un valor medio normal para la época del año (`{r} od0` ± `{r} od0_sd` mg/l). Si bien estos valores fueron inferiores a los registrados en los meses previos, esta disminución podría atribuirse a la baja intensidad del viento registrada durante la campaña de muestreo (4 km/h). Los bajos vientos favorecen la formación de olas de menor energía que limitan la mezcla vertical de la columna de agua. En consecuencia, se reduce el intercambio de oxígeno entre la atmósfera y las capas superficiales del embalse.
+
+**- Transparencia del agua (DS)**: La transparencia del agua medida con el disco de Secchi, registró un valor medio de (`{r} ds0` ± `{r} ds0_sd` m), con un amplio rango comprendido entre los 3.8 m en el Lóbulo Oeste (SM 7) y 5.5 m en el Lóbulo Este (SM 1 y 11).
+
+Se observa una relación directa entre los valores recolectados a campo con aquellos estimados por teledetección (**Figura 8**). El Lóbulo Oeste presentó los valores más bajos y heterogéneos de transparencia del agua debido al ingreso de sólidos por parte de los ríos tributarios, lo que genera una disminución de la transparencia del agua. Por su parte, el Lóbulo Este presentó los registros más altos y homogéneos de transparencia, lo que coincide con la dinámica general de este reservorio (@bonansea2019evaluating). 
 
 En cuanto al análisis temporal, durante los últimos meses se está observando un aumento progresivo en la transparencia del agua. Los datos registrados durante el último monitoreo están muy por encima del valor medio de referencia del embalse (1.8 ± 0.9 m), y del valor medio registrado en Junio 2024 el cual fue de 3.0 ± 1.1m (@fig-transparencia). 
 
@@ -152,6 +214,14 @@ En cuanto al análisis temporal, durante los últimos meses se está observando 
 source("scripts/figura_transparencia.R")
 g_ds
 ```
+
+**- Sólidos Disueltos Totales (SDT)**: Esta variable presento un rango de 76.0 a 83.5 ppm con un valor medio de 80.8 ± 2.3 ppm. Se observan diferencias estadísticas significativas al clasificar esta variable por ubicación espacial (ANOVA, p-test < 0.05). Asi, el Lobulo Oeste presentó los valores medios más altos de SDT (82.0 ± 1.4 ppm). Mientras que el Lobulo Este presentó las concentraciones más bajas (78.6 ± 1.9 ppm).
+
+**- Turbidez (Turb)**: Esta variable presentó el mismo comportamiento que los SDT. Su media fue de 0.2 ± 0.3 NTU, con un rango comprendido entre 0.0 y 0.8 NTU. 
+
+**- Conductividad Eléctrica (CE)**: El valor medio de esta variable fue de 121.0 ± 3.2 µS/cm, con un rango comprendido entre los 115.0 y 125.1 µS/cm. Al igual que los SDT, esta variable presentó diferencias estadísticamente significativas al ser analizadas por los Lóbulos del embalse (ANOVA, $p-test < 0.05$). En este sentido, las concentraciones medias más altas se encontraron en el Lóbulo Oeste (122.9 ± 1.9 µS/cm) y las más bajas en el Este (117.7 ± 1.8 µS/cm). 
+Al igual que lo que ocurre con la transparencia del agua, el comportamiento de las variables SDT, Turb y CE, estuvo condicionada por el ingreso de agua con sedimentos por parte de los ríos tributarios, lo que genera una zonificación longitudinal de Oeste a Este en el reservorio. 
+
 
 **- Concentración de Clorofila-a (Cl-a)**: Esta variable registró concentraciones bajas en todo el reservorio, sin encontrarse floraciones de algas/ cianobacterias en la superficie del mismo. La media registrada fue de 3.9 ± 1.6 mg/m<sup>3</sup>, estando por debajo de la media de referencia para este reservorio (11.3 ± 12.4 mg/m3). Las concentraciones más bajas de Cl-a (2.3 mg/m3), se registraron en la zona del Centro (SM 9) y donde confluyen los ríos Quillinzo, La Cruz y el canal de enfriamiento de la Central Nuclear (SM 4). El valor más alto (6.1 mg/m3) se midió en la zona de los ríos tributarios La Cruz y Quillinzo (SM 6).
 
@@ -208,17 +278,6 @@ A partir del análisis generado con la información de campo y en base a la info
 Este trabajo constituye un estudio sistemático y a largo plazo realizado por el Grupo de Monitoreo de Aguas Superficiales Interiores (GMASI) conformado por investigadores y becarios del Instituto de Ciencias de la Tierra, Biodiversidad y Ambiente (ICBIA, CONICET-UNRC) y del Instituto Gulich (UNC-CONAE), junto a la colaboración de distintas instituciones con el fin de obtener datos adecuados para una correcta evaluación de la calidad del agua del embalse Río Tercero.
 
 Debido a la importancia social, económica y ecológica de este cuerpo de agua, es importante seguir monitoreando la calidad del agua y estado trófico del mismo, ya sea para obtener un mejor conocimiento del mismo, como así también para detectar o predecir cualquier modificación leve en las variables estudiadas, lo que podría traducirse en un desequilibrio del sistema. Los autores de este informe agradecen la participación de las diferentes instituciones en la realización y logística de los muestreos de rutina.
-
-```{r}
-#| label: fig-mapa-temp
-#| fig-cap: Variación espacial de la temperatura del agua del embalse
-#| fig-width: 5
-#| fig-height: 5
-
-source("scripts/mapa_temperatura.R")
-mapa_temperatura
-```
-
 
 # Referencias bibliográficas {.unnumbered}
 
