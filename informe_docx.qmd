@@ -55,7 +55,7 @@ En estas campañas se monitorearon 11 sitios de muestreo predeterminados, en los
 #| tbl-cap: Nombre de los sitios de muestreo
 #| label: tbl-localizacion
 
-tibble(
+data.frame(
   x = 1:11,
   s = c(
     "Club Almafuerte",
@@ -71,7 +71,8 @@ tibble(
     "Presa"
   )
 ) |>
-  knitr::kable(col.names = c("", "Sitios de muestreo (SM)"))
+  transmute(s = paste0(x, ".- ", s)) |>
+  knitr::kable(col.names = "**Sitios de muestreo (SM)**", align = "l")
 ```
 
 Las campañas de muestreo fueron coordinadas por personal del **Instituto de Ciencia de la Tierra, Biodiversidad y Ambiente (ICBIA, CONICET-UNRC)** y la **Facultad de Ciencias Exactas, Físico-Químicas y Naturales, Universidad Nacional de Río Cuarto (FCEFQyN, UNRC)**. Además, se contó con el apoyo del **Instituto Gulich (IG, UNC-CONAE)**, el **Ministerio de Ambiente y Economía Circular** de la Provincia de Córdoba y la **Fundación Río Ctalamochita**. La embarcación y personal especializado fue aportado por el **Departamento Unidades de Alto Riesgo (DUAR)** perteneciente a la Policía de la Provincia de Córdoba y por la **Dirección de Seguridad Náutica (DSN)** provincial.
