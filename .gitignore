@@ -9,6 +9,12 @@ test*
 fuentes/
 scripts/.test.R
 officedown*
+datos/
+scripts/dique.R
+recortes/
+altura*
+temperatura*
+template*
 
 # History files
 .Rhistory
