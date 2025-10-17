@@ -15,6 +15,9 @@ recortes/
 altura*
 temperatura*
 template*
+vector/argentina*
+vector/dptos*
+vector/pcias*
 
 # History files
 .Rhistory
@@ -62,3 +65,5 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+**/*.quarto_ipynb
