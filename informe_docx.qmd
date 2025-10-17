@@ -201,31 +201,38 @@ A partir de los datos aportado por esta estación, la cual está ubicada en la z
 
 **- Oxígeno disuelto (OD)**: Se registró un valor medio normal para la época del año (`{r} od0` ± `{r} od0_sd` mg/l). Si bien estos valores fueron inferiores a los registrados en los meses previos, esta disminución podría atribuirse a la baja intensidad del viento registrada durante la campaña de muestreo (4 km/h). Los bajos vientos favorecen la formación de olas de menor energía que limitan la mezcla vertical de la columna de agua. En consecuencia, se reduce el intercambio de oxígeno entre la atmósfera y las capas superficiales del embalse.
 
+```{r}
+source("scripts/figura_transparencia.R")
+```
+
 **- Transparencia del agua (DS)**: La transparencia del agua medida con el disco de Secchi, registró un valor medio de (`{r} ds0` ± `{r} ds0_sd` m), con un amplio rango comprendido entre los 3.8 m en el Lóbulo Oeste (SM 7) y 5.5 m en el Lóbulo Este (SM 1 y 11).
 
-Se observa una relación directa entre los valores recolectados a campo con aquellos estimados por teledetección (**Figura 8**). El Lóbulo Oeste presentó los valores más bajos y heterogéneos de transparencia del agua debido al ingreso de sólidos por parte de los ríos tributarios, lo que genera una disminución de la transparencia del agua. Por su parte, el Lóbulo Este presentó los registros más altos y homogéneos de transparencia, lo que coincide con la dinámica general de este reservorio (@bonansea2019evaluating). 
+Se observa una relación directa entre los valores recolectados a campo con aquellos estimados por teledetección (**Figura 8**). El Lóbulo Oeste presentó los valores más bajos y heterogéneos de transparencia del agua debido al ingreso de sólidos por parte de los ríos tributarios, lo que genera una disminución de la transparencia del agua. Por su parte, el Lóbulo Este presentó los registros más altos y homogéneos de transparencia, lo que coincide con la dinámica general de este reservorio (@bonansea2019evaluating).
 
-En cuanto al análisis temporal, durante los últimos meses se está observando un aumento progresivo en la transparencia del agua. Los datos registrados durante el último monitoreo están muy por encima del valor medio de referencia del embalse (1.8 ± 0.9 m), y del valor medio registrado en Junio 2024 el cual fue de 3.0 ± 1.1m (@fig-transparencia). 
+[MAPA TRANSPARENCIA]{custom-style="Verbatim Char"}
+
+En cuanto al análisis temporal, durante los últimos meses se está observando un aumento progresivo en la transparencia del agua. Los datos registrados durante el último monitoreo están muy por encima del valor medio de referencia del embalse (`{r} ds_p` ± `{r} ds_p_sd` m), y del valor medio registrado en Junio 2024 el cual fue de `{r} ds1` ± `{r} ds1_sd` m (@fig-transparencia).
 
 ```{r}
 #| label: fig-transparencia
 #| fig-cap: Variación temporal de la transparencia del agua del embalse
 
-source("scripts/figura_transparencia.R")
 g_ds
 ```
 
-**- Sólidos Disueltos Totales (SDT)**: Esta variable presento un rango de 76.0 a 83.5 ppm con un valor medio de 80.8 ± 2.3 ppm. Se observan diferencias estadísticas significativas al clasificar esta variable por ubicación espacial (ANOVA, p-test < 0.05). Asi, el Lobulo Oeste presentó los valores medios más altos de SDT (82.0 ± 1.4 ppm). Mientras que el Lobulo Este presentó las concentraciones más bajas (78.6 ± 1.9 ppm).
+**- Sólidos Disueltos Totales (SDT)**: Esta variable presento un rango de `{r} sdt0_min` a `{r} sdt0_max` ppm con un valor medio de `{r} sdt0` ± `{r} sdt0_sd` ppm. Se observan diferencias estadísticas significativas al clasificar esta variable por ubicación espacial (ANOVA, $p-test < 0.05$). Asi, el Lobulo Oeste presentó los valores medios más altos de SDT (82.0 ± 1.4 ppm). Mientras que el Lobulo Este presentó las concentraciones más bajas (78.6 ± 1.9 ppm).
 
-**- Turbidez (Turb)**: Esta variable presentó el mismo comportamiento que los SDT. Su media fue de 0.2 ± 0.3 NTU, con un rango comprendido entre 0.0 y 0.8 NTU. 
+**- Turbidez (Turb)**: Esta variable presentó el mismo comportamiento que los SDT. Su media fue de `{r} turb0` ± `{r} turb0_sd` NTU, con un rango comprendido entre `{r} turb0_min` y `{r} turb0_max` NTU. 
 
-**- Conductividad Eléctrica (CE)**: El valor medio de esta variable fue de 121.0 ± 3.2 µS/cm, con un rango comprendido entre los 115.0 y 125.1 µS/cm. Al igual que los SDT, esta variable presentó diferencias estadísticamente significativas al ser analizadas por los Lóbulos del embalse (ANOVA, $p-test < 0.05$). En este sentido, las concentraciones medias más altas se encontraron en el Lóbulo Oeste (122.9 ± 1.9 µS/cm) y las más bajas en el Este (117.7 ± 1.8 µS/cm). 
+**- Conductividad Eléctrica (CE)**: El valor medio de esta variable fue de `{r} ce0` ± `{r} ce0_sd` µS/cm, con un rango comprendido entre los 115.0 y 125.1 µS/cm. Al igual que los SDT, esta variable presentó diferencias estadísticamente significativas al ser analizadas por los Lóbulos del embalse (ANOVA, $p-test < 0.05$). En este sentido, las concentraciones medias más altas se encontraron en el Lóbulo Oeste (122.9 ± 1.9 µS/cm) y las más bajas en el Este (117.7 ± 1.8 µS/cm). 
+
 Al igual que lo que ocurre con la transparencia del agua, el comportamiento de las variables SDT, Turb y CE, estuvo condicionada por el ingreso de agua con sedimentos por parte de los ríos tributarios, lo que genera una zonificación longitudinal de Oeste a Este en el reservorio. 
 
+**- Concentración de Clorofila-a (Cl-a)**: Esta variable registró concentraciones bajas en todo el reservorio, sin encontrarse floraciones de algas/ cianobacterias en la superficie del mismo. La media registrada fue de `{r} cla0` ± `{r} cla0_sd` mg/m<sup>3</sup>, estando por debajo de la media de referencia para este reservorio (11.3 ± 12.4 mg/m3). Las concentraciones más bajas de Cl-a (`{r} cla0_min` mg/m3), se registraron en la zona del Centro (SM 9) y donde confluyen los ríos Quillinzo, La Cruz y el canal de enfriamiento de la Central Nuclear (SM 4). El valor más alto (`{r} cla0_max` mg/m3) se midió en la zona de los ríos tributarios La Cruz y Quillinzo (SM 6).
 
-**- Concentración de Clorofila-a (Cl-a)**: Esta variable registró concentraciones bajas en todo el reservorio, sin encontrarse floraciones de algas/ cianobacterias en la superficie del mismo. La media registrada fue de 3.9 ± 1.6 mg/m<sup>3</sup>, estando por debajo de la media de referencia para este reservorio (11.3 ± 12.4 mg/m3). Las concentraciones más bajas de Cl-a (2.3 mg/m3), se registraron en la zona del Centro (SM 9) y donde confluyen los ríos Quillinzo, La Cruz y el canal de enfriamiento de la Central Nuclear (SM 4). El valor más alto (6.1 mg/m3) se midió en la zona de los ríos tributarios La Cruz y Quillinzo (SM 6).
+El procesamiento satelital confirmó el comportamiento de los datos recolectados a campo (**Figura 10**). En este sentido, se observó una distribución cuasi-homogenea en toda la superficie del embalse, con concentraciones relativamente bajas para toda la superficie del mismo.
 
-El procesamiento satelital confirmó el comportamiento de los datos recolectados a campo (Figura 10). En este sentido, se observó una distribución cuasi-homogenea en toda la superficie del embalse, con concentraciones relativamente bajas para toda la superficie del mismo.
+[MAPA CLOROFILA-A]{custom-style="Verbatim Char"}
 
 El análisis satelital además mostró lo que podría ser un florecimiento de cianobacterias en el centro del embalse (SM 9). Sin embargo, el mismo presentó concentraciones bajas y no fue diferenciado durante la campaña de monitoreo.
 
@@ -239,7 +246,9 @@ source("scripts/figura_clorofila-a.R")
 g_clo
 ```
 
-**- Concentración de Clorofila-a de Cianobacetrias (Cl-aCiano)**: Esta variable presentó valores muy bajos para toda la superficie del embalse (1.1 ± 0.3 mg/m3), con valores máximos que solo alcanzaron los 1.5 mg/m3 en la zona de desembocadura del rio tributario Santa Rosa (SM 8) (Figura 12).
+**- Concentración de Clorofila-a de Cianobacetrias (Cl-aCiano)**: Esta variable presentó valores muy bajos para toda la superficie del embalse (`{r} cla_ciano0` ± `{r} cla_ciano0_sd` mg/m3), con valores máximos que solo alcanzaron los `{r} cla_ciano0_max` mg/m3 en la zona de desembocadura del rio tributario Santa Rosa (SM 8) (**Figura 12**).
+
+[MAPA CYANOBACTERIA]{custom-style="Verbatim Char"}
 
 # Recuento de fitoplancton 
 
@@ -259,7 +268,7 @@ Las diatomeas (Chrysophytas) estuvieron presentes en todos los sitios, pero en m
 
 # Determinación del estado trófico 
 
-Si bien la evaluación trófica se realiza como un valor promedio de todo un año monitoreado, al realizar una estimación mensual del Índice de Estado Trófico (TSI, Carlson 1977), se determinó que en los últimos meses el embalse está presentando una disminución en su estado trófico. Cabe mencionar que para este análisis no se consideró la variable fósforo total, ya que la concentración medida es atípica. 
+Si bien la evaluación trófica se realiza como un valor promedio de todo un año monitoreado, al realizar una estimación mensual del Índice de Estado Trófico @carlson1977trophic, se determinó que en los últimos meses el embalse está presentando una disminución en su estado trófico. Cabe mencionar que para este análisis no se consideró la variable fósforo total, ya que la concentración medida es atípica. 
 
 En la actualidad, el embalse se encuentra en una situación mesotrófica baja. Esto, además de estar favorecido por la estación climática de Otoño, está estrechamente relacionado con los altos valores de transparencia del agua y bajas concentraciones de clorofila-a que se vienen registrando en las últimas campañas de monitoreo (@fig-tsi).
 
