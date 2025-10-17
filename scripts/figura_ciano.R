@@ -1,7 +1,11 @@
+# datos ------------------------------------------------------------------
+
 algas_orden <- c("Diatomeas", "Clorofitas", "Cianobacterias", "Criptófitas")
 
 d_micro <- read_csv("datos/d_micro.csv", show_col_types = FALSE) |>
   mutate(algas = factor(algas, levels = algas_orden))
+
+# figura -----------------------------------------------------------------
 
 g_ciano <- ggplot(d_micro, aes(sitio, suma, fill = algas)) +
   geom_col(position = position_stack()) +
@@ -39,6 +43,8 @@ g_ciano <- ggplot(d_micro, aes(sitio, suma, fill = algas)) +
     strip.background = element_blank(),
     strip.clip = "off"
   )
+
+# guardo -----------------------------------------------------------------
 
 guardar_png(
   plot = g_ciano,

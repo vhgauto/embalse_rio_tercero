@@ -1,3 +1,5 @@
+# datos ------------------------------------------------------------------
+
 cota_vertedero <- readxl::read_xlsx(
   "datos/Base_ERT_OriginalActualizada.xlsx",
   sheet = "3-Nivel_Diques-Cba"
@@ -19,6 +21,8 @@ d_cota_año <- readxl::read_xlsx(
     make_date(año_actual - 1, mes_actual, 1),
     make_date(año_actual, mes_actual, 1)
   ))
+
+# figura -----------------------------------------------------------------
 
 relleno <- grid::linearGradient(
   colours = hcl.colors(100, "Temps"),
@@ -97,6 +101,8 @@ g_cota_año <- ggplot() +
     strip.background = element_blank(),
     strip.clip = "off"
   )
+
+# guardo -----------------------------------------------------------------
 
 guardar_png(
   plot = g_cota_año,

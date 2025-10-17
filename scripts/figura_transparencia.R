@@ -1,13 +1,17 @@
+# datos ------------------------------------------------------------------
+
 d_ds <- filter(d, param == "ds") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
   drop_na(valor) |>
   reframe(
-    temp_m = median(valor, na.rm = TRUE),
-    temp_sd = sd(valor, na.rm = TRUE),
+    ds_m = median(valor, na.rm = TRUE),
+    ds_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )
 
-g_ds <- ggplot(d_ds, aes(fecha, temp_m)) +
+# figura -----------------------------------------------------------------
+
+g_ds <- ggplot(d_ds, aes(fecha, ds_m)) +
   geom_segment(
     aes(color = "a"),
     x = fecha_i,
@@ -29,7 +33,7 @@ g_ds <- ggplot(d_ds, aes(fecha, temp_m)) +
     inherit.aes = FALSE
   ) +
   geom_errorbar(
-    aes(ymin = temp_m - temp_sd, ymax = temp_m + temp_sd, color = "b"),
+    aes(ymin = ds_m - ds_sd, ymax = ds_m + ds_sd, color = "b"),
     linewidth = .25,
     width = 2,
     key_glyph = "crossbar"
@@ -92,9 +96,40 @@ g_ds <- ggplot(d_ds, aes(fecha, temp_m)) +
     strip.clip = "off"
   )
 
+# guardo -----------------------------------------------------------------
+
 guardar_png(
   plot = g_ds,
   filename = "figura_transparencia",
   ancho = 5,
   alto = 3
 )
+
+# promedios y desvíos ----------------------------------------------------
+
+ds0_tbl <- filter(
+  d_ds,
+  month(fecha) == mes_actual & year(fecha) == año_actual
+)
+
+ds1_tbl <- filter(
+  d_ds,
+  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+)
+
+ds2_tbl <- filter(
+  d_ds,
+  month(fecha) == mes_actual & year(fecha) == año_actual - 1
+)
+
+ds0 <- formato(ds0_tbl$ds_m)
+ds0_sd <- formato(ds0_tbl$ds_sd)
+
+ds1 <- formato(ds1_tbl$ds_m)
+ds1_sd <- formato(ds1_tbl$ds_sd)
+
+ds2 <- formato(ds2_tbl$ds_m)
+ds2_sd <- formato(ds2_tbl$ds_sd)
+
+ds_p <- formato(filter(promedio_tbl, param == "dseratura")$m)
+ds_p_sd <- formato(filter(promedio_tbl, param == "dseratura")$sd)

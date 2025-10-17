@@ -1,3 +1,5 @@
+# datos ------------------------------------------------------------------
+
 cota_vertedero <- readxl::read_xlsx(
   "datos/Base_ERT_OriginalActualizada.xlsx",
   sheet = "3-Nivel_Diques-Cba"
@@ -14,6 +16,8 @@ d_cota <- readxl::read_xlsx(
   filter(fecha != "h labio de Vertedero") |>
   drop_na() |>
   mutate(fecha = janitor::excel_numeric_to_date(as.numeric(fecha)))
+
+# figura -----------------------------------------------------------------
 
 relleno <- grid::linearGradient(
   colours = hcl.colors(100, "Temps"),
@@ -89,6 +93,8 @@ g_cota_hist <- ggplot() +
     strip.background = element_blank(),
     strip.clip = "off"
   )
+
+# guardo -----------------------------------------------------------------
 
 guardar_png(
   plot = g_cota_hist,

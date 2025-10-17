@@ -1,3 +1,5 @@
+# datos ------------------------------------------------------------------
+
 d_clo <- filter(d, param == "cla") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
   drop_na(valor) |>
@@ -6,6 +8,8 @@ d_clo <- filter(d, param == "cla") |>
     clo_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )
+
+# figura -----------------------------------------------------------------
 
 g_clo <- ggplot(d_clo, aes(fecha, clo_m)) +
   geom_segment(
@@ -96,6 +100,8 @@ g_clo <- ggplot(d_clo, aes(fecha, clo_m)) +
     strip.background = element_blank(),
     strip.clip = "off"
   )
+
+# guardo -----------------------------------------------------------------
 
 guardar_png(
   plot = g_clo,

@@ -1,3 +1,5 @@
+# datos ------------------------------------------------------------------
+
 d_ds <- read_csv("datos/d.csv", show_col_types = FALSE) |>
   filter(param == "ds") |>
   select(fecha, valor) |>
@@ -25,33 +27,6 @@ d_tsi <- inner_join(d_ds, d_cla, by = join_by(año, mes)) |>
   ) |>
   mutate(tsi = (tsi_ds + tsi_cla) / 2)
 
-# d_est <- expand_grid(
-#   mes = c(3, 6, 9, 12),
-#   año = c(año_actual, año_actual - 1)
-# ) |>
-#   mutate(
-#     estacion = case_match(
-#       mes,
-#       3 + 3 ~ "otoño",
-#       6 + 3 ~ "invierno",
-#       9 + 3 ~ "primavera",
-#       3 ~ "verano"
-#     )
-#   ) |>
-#   mutate(fecha = make_date(year = año, month = mes, day = 21)) |>
-#   arrange(fecha) |>
-#   filter(between(fecha, fecha_i, fecha_f)) |>
-#   mutate(fecha_min = lag(fecha, default = min(d_tsi$fecha))) |>
-#   mutate(fecha_max = if_else(fecha == min(fecha), min(d_tsi$fecha), fecha)) |>
-#   mutate(fecha_max = if_else(fecha_max == min(fecha), fecha, fecha)) |>
-#   rowwise() |>
-#   mutate(fecha_label = fecha_min + (fecha_max - fecha_min) / 2) |>
-#   ungroup() |>
-#   mutate(
-#     estacion_label = if_else(row_number() == 1, "", str_to_sentence(estacion))
-#   ) |>
-#   mutate(fill = color_estaciones[estacion])
-
 d_area_tsi <- tibble(
   estado = c(
     "Ultra-oligotrófico",
@@ -64,6 +39,8 @@ d_area_tsi <- tibble(
   ymax = c(30, 40, 50, 70, 100)
 ) |>
   mutate(ylabel = (ymax + ymin) / 2)
+
+# figura -----------------------------------------------------------------
 
 g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
   geom_rect(
@@ -82,8 +59,6 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
   geom_rect(
     data = d_area_tsi,
     aes(
-      # xmin = min(d_tsi$fecha),
-      # xmax = max(d_est$fecha),
       xmin = fecha_i,
       xmax = fecha_f,
       ymin = ymin,
@@ -111,7 +86,6 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
     fill = "white",
     stroke = 1
   ) +
-  # geom_vline(xintercept = d_est$fecha, linetype = 2, linewidth = .2) +
   geom_text(
     data = d_est,
     aes(fecha_label, I(1.01), label = estacion_label),
@@ -159,6 +133,8 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
     strip.background = element_blank(),
     strip.clip = "off"
   )
+
+# guardo -----------------------------------------------------------------
 
 guardar_png(
   plot = g_tsi,

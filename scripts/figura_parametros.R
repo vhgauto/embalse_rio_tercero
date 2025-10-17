@@ -1,7 +1,7 @@
-d <- read_csv("datos/d.csv", show_col_types = FALSE) |>
-  mutate(unidad = if_else(is.na(unidad), "", unidad))
+# variables --------------------------------------------------------------
 
 parametros_interes <- c("temperatura", "pH", "od", "ds", "cla", "cla_ciano")
+
 parametros_label <- c(
   "Temperatura del agua (°C)",
   "pH",
@@ -15,6 +15,8 @@ parametros_tbl <- tibble(
   param = parametros_interes,
   parametros_label = parametros_label
 )
+
+# datos ------------------------------------------------------------------
 
 d_actual <- filter(
   d,
@@ -37,6 +39,8 @@ d_comp <- rbind(d_actual, d_mes_anterior, d_año_anterior) |>
   inner_join(parametros_tbl, by = join_by(param)) |>
   mutate(param = factor(param, levels = parametros_interes)) |>
   mutate(parametros_label = fct_reorder(parametros_label, as.numeric(param)))
+
+# figura -----------------------------------------------------------------
 
 g_param <- ggplot(d_comp, aes(fecha_label, valor, fill = fecha_label)) +
   stat_summary(
@@ -73,6 +77,8 @@ g_param <- ggplot(d_comp, aes(fecha_label, valor, fill = fecha_label)) +
     strip.background = element_blank(),
     strip.clip = "off"
   )
+
+# guardo -----------------------------------------------------------------
 
 guardar_png(
   plot = g_param,

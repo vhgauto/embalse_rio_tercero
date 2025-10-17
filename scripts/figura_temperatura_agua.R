@@ -1,3 +1,5 @@
+# datos ------------------------------------------------------------------
+
 d_temp <- filter(d, param == "temperatura") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
   drop_na(valor) |>
@@ -6,6 +8,8 @@ d_temp <- filter(d, param == "temperatura") |>
     temp_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )
+
+# figura -----------------------------------------------------------------
 
 g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
   geom_segment(
@@ -92,9 +96,40 @@ g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
     strip.clip = "off"
   )
 
+# guardo -----------------------------------------------------------------
+
 guardar_png(
   plot = g_temp,
   filename = "figura_temperatura",
   ancho = 5,
   alto = 3
 )
+
+# promedios y desvíos ----------------------------------------------------
+
+temp0_tbl <- filter(
+  d_temp,
+  month(fecha) == mes_actual & year(fecha) == año_actual
+)
+
+temp1_tbl <- filter(
+  d_temp,
+  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+)
+
+temp2_tbl <- filter(
+  d_temp,
+  month(fecha) == mes_actual & year(fecha) == año_actual - 1
+)
+
+temp0 <- formato(temp0_tbl$temp_m)
+temp0_sd <- formato(temp0_tbl$temp_sd)
+
+temp1 <- formato(temp1_tbl$temp_m)
+temp1_sd <- formato(temp1_tbl$temp_sd)
+
+temp2 <- formato(temp2_tbl$temp_m)
+temp2_sd <- formato(temp2_tbl$temp_sd)
+
+temp_p <- formato(filter(promedio_tbl, param == "temperatura")$m)
+temp_p_sd <- formato(filter(promedio_tbl, param == "temperatura")$sd)
