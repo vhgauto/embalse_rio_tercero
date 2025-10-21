@@ -1,6 +1,3 @@
-d <- read_csv("datos/d.csv", show_col_types = FALSE) |>
-  mutate(unidad = if_else(is.na(unidad), "", unidad))
-
 tabla_parametros <- filter(
   d,
   month(fecha) == mes_actual & year(fecha) == año_actual
