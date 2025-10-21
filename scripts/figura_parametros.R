@@ -34,7 +34,7 @@ d_año_anterior <- filter(
 d_comp <- rbind(d_actual, d_mes_anterior, d_año_anterior) |>
   filter(param %in% parametros_interes) |>
   drop_na(valor) |>
-  mutate(fecha_label = str_to_sentence(format(fecha, "%b %y"))) |>
+  mutate(fecha_label = str_to_sentence(format(fecha, "%b '%y"))) |>
   mutate(fecha_label = fct_reorder(as.character(fecha_label), fecha)) |>
   inner_join(parametros_tbl, by = join_by(param)) |>
   mutate(param = factor(param, levels = parametros_interes)) |>
