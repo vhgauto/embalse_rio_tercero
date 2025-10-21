@@ -1,21 +1,26 @@
 # datos ------------------------------------------------------------------
 
-cota_vertedero <- readxl::read_xlsx(
-  "datos/Base_ERT_OriginalActualizada.xlsx",
-  sheet = "3-Nivel_Diques-Cba"
-) |>
-  select(fecha = 1, altura = "Embalse") |>
-  filter(fecha == "h labio de Vertedero") |>
-  pull(altura)
+# https://cordoba.redesclimaticas.com/next/reports?mss=30335
 
-d_cota <- readxl::read_xlsx(
-  "datos/Base_ERT_OriginalActualizada.xlsx",
-  sheet = "3-Nivel_Diques-Cba"
-) |>
-  select(fecha = 1, altura = "Embalse") |>
-  filter(fecha != "h labio de Vertedero") |>
-  drop_na() |>
-  mutate(fecha = janitor::excel_numeric_to_date(as.numeric(fecha)))
+cota_vertedero <- 46.5
+# cota_vertedero <- readxl::read_xlsx(
+#   "datos/Base_ERT_OriginalActualizada.xlsx",
+#   sheet = "3-Nivel_Diques-Cba"
+# ) |>
+#   select(fecha = 1, altura = "Embalse") |>
+#   filter(fecha == "h labio de Vertedero") |>
+#   pull(altura)
+
+# d_cota <- readxl::read_xlsx(
+#   "datos/Base_ERT_OriginalActualizada.xlsx",
+#   sheet = "3-Nivel_Diques-Cba"
+# ) |>
+#   select(fecha = 1, altura = "Embalse") |>
+#   filter(fecha != "h labio de Vertedero") |>
+#   drop_na() |>
+#   mutate(fecha = janitor::excel_numeric_to_date(as.numeric(fecha)))
+
+d_cota <- read_csv("datos/base_de_datos_cotas.csv", show_col_types = FALSE)
 
 # figura -----------------------------------------------------------------
 
