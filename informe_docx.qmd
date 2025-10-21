@@ -26,6 +26,9 @@ nocite: |
   @*
 date: last-modified
 date-format: iso
+params:
+    mes_actual: 6
+    año_actual: 2025
 ---
 
 # Consideraciones generales
@@ -161,7 +164,7 @@ Cabe destacar que se registraron concentraciones inusualmente elevadas de nutrie
 
 La determinación geo-química del agua evidenció que en todo el embalse la calidad del agua se clasificó como duce, blanda y bicarbonatada sódica-cálcica.
 
-En cuanto a la clasificación para distintos usos, el agua del embalse se clasificó como deficiente en sales para ganadería (Bavera et al. 2001). Mientras que, para consumo humano, se determinó que los elementos y propiedades analizadas cumplen con los límites recomendados por el Código Alimentario Argentina (CAA) y por la Secretaría de Recursos Hídricos de la Provincia de Córdoba. Sin embargo, para alcanzar la definición de aptitud para consumo humano se debe complementar con el análisis microbiológico correspondiente. 
+En cuanto a la clasificación para distintos usos, el agua del embalse se clasificó como deficiente en sales para ganadería @bavera2001manual. Mientras que, para consumo humano, se determinó que los elementos y propiedades analizadas cumplen con los límites recomendados por el Código Alimentario Argentina (CAA) y por la Secretaría de Recursos Hídricos de la Provincia de Córdoba. Sin embargo, para alcanzar la definición de aptitud para consumo humano se debe complementar con el análisis microbiológico correspondiente. 
 
 A continuación se detalla la dinámica de las principales variables medidas: 
 
@@ -180,7 +183,7 @@ g_temp
 
 El análisis temporal demostró que los valores registrados durante la presente campaña fueron inferiores a los registrados durante el mes de mayo (`{r} temp1` ± `{r} temp1_sd` °C), pero similares a los registros de Junio del año 2024 (`{r} temp2` ± `{r} temp2_sd` °C).
 
-Respecto a la variación espacial, tanto los datos recolectados a campo como la información aportada por el análisis satelital de una imagen Landsat 8 TIRS del área de estudio (Fecha de adquisición 20 de Junio de 2025), demuestran que los valores bajos y homogéneos se registraron en el Lobulo Este del embalse.  Mientras que el Lobulo Oeste, registró los valores más heterogéneos, lo cual estuvo marcada por el ingreso de flujos de agua con baja temperatura por los ríos tributarios (> 14 °C) y altos valores de temperatura asociados a la pluma térmica generada por el canal de enfriamiento de la central nuclear (< 17 °C) (@fig-mapa-temp).
+Respecto a la variación espacial, tanto los datos recolectados a campo como la información aportada por el análisis satelital de una imagen Landsat 8 TIRS del área de estudio (Fecha de adquisición 20 de Junio de 2025), demuestran que los valores bajos y homogéneos se registraron en el Lóbulo Este del embalse.  Mientras que el Lóbulo Oeste, registró los valores más heterogéneos, lo cual estuvo marcada por el ingreso de flujos de agua con baja temperatura por los ríos tributarios (> 14 °C) y altos valores de temperatura asociados a la pluma térmica generada por el canal de enfriamiento de la central nuclear (< 17 °C) (@fig-mapa-temp).
 
 ```{r}
 #| label: fig-mapa-temp
@@ -192,7 +195,7 @@ source("scripts/mapa_temperatura.R")
 mapa_temperatura
 ```
 
-Como fuente de información adicional se cuenta con una plataforma de medición en tiempo real de variables hidro-metereológicas que pertenece al Gobierno de la Provincia de Córdoba y que es operada por el Observatorio Hidrometeorológico (MAAySP) en cooperación con el Laboratorio de Hidráulica (LH, UNC) (@fig-estacion-hidro). 
+Como fuente de información adicional se cuenta con una plataforma de medición en tiempo real de variables hidro-meteorológicas que pertenece al Gobierno de la Provincia de Córdoba y que es operada por el Observatorio Hidrometeorológico (MAAySP) en cooperación con el Laboratorio de Hidráulica (LH, UNC) (@fig-estacion-hidro). 
 
 ![Estación hidro-meteorológica](fig/estacion_hidro_meteo.jpg){#fig-estacion-hidro}
 
@@ -221,7 +224,7 @@ En cuanto al análisis temporal, durante los últimos meses se está observando 
 g_ds
 ```
 
-**- Sólidos Disueltos Totales (SDT)**: Esta variable presento un rango de `{r} sdt0_min` a `{r} sdt0_max` ppm con un valor medio de `{r} sdt0` ± `{r} sdt0_sd` ppm. Se observan diferencias estadísticas significativas al clasificar esta variable por ubicación espacial (ANOVA, $p-test < 0.05$). Asi, el Lobulo Oeste presentó los valores medios más altos de SDT (82.0 ± 1.4 ppm). Mientras que el Lobulo Este presentó las concentraciones más bajas (78.6 ± 1.9 ppm).
+**- Sólidos Disueltos Totales (SDT)**: Esta variable presento un rango de `{r} sdt0_min` a `{r} sdt0_max` ppm con un valor medio de `{r} sdt0` ± `{r} sdt0_sd` ppm. Se observan diferencias estadísticas significativas al clasificar esta variable por ubicación espacial (ANOVA, $p-test < 0.05$). Asi, el Lóbulo Oeste presentó los valores medios más altos de SDT (82.0 ± 1.4 ppm). Mientras que el Lóbulo Este presentó las concentraciones más bajas (78.6 ± 1.9 ppm).
 
 **- Turbidez (Turb)**: Esta variable presentó el mismo comportamiento que los SDT. Su media fue de `{r} turb0` ± `{r} turb0_sd` NTU, con un rango comprendido entre `{r} turb0_min` y `{r} turb0_max` NTU. 
 
@@ -231,7 +234,7 @@ Al igual que lo que ocurre con la transparencia del agua, el comportamiento de l
 
 **- Concentración de Clorofila-a (Cl-a)**: Esta variable registró concentraciones bajas en todo el reservorio, sin encontrarse floraciones de algas/ cianobacterias en la superficie del mismo. La media registrada fue de `{r} cla0` ± `{r} cla0_sd` mg/m<sup>3</sup>, estando por debajo de la media de referencia para este reservorio (11.3 ± 12.4 mg/m3). Las concentraciones más bajas de Cl-a (`{r} cla0_min` mg/m3), se registraron en la zona del Centro (SM 9) y donde confluyen los ríos Quillinzo, La Cruz y el canal de enfriamiento de la Central Nuclear (SM 4). El valor más alto (`{r} cla0_max` mg/m3) se midió en la zona de los ríos tributarios La Cruz y Quillinzo (SM 6).
 
-El procesamiento satelital confirmó el comportamiento de los datos recolectados a campo (**Figura 10**). En este sentido, se observó una distribución cuasi-homogenea en toda la superficie del embalse, con concentraciones relativamente bajas para toda la superficie del mismo.
+El procesamiento satelital confirmó el comportamiento de los datos recolectados a campo (**Figura 10**). En este sentido, se observó una distribución cuasi-homogénea en toda la superficie del embalse, con concentraciones relativamente bajas para toda la superficie del mismo.
 
 [MAPA CLOROFILA-A]{custom-style="Verbatim Char"}
 
@@ -263,9 +266,9 @@ source("scripts/figura_ciano.R")
 g_ciano
 ```
 
-Coincidiendo con la información satelital, se observó que las concentraciones más importantes de fitoplancton se encontraron en el Lóbulo Este (SM 1 y 2). En estos sitios se encontraron dominancia de cianobacterias (Cyanophytas). Este grupo fitoplanctónico también estuvo presente, aunque en menor proporción, en la zona de ingreso de los ríos tributarios Grande y Santa Rosa (SM 7 y 8). 
+Coincidiendo con la información satelital, se observó que las concentraciones más importantes de fitoplancton se encontraron en el Lóbulo Este (SM 1 y 2). En estos sitios se encontraron dominancia de cianobacterias (*Cyanophytas*). Este grupo fitoplanctónico también estuvo presente, aunque en menor proporción, en la zona de ingreso de los ríos tributarios Grande y Santa Rosa (SM 7 y 8). 
 
-Las diatomeas (Chrysophytas) estuvieron presentes en todos los sitios, pero en menor proporción que las cianobacterias. Mientras que los grupos representados por criptófitas (Pyrrophytas) y clorófitas (Chlorophytas) presentaron valores muy bajos en todo el embalse, sin encontrarse diferencias entre los sitios de muestreo y aportando muy poco a la abundancia general del reservorio.
+Las diatomeas (*Chrysophytas*) estuvieron presentes en todos los sitios, pero en menor proporción que las cianobacterias. Mientras que los grupos representados por criptófitas (*Pyrrophytas*) y clorófitas (*Chlorophytas*) presentaron valores muy bajos en todo el embalse, sin encontrarse diferencias entre los sitios de muestreo y aportando muy poco a la abundancia general del reservorio.
 
 # Determinación del estado trófico 
 
