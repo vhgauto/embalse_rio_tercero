@@ -99,5 +99,5 @@ if (FALSE) {
       .by = c(sitio, algas)
     )
 
-  write_csv(d_micro, "datos/d_micro.csv")
+  write_csv(d_micro, "datos/base_de_datos_micro.csv")
 }
