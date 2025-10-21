@@ -72,76 +72,124 @@ sitio_etq <- c(
 
 sitio_tbl <- tibble(sitio = sitio_nombre, sitio_etq = sitio_etq)
 
-if (FALSE) {
-  d1 <- readxl::read_xlsx(path = "datos/Base_ERT_OriginalActualizada.xlsx") |>
-    janitor::clean_names() |>
-    slice(3:24) |>
-    select(
-      punto = x1,
-      id,
-      sitio = sitio_de_muestreo,
-      latitud = x5,
-      longitud = fecha,
-      fecha = hora,
-      temperatura = temp_oh2,
-      pH = p_h,
-      od,
-      ds = disco_s,
-      sdt = soliddos_disueltos_totales,
-      turb = turbidez,
-      ce = conductividad,
-      cla = cloroflila_total_sonda,
-      cla_ciano = clorofila_ciano_sonda
-    ) |>
-    mutate(
-      across(
-        .cols = c(punto, latitud:cla_ciano),
-        .fns = as.numeric
-      )
-    ) |>
-    mutate(fecha = janitor::excel_numeric_to_date(fecha)) |>
-    mutate(latitud = if_else(latitud < 0, latitud, -latitud)) |>
-    mutate(longitud = if_else(longitud < 0, longitud, -longitud)) |>
-    pivot_longer(
-      cols = temperatura:cla_ciano,
-      values_to = "valor",
-      names_to = "param"
-    ) |>
-    full_join(parametros_tbl, by = join_by(param)) |>
-    full_join(sitio_tbl, by = join_by(sitio))
-}
+# if (FALSE) {
+#   d1 <- readxl::read_xlsx(path = "datos/Base_ERT_OriginalActualizada.xlsx") |>
+#     janitor::clean_names() |>
+#     slice(3:24) |>
+#     select(
+#       punto = x1,
+#       id,
+#       sitio = sitio_de_muestreo,
+#       latitud = x5,
+#       longitud = fecha,
+#       fecha = hora,
+#       temperatura = temp_oh2,
+#       pH = p_h,
+#       od,
+#       ds = disco_s,
+#       sdt = soliddos_disueltos_totales,
+#       turb = turbidez,
+#       ce = conductividad,
+#       cla = cloroflila_total_sonda,
+#       cla_ciano = clorofila_ciano_sonda
+#     ) |>
+#     mutate(
+#       across(
+#         .cols = c(punto, latitud:cla_ciano),
+#         .fns = as.numeric
+#       )
+#     ) |>
+#     mutate(fecha = janitor::excel_numeric_to_date(fecha)) |>
+#     mutate(latitud = if_else(latitud < 0, latitud, -latitud)) |>
+#     mutate(longitud = if_else(longitud < 0, longitud, -longitud)) |>
+#     pivot_longer(
+#       cols = temperatura:cla_ciano,
+#       values_to = "valor",
+#       names_to = "param"
+#     ) |>
+#     full_join(parametros_tbl, by = join_by(param)) |>
+#     full_join(sitio_tbl, by = join_by(sitio))
+# }
 
+# if (FALSE) {
+#   d2 <- readxl::read_xlsx(
+#     path = "datos/Base_ERT_OriginalActualizada.xlsx",
+#     sheet = 1
+#   ) |>
+#     janitor::clean_names() |>
+#     slice(25:1e5) |>
+#     select(
+#       punto = x1,
+#       id,
+#       sitio = sitio_de_muestreo,
+#       latitud = coordenadas_decimales,
+#       longitud = x5,
+#       fecha,
+#       temperatura = temp_oh2,
+#       pH = p_h,
+#       od,
+#       ds = disco_s,
+#       sdt = soliddos_disueltos_totales,
+#       turb = turbidez,
+#       ce = conductividad,
+#       cla = cloroflila_total_sonda,
+#       cla_ciano = clorofila_ciano_sonda
+#     ) |>
+#     names()
+#   mutate(
+#     across(
+#       .cols = c(punto, latitud:cla_ciano),
+#       .fns = as.numeric
+#     )
+#   ) |>
+#     mutate(fecha = janitor::excel_numeric_to_date(fecha)) |>
+#     mutate(latitud = if_else(latitud < 0, latitud, -latitud)) |>
+#     mutate(longitud = if_else(longitud < 0, longitud, -longitud)) |>
+#     pivot_longer(
+#       cols = temperatura:cla_ciano,
+#       values_to = "valor",
+#       names_to = "param"
+#     ) |>
+#     full_join(parametros_tbl, by = join_by(param)) |>
+#     full_join(sitio_tbl, by = join_by(sitio))
+# }
+
+# if (FALSE) {
+#   write_csv(rbind(d1, d2), "datos/base_de_datos.csv")
+# }
+
+# google sheet
 if (FALSE) {
-  d2 <- readxl::read_xlsx(
+  readxl::read_xlsx(
     path = "datos/Base_ERT_OriginalActualizada.xlsx",
-    sheet = 1
+    sheet = 1,
+    skip = 2
   ) |>
     janitor::clean_names() |>
-    slice(25:1e5) |>
     select(
-      punto = x1,
-      id,
-      sitio = sitio_de_muestreo,
-      latitud = coordenadas_decimales,
-      longitud = x5,
-      fecha,
-      temperatura = temp_oh2,
-      pH = p_h,
-      od,
-      ds = disco_s,
-      sdt = soliddos_disueltos_totales,
-      turb = turbidez,
-      ce = conductividad,
-      cla = cloroflila_total_sonda,
-      cla_ciano = clorofila_ciano_sonda
+      punto = 1,
+      id = 2,
+      sitio = 3,
+      latitud = 4,
+      longitud = 5,
+      fecha = 6,
+      temperatura = 13,
+      pH = 14,
+      od = 15,
+      ds = 16,
+      ce = 18,
+      sdt = 19,
+      turb = 20,
+      cla = 25,
+      cla_ciano = 26
     ) |>
     mutate(
       across(
-        .cols = c(punto, latitud:cla_ciano),
+        .cols = c(punto:id, latitud:longitud, temperatura:cla_ciano),
         .fns = as.numeric
       )
     ) |>
-    mutate(fecha = janitor::excel_numeric_to_date(fecha)) |>
+    mutate(fecha = as.Date(fecha)) |>
     mutate(latitud = if_else(latitud < 0, latitud, -latitud)) |>
     mutate(longitud = if_else(longitud < 0, longitud, -longitud)) |>
     pivot_longer(
@@ -150,7 +198,8 @@ if (FALSE) {
       names_to = "param"
     ) |>
     full_join(parametros_tbl, by = join_by(param)) |>
-    full_join(sitio_tbl, by = join_by(sitio))
+    full_join(sitio_tbl, by = join_by(sitio)) |>
+    drop_na(valor) |>
+    fill(fecha) |>
+    write_csv("datos/base_de_datos.csv")
 }
-
-# write_csv(rbind(d1, d2), "datos/d.csv")
