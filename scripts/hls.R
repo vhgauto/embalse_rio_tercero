@@ -1,8 +1,14 @@
+# paquetes ---------------------------------------------------------------
+
 library(rstac)
 library(terra)
 
-fecha_actual <- read_csv("datos/d.csv", show_col_types = FALSE) |>
-  filter(month(fecha) == mes_actual & year(fecha) == año_actual) |>
+# datos ------------------------------------------------------------------
+
+fecha_actual <- filter(
+  d,
+  month(fecha) == mes_actual & year(fecha) == año_actual
+) |>
   distinct(fecha) |>
   pull(fecha)
 
@@ -202,14 +208,38 @@ f_masked <- function(W) {
   )
 }
 
-aerosol_masked <- f_masked(aerosol_stack)
-blue_masked <- f_masked(blue_stack)
-green_masked <- f_masked(green_stack)
-red_masked <- f_masked(red_stack)
-nir_masked <- f_masked(nir_stack)
-swir1_masked <- f_masked(swir1_stack)
-swir2_masked <- f_masked(swir2_stack)
-fmask_masked <- f_masked(fmask_stack)
+ff_mascara <- function(S) {
+  if_else(((S %/% 2^5) %% 2) == 1, 1, NA)
+}
+
+ff_bit <- app(fmask_stack[[1]], ff_mascara)
+
+# aerosol_masked <- f_masked(aerosol_stack)
+# blue_masked <- f_masked(blue_stack)
+# green_masked <- f_masked(green_stack)
+# red_masked <- f_masked(red_stack)
+# nir_masked <- f_masked(nir_stack)
+# swir1_masked <- f_masked(swir1_stack)
+# swir2_masked <- f_masked(swir2_stack)
+# fmask_masked <- f_masked(fmask_stack)
+
+# aerosol_masked <- aerosol_stack[[1]] * ff_bit
+# blue_masked <- blue_stack[[1]] * ff_bit
+# green_masked <- green_stack[[1]] * ff_bit
+# red_masked <- red_stack[[1]] * ff_bit
+# nir_masked <- nir_stack[[1]] * ff_bit
+# swir1_masked <- swir1_stack[[1]] * ff_bit
+# swir2_masked <- swir2_stack[[1]] * ff_bit
+# fmask_masked <- fmask_stack[[1]] * ff_bit
+
+aerosol_masked <- aerosol_stack[[1]]
+blue_masked <- blue_stack[[1]]
+green_masked <- green_stack[[1]]
+red_masked <- red_stack[[1]]
+nir_masked <- nir_stack[[1]]
+swir1_masked <- swir1_stack[[1]]
+swir2_masked <- swir2_stack[[1]]
+fmask_masked <- fmask_stack[[1]]
 
 f_recorte <- function(Q) {
   r <- rast(
@@ -220,7 +250,8 @@ f_recorte <- function(Q) {
       red_masked[[Q]],
       nir_masked[[Q]],
       swir1_masked[[Q]],
-      swir2_masked[[Q]]
+      swir2_masked[[Q]],
+      fmask_masked[[Q]]
     )
   )
 }
@@ -235,7 +266,12 @@ fecha_recorte <- filter(
   gsub(pattern = "-", replacement = "", x = _)
 
 f_write_raster <- function(Y) {
-  writeRaster(Y, paste0("recortes/", fecha_recorte, ".tif"), overwrite = TRUE)
+  terra::saveRDS(
+    Y,
+    paste0("recortes/", fecha_recorte, ".rds"),
+    # overwrite = TRUE
+    # datatype = "INT8U"
+  )
   print(ymd(fecha_recorte))
 }
 
@@ -315,7 +351,9 @@ temp_stack <- open_hls_temp(
   nombre = "temperatura"
 )
 
-temp_masked <- f_masked(temp_stack)[[1]]
+# temp_masked <- f_masked(temp_stack)[[1]]
+# temp_masked <- temp_stack * ff_bit
+temp_masked <- temp_stack
 
 fecha_recorte_temp <- filter(
   sf_items_temp,
