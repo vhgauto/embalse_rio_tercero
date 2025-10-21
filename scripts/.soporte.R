@@ -46,7 +46,7 @@ update_geom_defaults("text", aes(family = "Times New Roman"))
 
 # datos ------------------------------------------------------------------
 
-d <- read_csv("datos/d.csv", show_col_types = FALSE) |>
+d <- read_csv("datos/base_de_datos.csv", show_col_types = FALSE) |>
   mutate(unidad = if_else(is.na(unidad), "", unidad))
 
 promedio_tbl <- filter(
@@ -62,8 +62,8 @@ promedio_tbl <- filter(
 
 # mes y año --------------------------------------------------------------
 
-mes_actual <- 6
-año_actual <- 2025
+# mes_actual <- 6
+# año_actual <- 2025
 
 # figuras ----------------------------------------------------------------
 
