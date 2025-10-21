@@ -1,7 +1,6 @@
 # datos ------------------------------------------------------------------
 
-d_ds <- read_csv("datos/d.csv", show_col_types = FALSE) |>
-  filter(param == "ds") |>
+d_ds <- filter(d, param == "ds") |>
   select(fecha, valor) |>
   drop_na() |>
   mutate(mes = month(fecha), año = year(fecha)) |>
@@ -9,8 +8,7 @@ d_ds <- read_csv("datos/d.csv", show_col_types = FALSE) |>
   mutate(fecha = make_date(year = año, month = mes, day = 21)) |>
   filter(between(fecha, fecha_i, fecha_f))
 
-d_cla <- read_csv("datos/d.csv", show_col_types = FALSE) |>
-  filter(param == "cla") |>
+d_cla <- filter(d, param == "cla") |>
   select(fecha, valor) |>
   drop_na() |>
   mutate(mes = month(fecha), año = year(fecha)) |>
