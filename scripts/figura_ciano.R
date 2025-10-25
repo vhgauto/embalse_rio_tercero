@@ -2,7 +2,7 @@
 
 algas_orden <- c("Diatomeas", "Clorofitas", "Cianobacterias", "Criptófitas")
 
-d_micro <- read_csv("datos/base_de_datos_micro.csv", show_col_types = FALSE) |>
+d_micro <- read_csv("datos/base_de_datos_micro2.csv", show_col_types = FALSE) |>
   mutate(algas = factor(algas, levels = algas_orden))
 
 # figura -----------------------------------------------------------------
@@ -15,6 +15,7 @@ g_ciano <- ggplot(d_micro, aes(sitio, suma, fill = algas)) +
   ) +
   scale_y_continuous(
     expand = expansion(mult = c(0, .05), add = c(0, 0)),
+    breaks = scales::breaks_width(1e5),
     labels = \(Q) {
       if_else(
         Q == 0,
@@ -32,7 +33,7 @@ g_ciano <- ggplot(d_micro, aes(sitio, suma, fill = algas)) +
     breaks = algas_orden,
     values = c("#F4A261", "#FFFF00", "#2A9D8F", "#B7DEE8")
   ) +
-  labs(x = "Sitio de muestreo", y = "Abundancia (1E6 cel/ml)") +
+  labs(x = "Sitio de muestreo", y = "Abundancia (cel/L)") +
   guides(
     fill = guide_legend(
       override.aes = list(color = "black", linewidth = .1)

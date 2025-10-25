@@ -1,39 +1,17 @@
-f_pdf <- function(archivo) {
-  tabulapdf::extract_tables(archivo, pages = 2, method = "stream") |>
-    pluck(1) |>
-    select(
-      "parametro" = 1
-    ) |>
-    drop_na() |>
-    filter(str_detect(parametro, ":")) |>
-    separate_wider_delim(
-      cols = parametro,
-      delim = ":",
-      names = c("param", "valor")
-    ) |>
-    mutate(valor = str_trim(valor)) |>
-    filter(param != "Sólidos Disueltos Totales") |>
-
-    mutate(unidad = str_replace(valor, ".+ ((\\w)+)", "\\1")) |>
-    mutate(
-      unidad = if_else(unidad %in% c("Incoloro", "Inodoro"), "-", unidad)
-    ) |>
-    mutate(unidad = if_else(param %in% c("RAS", "pH"), "-", unidad)) |>
-    mutate(valor_n = str_remove(valor, unidad)) |>
-    mutate(valor_n = if_else(is.na(valor_n), valor, valor_n)) |>
-    select(param, valor_n, unidad) |>
-    mutate(param = str_replace(param, "oC", "°C"))
-}
-
-d9 <- f_pdf(
-  "datos/protocolo análisis agua-Embalsr rio III-Sitio 9-Bonansea.pdf"
+protocolos <- list.files(
+  paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
+  pattern = "protocolo",
+  full.names = TRUE
 )
-d11 <- f_pdf(
-  "datos/protocolo análisis agua-Embalsr rio III-Sitio 11-Bonansea.pdf"
-)
+
+sitio9 <- protocolos[str_detect(protocolos, "9")]
+sitio11 <- protocolos[str_detect(protocolos, "11")]
+
+d9 <- f_pdf1(sitio9)
+d11 <- f_pdf1(sitio11)
 
 d_limite <- tabulapdf::extract_tables(
-  "datos/protocolo análisis agua-Embalsr rio III-Sitio 11-Bonansea.pdf",
+  "datos/calidad_agua_2025_10/protocolo análisis agua-Dr. Bonansea-sitio 11.pdf",
   pages = 2,
   method = "stream"
 ) |>
@@ -42,7 +20,19 @@ d_limite <- tabulapdf::extract_tables(
   drop_na(param) |>
   mutate(limite = replace_na(limite, "-")) |>
   mutate(param = str_replace(param, "(.+)\\: .+", "\\1")) |>
-  mutate(param = str_replace(param, "oC", "°C"))
+  mutate(param = str_replace(param, "oC", "°C")) |>
+  mutate(limite = str_replace_all(limite, ",", "."))
+
+nit_l <- list.files(
+  paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
+  pattern = "W",
+  full.names = TRUE
+)
+
+tabulapdf::extract_text(nit_l[str_detect(nit_l, "11")]) |>
+  str_split("\n") |>
+  pluck(1) |>
+  str_replace_all("\r", "")
 
 tabla_calidad_tbl <- inner_join(d9, d11, by = join_by(param, unidad)) |>
   relocate(1, 3, 2, 4) |>
@@ -60,13 +50,28 @@ tabla_calidad_tbl <- inner_join(d9, d11, by = join_by(param, unidad)) |>
     "Determinación" = param,
     "Unidad" = unidad,
     "Límite de aptitud" = limite
-  ) |>
-  mutate(across(
-    .cols = c("SM 9: Centro", "SM 11: Presa"),
-    .fns = ~ str_replace_all(., "\\.", ",")
-  ))
+  )
+
+nit_l <- list.files(
+  paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
+  pattern = "W",
+  full.names = TRUE
+)
+
+nit9 <- f_pdf2(9)
+nit11 <- f_pdf2(11)
+
+nit_tbl <- tibble(
+  "1" = c("Nitrógeno Kjeldahl", "Fósforo Total"),
+  "2" = "mg/L",
+  "3" = nit9,
+  "4" = nit11,
+  "5" = "-"
+)
+
+names(nit_tbl) <- names(tabla_calidad_tbl)
 
 tabla_calidad_md <- knitr::kable(
-  tabla_calidad_tbl,
+  bind_rows(tabla_calidad_tbl, nit_tbl),
   col.names = paste0("**", names(tabla_calidad_tbl), "**")
 )

@@ -6,7 +6,7 @@ parametros_label <- c(
   "Temperatura del agua (°C)",
   "pH",
   "Oxígeno Disuelto (mg/L)",
-  "Transparencia del<br>Agua (m)",
+  "Transparencia<br>del Agua (m)",
   "Concentración de<br>Clorofila-a (mg/m<sup>3</sup>)",
   "Clorofila-a de<br>Cianobacterias (mg/m<sup>3</sup>)"
 )
@@ -38,27 +38,25 @@ d_comp <- rbind(d_actual, d_mes_anterior, d_año_anterior) |>
   mutate(fecha_label = fct_reorder(as.character(fecha_label), fecha)) |>
   inner_join(parametros_tbl, by = join_by(param)) |>
   mutate(param = factor(param, levels = parametros_interes)) |>
-  mutate(parametros_label = fct_reorder(parametros_label, as.numeric(param)))
+  mutate(parametros_label = fct_reorder(parametros_label, as.numeric(param))) |>
+  reframe(
+    param_m = mean(valor, na.rm = TRUE),
+    param_sd = sd(valor, na.rm = TRUE),
+    .by = c(parametros_label, fecha_label)
+  )
 
 # figura -----------------------------------------------------------------
 
-g_param <- ggplot(d_comp, aes(fecha_label, valor, fill = fecha_label)) +
-  stat_summary(
-    geom = "col",
-    fun = median
-  ) +
-  stat_summary(
-    geom = "errorbar",
-    fun = "median",
-    fun.min = \(x) median(x) - sd(x),
-    fun.max = \(x) median(x) + sd(x),
+g_param <- ggplot(d_comp, aes(fecha_label, param_m, fill = fecha_label)) +
+  geom_col() +
+  geom_errorbar(
+    aes(ymin = param_m - param_sd, ymax = param_m + param_sd),
     linewidth = .25,
     width = .2
   ) +
-  facet_wrap(vars(parametros_label), scale = "free", nrow = 2) +
+  facet_wrap(vars(parametros_label), nrow = 2, scales = "free") +
   scale_y_continuous(
-    expand = expansion(mult = c(0, .05), add = c(0, 0)),
-    labels = scales::label_number(big.mark = ".", decimal.mark = ",")
+    expand = expansion(mult = c(0, .05), add = c(0, 0))
   ) +
   scale_fill_manual(
     values = c("#990100", "#9BBB58", "#4F81BC")
@@ -66,7 +64,7 @@ g_param <- ggplot(d_comp, aes(fecha_label, valor, fill = fecha_label)) +
   labs(y = NULL, x = NULL) +
   theme_bw(base_size = 9, base_family = "Times New Roman") +
   theme(
-    plot.margin = margin(10, 5, 5, 5),
+    plot.margin = margin(0, 5, 5, 5),
     legend.position = "none",
     axis.text = element_text(color = "black"),
     axis.ticks.x = element_blank(),

@@ -27,13 +27,28 @@ gen_ciano <- c("Dolichospermum", "Microcystis", "Nostoc")
 
 gen_criptofitas <- c("Ceratium", "Peridinium")
 
-f_micro <- function(W) {
+ex <- list.files(
+  path = paste0("datos/algas_", año_actual, "_", mes_actual_chr),
+  full.names = TRUE
+)
+
+archivo <- "datos/algas_2025_10/FitoERT_2025_10_08.xlsx"
+
+f_micro <- function(archivo, W) {
   ctes_tbl <- readxl::read_xlsx(
-    path = "datos/FitoERT_2025_06_19.xlsx",
+    path = ex,
     sheet = W,
     range = "A1:B5"
   ) |>
     rename(param = 1, valor = 2)
+
+  sitio_int <- readxl::read_xlsx(
+    path = ex,
+    sheet = W,
+    range = "F1:F2"
+  ) |>
+    names() |>
+    as.integer()
 
   n_campos <- ctes_tbl[ctes_tbl$param == "N° Campos", 2]$valor
   vol_filtrado <- ctes_tbl[ctes_tbl$param == "Vol Filtrado mL (V)", 2]$valor
@@ -47,7 +62,7 @@ f_micro <- function(W) {
   ]$valor
 
   readxl::read_xlsx(
-    path = "datos/FitoERT_2025_06_19.xlsx",
+    path = archivo,
     sheet = W,
     skip = 5
   ) |>
@@ -78,13 +93,13 @@ f_micro <- function(W) {
         (area_campo * n_campos * vol_filtrado)
     ) |>
     mutate(cel_litro = round(indiv_ml * factor_celular * 1000)) |>
-    mutate(sitio = W)
+    mutate(sitio = sitio_int)
 }
 
 algas_orden <- c("Diatomeas", "Clorofitas", "Cianobacterias", "Criptófitas")
 
 if (FALSE) {
-  d_micro <- map_dfr(1:11, f_micro) |>
+  d_micro <- map_dfr(1:10, ~ f_micro(archivo, .x)) |>
     mutate(
       algas = case_when(
         generos %in% gen_diatomeas ~ "Diatomeas",
@@ -97,7 +112,8 @@ if (FALSE) {
     reframe(
       suma = sum(cel_litro),
       .by = c(sitio, algas)
-    )
+    ) |>
+    mutate(fecha = max(d$fecha), .before = 1)
 
-  write_csv(d_micro, "datos/base_de_datos_micro.csv")
+  write_csv(d_micro, "datos/base_de_datos_micro2.csv")
 }

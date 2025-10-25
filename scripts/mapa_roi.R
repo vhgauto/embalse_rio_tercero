@@ -7,13 +7,13 @@ library(tidyverse)
 
 # vectores ---------------------------------------------------------------
 
-# v <- ext(-64.543133, -64.398079, -32.271749, -32.155559) |>
-#   vect(crs = "EPSG:4326")
-# e <- ext(r)
-# w <- vect("vector/argentina-251016-free/gis_osm_water_a_free_1.shp")
-# w_crop <- crop(w, e)
-# embalse <- w_crop2[w_crop$name == "Embalse Ministro Juan Pistarini"]
-# writeVector(embalse, "vector/embalse.gpkg")
+v <- ext(-64.543133, -64.398079, -32.271749, -32.155559) |>
+  vect(crs = "EPSG:4326")
+e <- ext(r)
+w <- vect("vector/argentina-251016-free/gis_osm_water_a_free_1.shp")
+w_crop <- crop(w, e)
+embalse <- w_crop2[w_crop$name == "Embalse Ministro Juan Pistarini"]
+writeVector(embalse, "vector/embalse.gpkg")
 embalse <- vect("vector/embalse.gpkg")
 
 ciudades <- tibble(

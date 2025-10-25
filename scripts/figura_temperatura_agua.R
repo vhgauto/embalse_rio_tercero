@@ -63,7 +63,7 @@ g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
   ) +
   scale_x_date(
     breaks = scales::breaks_width("1 month"),
-    labels = \(x) str_to_sentence(format(x, "%b %y")),
+    labels = \(x) str_to_sentence(format(x, "%b '%y")),
     expand = c(0, 0)
   ) +
   scale_y_continuous(

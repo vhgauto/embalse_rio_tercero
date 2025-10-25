@@ -1,5 +1,8 @@
 library(tidyverse)
 
+d1 <- read_csv("datos/base_de_datos.csv", show_col_types = FALSE) |>
+  mutate(unidad = if_else(is.na(unidad), "", unidad))
+
 parametros_nombre <- c(
   "temperatura",
   "pH",
@@ -72,94 +75,13 @@ sitio_etq <- c(
 
 sitio_tbl <- tibble(sitio = sitio_nombre, sitio_etq = sitio_etq)
 
-# if (FALSE) {
-#   d1 <- readxl::read_xlsx(path = "datos/Base_ERT_OriginalActualizada.xlsx") |>
-#     janitor::clean_names() |>
-#     slice(3:24) |>
-#     select(
-#       punto = x1,
-#       id,
-#       sitio = sitio_de_muestreo,
-#       latitud = x5,
-#       longitud = fecha,
-#       fecha = hora,
-#       temperatura = temp_oh2,
-#       pH = p_h,
-#       od,
-#       ds = disco_s,
-#       sdt = soliddos_disueltos_totales,
-#       turb = turbidez,
-#       ce = conductividad,
-#       cla = cloroflila_total_sonda,
-#       cla_ciano = clorofila_ciano_sonda
-#     ) |>
-#     mutate(
-#       across(
-#         .cols = c(punto, latitud:cla_ciano),
-#         .fns = as.numeric
-#       )
-#     ) |>
-#     mutate(fecha = janitor::excel_numeric_to_date(fecha)) |>
-#     mutate(latitud = if_else(latitud < 0, latitud, -latitud)) |>
-#     mutate(longitud = if_else(longitud < 0, longitud, -longitud)) |>
-#     pivot_longer(
-#       cols = temperatura:cla_ciano,
-#       values_to = "valor",
-#       names_to = "param"
-#     ) |>
-#     full_join(parametros_tbl, by = join_by(param)) |>
-#     full_join(sitio_tbl, by = join_by(sitio))
-# }
+mes_d <- month(max(d1$fecha))
+año_d <- year(max(d1$fecha))
 
-# if (FALSE) {
-#   d2 <- readxl::read_xlsx(
-#     path = "datos/Base_ERT_OriginalActualizada.xlsx",
-#     sheet = 1
-#   ) |>
-#     janitor::clean_names() |>
-#     slice(25:1e5) |>
-#     select(
-#       punto = x1,
-#       id,
-#       sitio = sitio_de_muestreo,
-#       latitud = coordenadas_decimales,
-#       longitud = x5,
-#       fecha,
-#       temperatura = temp_oh2,
-#       pH = p_h,
-#       od,
-#       ds = disco_s,
-#       sdt = soliddos_disueltos_totales,
-#       turb = turbidez,
-#       ce = conductividad,
-#       cla = cloroflila_total_sonda,
-#       cla_ciano = clorofila_ciano_sonda
-#     ) |>
-#     names()
-#   mutate(
-#     across(
-#       .cols = c(punto, latitud:cla_ciano),
-#       .fns = as.numeric
-#     )
-#   ) |>
-#     mutate(fecha = janitor::excel_numeric_to_date(fecha)) |>
-#     mutate(latitud = if_else(latitud < 0, latitud, -latitud)) |>
-#     mutate(longitud = if_else(longitud < 0, longitud, -longitud)) |>
-#     pivot_longer(
-#       cols = temperatura:cla_ciano,
-#       values_to = "valor",
-#       names_to = "param"
-#     ) |>
-#     full_join(parametros_tbl, by = join_by(param)) |>
-#     full_join(sitio_tbl, by = join_by(sitio))
-# }
-
-# if (FALSE) {
-#   write_csv(rbind(d1, d2), "datos/base_de_datos.csv")
-# }
-
-# google sheet
-if (FALSE) {
+if (mes_d == mes_actual & año_d == año_actual) {
+  TRUE
+} else {
+  # google sheet
   readxl::read_xlsx(
     path = "datos/Base_ERT_OriginalActualizada.xlsx",
     sheet = 1,

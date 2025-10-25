@@ -21,10 +21,7 @@ tabla_parametros <- filter(
   )
 
 tabla_parametros_chr <- tabla_parametros |>
-  mutate(across(
-    .cols = -sitio_etq,
-    .fns = ~ format(round(., 1), nsmall = 1, big.mark = ".", decimal.mark = ",")
-  )) |>
+  mutate(across(.cols = -sitio_etq, .fns = formato)) |>
   mutate(across(
     .cols = -sitio_etq,
     .fns = ~ if_else(str_detect(., "NA"), "-", .)
@@ -49,7 +46,7 @@ tabla_parametros_resumen <- tabla_parametros |>
     names_to = "sitio_etq"
   ) |>
   pivot_wider(names_from = param, values_from = valor) |>
-  mutate(across(.cols = -sitio_etq, .fns = ~ round(., 1))) |>
+  mutate(across(.cols = -sitio_etq, .fns = formato)) |>
   mutate(sitio_etq = paste0("**", sitio_etq, "**")) |>
   mutate(across(.cols = -sitio_etq, .fns = as.character))
 
@@ -59,9 +56,9 @@ unidades_v <- c(
   "-",
   "mg/L",
   "m",
+  "µS/cm",
   "ppm",
   "UNT",
-  "µS/cm",
   "mg/m3",
   "mg/m3"
 )

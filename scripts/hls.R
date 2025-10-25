@@ -283,7 +283,7 @@ items_temp <- s |>
   stac_search(
     collections = "HLSL30_2.0",
     bbox = bbox,
-    datetime = roi_datetime,
+    datetime = "2025-10-01T00:00:00Z/2025-10-03T23:59:59Z",
     limit = 100
   ) |>
   post_request()
@@ -300,42 +300,20 @@ sf_items_temp <- cbind(
 )
 
 extract_asset_urls_temp <- function(feature) {
-  # collection_id <- feature$collection
-  # if (collection_id == "HLSS30_2.0") {
-  #   bands = c("B01")
-  # } else if (collection_id == "HLSL30_2.0") {
-  #   bands = c("B10")
-  # }
-  sapply("B10", function(band) feature$assets[[band]]$href)
+  sapply(c("B02", "B03", "B04", "B10", "B11"), function(band) {
+    feature$assets[[band]]$href
+  })
 }
 
 asset_urls_temp <- t(sapply(items_temp$features, extract_asset_urls_temp))
-colnames(asset_urls_temp) <- "temperatura"
+colnames(asset_urls_temp) <- c("B02", "B03", "B04", "temp_10", "temp_11")
 sf_items_temp <- cbind(sf_items_temp, asset_urls_temp)
 
 open_hls_temp <- function(url, roi = NULL, nombre) {
   # Add VSICURL prefix
   url <- paste0('/vsicurl/', url)
-  # Retrieve metadata
-  # meta <- describe(url)
-  # Check if dataset is Quality Layer (Fmask) - no scaling this asset (int8 datatype)
-  # is_fmask <- any(grep("Fmask", meta))
-  # Check if Scale is present in band metadata
-  # will_autoscale <- any(grep("Scale:", meta))
-  # Read the raster
   r <- rast(url)
   names(r) <- nombre
-  # Apply Scale Factor if necessary
-  # if (!will_autoscale && !is_fmask) {
-  #   print(paste(
-  #     "No scale factor found in band metadata.",
-  #     "Applying scale factor of 0.0001 to",
-  #     basename(url)
-  #   ))
-  #   r <- r * 0.0001
-  #   names(r) <- nombre
-  # }
-  # Crop if roi specified
   if (!is.null(roi)) {
     # Reproject roi to match crs of r
     roi_reproj <- project(roi, crs(r))
@@ -345,15 +323,47 @@ open_hls_temp <- function(url, roi = NULL, nombre) {
   return(r)
 }
 
-temp_stack <- open_hls_temp(
-  url = sf_items_temp$temperatura,
+stack_b2 <- open_hls_temp(
+  url = sf_items_temp$B02,
   roi = roi,
-  nombre = "temperatura"
+  nombre = "b02"
 )
+# stack_b2[stack_b2$b02 < 0] <- 0
+
+stack_b3 <- open_hls_temp(
+  url = sf_items_temp$B03,
+  roi = roi,
+  nombre = "b03"
+)
+
+stack_b4 <- open_hls_temp(
+  url = sf_items_temp$B04,
+  roi = roi,
+  nombre = "b04"
+)
+
+temp_stack_10 <- open_hls_temp(
+  url = sf_items_temp$temp_10,
+  roi = roi,
+  nombre = "temp_b10"
+)
+
+temp_stack_11 <- open_hls_temp(
+  url = sf_items_temp$temp_11,
+  roi = roi,
+  nombre = "temp_b11"
+)
+
+# temp_stack <- open_hls_temp(
+#   url = sf_items_temp$temperatura,
+#   roi = roi,
+#   nombre = "temperatura"
+# )
 
 # temp_masked <- f_masked(temp_stack)[[1]]
 # temp_masked <- temp_stack * ff_bit
-temp_masked <- temp_stack
+# temp_masked <- temp_stack * .01
+temp_masked <- temp_stack_10
 
 fecha_recorte_temp <- filter(
   sf_items_temp,
@@ -367,3 +377,21 @@ writeRaster(
   paste0("recortes/", fecha_recorte_temp, "_temp.tif"),
   overwrite = TRUE
 )
+
+pp <- c(stack_b2, stack_b3, stack_b4, temp_stack_10)
+writeRaster(pp, "recortes/pp.tif")
+
+plotRGB(pp, r = 3, g = 2, b = 1, scale = .1, stretch = "lin")
+
+library(tidyterra)
+
+ggplot() +
+  geom_spatraster_rgb(
+    data = pp,
+    r = 3,
+    g = 2,
+    b = 1,
+    max_col_value = .2,
+    # stretch = "hist",
+    interpolate = FALSE
+  )

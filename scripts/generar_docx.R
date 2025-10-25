@@ -1,1 +1,1 @@
-informe(MES = 6, AÑO = 2025)
+informe(MES = 10, AÑO = 2025)

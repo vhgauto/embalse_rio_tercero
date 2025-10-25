@@ -1,59 +1,28 @@
 # paquetes ---------------------------------------------------------------
 
-library(terra)
 library(ggspatial)
 library(tidyterra)
 
-# datos ------------------------------------------------------------------
+# mapa -------------------------------------------------------------------
 
-mes_actual_chr <- if (mes_actual <= 9) paste0("0", mes_actual) else mes_actual
+# fecha_temp <- r_actual[!str_detect(r_actual, "temp")] |>
+#   basename() |>
+#   sub(".rds", "", x = _)
 
-r_files <- list.files("recortes/", full.names = TRUE)
-r_actual <- r_files[str_detect(r_files, paste0(año_actual, mes_actual_chr))]
-r_actual <- r_actual[str_detect(r_actual, "rds")]
-
-r <- readRDS(r_actual)
-writeRaster(
-  r,
-  paste0(
-    "recortes/",
-    sub(".rds", "", basename(r_actual[!str_detect(r_actual, "temp")])),
-    ".tif"
-  ),
-  overwrite = TRUE
-)
-
-r_actual_temp <- r_files[str_detect(
-  r_files,
-  paste0(año_actual, mes_actual_chr)
-)]
-r_actual_temp <- r_actual_temp[str_detect(r_actual_temp, "temp")]
-
-r_temp <- rast(r_actual_temp)
+r_actual_temp <- "recortes/20251002_temp.tif"
 
 ff_mascara <- function(S) {
   if_else(((S %/% 2^5) %% 2) == 1, 1, NA)
 }
 
-r_mask <- app(r$fmask, ff_mascara)
+r_mask <- app(r$fmask, ff_mascara) |>
+  mask(emb)
 r_agua <- r * r_mask
+r_temp <- rast(r_actual_temp)
 r_temp_agua <- r_temp * r_mask
 
-# máscara de agua --------------------------------------------------------
+fecha_temp <- "20251002"
 
-# mndwi <- (r$green - r$nir) / (r$green + r$nir)
-# mndwi[is.infinite(mndwi)] <- NA
-
-# agua <- thresh(mndwi, method = "mean")
-# agua[isFALSE(agua)] <- NA
-
-# r_temp_agua <- r_temp * agua
-
-# mapa -------------------------------------------------------------------
-
-fecha_temp <- r_actual[!str_detect(r_actual, "temp")] |>
-  basename() |>
-  sub(".rds", "", x = _)
 etq_temp <- paste0(
   "Producto HSL\nFecha: ",
   ymd(fecha_temp),
@@ -65,6 +34,18 @@ mapa_temperatura <- ggplot() +
   scale_fill_gradient(low = "grey50", high = "grey90") +
   ggnewscale::new_scale_fill() +
   geom_spatraster(data = r_temp_agua, interpolate = FALSE) +
+  geom_segment(
+    data = flechas_tbl,
+    aes(x = xi, y = yi, xend = xf, yend = yf, group = id),
+    arrow = arrow(angle = 10, length = unit(2, "mm"), type = "closed"),
+    linewidth = .2
+  ) +
+  geom_spatvector(
+    data = emb,
+    fill = NA,
+    color = "grey30",
+    linewidth = .2
+  ) +
   annotate(
     geom = "text",
     x = I(.99),
@@ -76,16 +57,15 @@ mapa_temperatura <- ggplot() +
     vjust = 0,
     lineheight = .8
   ) +
-  scale_fill_viridis_c(
-    option = "turbo",
-    na.value = NA,
-    name = "Temperatura (°C)"
+  scale_fill_gradientn(
+    colors = RColorBrewer::brewer.pal(n = 11, name = "RdBu"),
+    na.value = NA
   ) +
   annotation_north_arrow(
     location = "tl",
     style = north_arrow_fancy_orienteering(),
-    height = unit(1, "cm"),
-    width = unit(1, "cm"),
+    height = unit(.8, "cm"),
+    width = unit(.8, "cm"),
     pad_x = unit(0.25, "cm"),
     pad_y = unit(0.25, "cm")
   ) +
@@ -97,13 +77,14 @@ mapa_temperatura <- ggplot() +
     text_family = "Times New Roman"
   ) +
   coord_sf(expand = FALSE) +
+  labs(fill = "Temperatura (°C)") +
   theme_void(base_size = 8, base_family = "Times New Roman") +
   theme(
     plot.background = element_rect(fill = "white", color = NA),
     legend.key.height = unit(7, "pt"),
     legend.box.margin = margin(0, 0, 0, 0),
     legend.position = "bottom",
-    legend.text = element_text(size = 6),
+    legend.text = element_text(size = 6, margin = margin(t = 2)),
     legend.title = element_text(margin = margin(t = 0, b = 10, r = 5))
   )
 
