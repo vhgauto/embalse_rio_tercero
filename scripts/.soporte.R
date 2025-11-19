@@ -70,7 +70,7 @@ f_pdf2 <- function(punto) {
       pluck(1) |>
       str_replace_all("\r", "")
 
-    v <- nit_v[c(20, 22)] |>
+    v <- nit_v[20:22] |>
       str_replace_all(",", ".") |>
       str_remove_all(" mg/L")
   }
@@ -84,7 +84,7 @@ f_pdf2 <- function(punto) {
       pluck(1) |>
       str_replace_all("\r", "")
 
-    v <- nit_v[c(18, 20)] |>
+    v <- nit_v[18:20] |>
       str_replace_all(",", ".") |>
       str_remove_all(" mg/L")
   }

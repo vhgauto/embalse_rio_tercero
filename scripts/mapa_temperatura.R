@@ -26,7 +26,7 @@ fecha_temp <- "20251002"
 etq_temp <- paste0(
   "Producto HSL\nFecha: ",
   ymd(fecha_temp),
-  "\nReflectancia de superficie"
+  "\nSensor térmico infrarrojo"
 )
 
 mapa_temperatura <- ggplot() +
@@ -58,7 +58,7 @@ mapa_temperatura <- ggplot() +
     lineheight = .8
   ) +
   scale_fill_gradientn(
-    colors = RColorBrewer::brewer.pal(n = 11, name = "RdBu"),
+    colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")),
     na.value = NA
   ) +
   annotation_north_arrow(

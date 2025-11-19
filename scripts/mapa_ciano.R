@@ -112,7 +112,8 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-predict_ciano[predict_ciano$.pred > 3] <- NA
+lim_ciano <- 3
+predict_ciano[predict_ciano$.pred > lim_ciano] <- NA
 
 # medido vs .pred
 predict(

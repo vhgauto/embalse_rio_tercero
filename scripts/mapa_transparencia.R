@@ -44,7 +44,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ds = p$valor, .before = 1) |>
-  mutate(ratio = swir2 / green) |>
+  mutate(ratio = swir1 / green) |>
   select(ds, ratio)
 
 # workflow
@@ -93,7 +93,9 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-predict_ds[predict_ds$.pred > 9] <- NA
+# lim_transparencia <- 9
+lim_transparencia <- 5.5
+predict_ds[predict_ds$.pred > lim_transparencia] <- lim_transparencia
 
 # medido vs .pred
 # predict(

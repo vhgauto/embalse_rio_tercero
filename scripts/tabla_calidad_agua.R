@@ -29,10 +29,10 @@ nit_l <- list.files(
   full.names = TRUE
 )
 
-tabulapdf::extract_text(nit_l[str_detect(nit_l, "11")]) |>
-  str_split("\n") |>
-  pluck(1) |>
-  str_replace_all("\r", "")
+# tabulapdf::extract_text(nit_l[str_detect(nit_l, "11")]) |>
+#   str_split("\n") |>
+#   pluck(1) |>
+#   str_replace_all("\r", "")
 
 tabla_calidad_tbl <- inner_join(d9, d11, by = join_by(param, unidad)) |>
   relocate(1, 3, 2, 4) |>
@@ -50,7 +50,8 @@ tabla_calidad_tbl <- inner_join(d9, d11, by = join_by(param, unidad)) |>
     "Determinación" = param,
     "Unidad" = unidad,
     "Límite de aptitud" = limite
-  )
+  ) |>
+  filter(!Determinación %in% c("Conductividad a 25 °C", "Nitrato"))
 
 nit_l <- list.files(
   paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
@@ -62,7 +63,7 @@ nit9 <- f_pdf2(9)
 nit11 <- f_pdf2(11)
 
 nit_tbl <- tibble(
-  "1" = c("Nitrógeno Kjeldahl", "Fósforo Total"),
+  "1" = c("Nitrógeno Kjeldahl", "Nitratos", "Fósforo Total"),
   "2" = "mg/L",
   "3" = nit9,
   "4" = nit11,

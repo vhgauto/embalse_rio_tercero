@@ -112,7 +112,8 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-predict_cla[predict_cla$.pred > 10] <- NA
+lim_clorofila <- 10
+predict_cla[predict_cla$.pred > lim_clorofila] <- NA
 
 # medido vs .pred
 predict(
