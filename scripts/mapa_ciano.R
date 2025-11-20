@@ -16,6 +16,8 @@ ciano_tbl <- terra::extract(r_agua, p) |>
 
 nombres_ciano <- names(ciano_tbl)
 
+nombres_ds <- names(ds_tbl)
+
 # modelo -----------------------------------------------------------------
 
 ciano_tbl |>
@@ -154,9 +156,9 @@ etq_ciano <- paste0(
 )
 
 mapa_ciano <- ggplot() +
-  geom_spatraster(data = r$nir, show.legend = FALSE, interpolate = FALSE) +
-  scale_fill_gradient(low = "grey50", high = "grey90") +
-  ggnewscale::new_scale_fill() +
+  # geom_spatraster(data = r$nir, show.legend = FALSE, interpolate = FALSE) +
+  # scale_fill_gradient(low = "grey50", high = "grey90") +
+  # ggnewscale::new_scale_fill() +
   geom_spatraster(data = predict_ciano, interpolate = FALSE) +
   geom_segment(
     data = flechas_tbl,
@@ -164,19 +166,19 @@ mapa_ciano <- ggplot() +
     arrow = arrow(angle = 10, length = unit(2, "mm"), type = "closed"),
     linewidth = .2
   ) +
-  geom_spatvector(
-    data = emb,
-    fill = NA,
-    color = "grey30",
-    linewidth = .2
-  ) +
+  # geom_spatvector(
+  #   data = emb,
+  #   fill = NA,
+  #   color = "grey30",
+  #   linewidth = .2
+  # ) +
   annotate(
     geom = "text",
     x = I(.99),
     y = I(.01),
     label = etq_ciano,
     size = 3,
-    family = "Times New Roman",
+    family = "Arial",
     hjust = 1,
     vjust = 0,
     lineheight = .8
@@ -195,15 +197,15 @@ mapa_ciano <- ggplot() +
     pad_x = unit(0.2, "cm"),
     pad_y = unit(0.2, "cm"),
     width_hint = .1,
-    text_family = "Times New Roman"
+    text_family = "Arial"
   ) +
   coord_sf(expand = FALSE) +
   labs(
     fill = "Concentración de clorofila-a<br>de cianobacterias (mg/m<sup>3</sup>)"
   ) +
-  theme_void(base_size = 8, base_family = "Times New Roman") +
+  theme_void(base_size = 8, base_family = "Arial") +
   theme(
-    plot.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = NA, color = NA),
     legend.key.height = unit(7, "pt"),
     legend.box.margin = margin(0, 0, 0, 0),
     legend.position = "bottom",
@@ -219,7 +221,19 @@ guardar_png(
   plot = mapa_ciano,
   filename = "mapa_ciano",
   ancho = 5,
-  alto = 5
+  alto = 5,
+  formato = ".tif"
 )
 
 # browseURL(paste0(getwd(), "/fig/2025-10/mapa_ciano_2025_10.png"))
+
+extract_ciano <- terra::extract(predict_ciano, v) |>
+  as_tibble() |>
+  rename(punto = ID)
+
+r2_ciano <- filter(d, fecha == max(d$fecha) & param == "cla_ciano") |>
+  select(punto, valor) |>
+  inner_join(extract_ciano, by = join_by(punto)) |>
+  lm(valor ~ .pred, data = _) |>
+  broom::glance() |>
+  pull(r.squared)

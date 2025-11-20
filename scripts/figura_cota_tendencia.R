@@ -86,7 +86,7 @@ g_cota_hist <- ggplot() +
   scale_fill_identity() +
   coord_cartesian(ylim = c(min_cota, max_cota), expand = FALSE) +
   labs(x = NULL, y = "Nivel de presa (m)") +
-  theme_bw(base_size = 8, base_family = "Times New Roman") +
+  theme_bw(base_size = 8, base_family = "Arial") +
   theme(
     plot.margin = margin(10, 5, 5, 5),
     axis.text = element_text(color = "black"),

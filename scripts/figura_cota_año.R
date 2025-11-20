@@ -35,6 +35,12 @@ d_cota_año <- read_csv(
     make_date(año_actual, mes_actual, 1)
   ))
 
+d_cota_año <- read_csv(
+  "datos/base_de_datos_cotas.csv",
+  show_col_types = FALSE
+) |>
+  filter(between(fecha, fecha_i, fecha_f))
+
 # figura -----------------------------------------------------------------
 
 relleno <- grid::linearGradient(
@@ -91,6 +97,25 @@ g_cota_año <- ggplot() +
     fill = alpha("white", .75),
     border.color = NA
   ) +
+  geom_rect(
+    data = d_est,
+    aes(
+      xmin = fecha_min,
+      xmax = fecha_max,
+      ymin = I(1.075),
+      ymax = I(1),
+      fill = fill
+    ),
+    inherit.aes = FALSE
+  ) +
+  geom_text(
+    data = d_est,
+    aes(fecha_label, I(1.01), label = estacion_label),
+    inherit.aes = FALSE,
+    size = tamaño_label_est,
+    vjust = -.2,
+    fontface = "bold"
+  ) +
   scale_x_date(
     breaks = scales::breaks_width("1 month"),
     labels = \(x) str_to_sentence(format(x, "%b '%y")),
@@ -100,11 +125,15 @@ g_cota_año <- ggplot() +
     labels = scales::label_number(big.mark = ".", decimal.mark = ",")
   ) +
   scale_fill_identity() +
-  coord_cartesian(ylim = c(min_cota_año, max_cota_año), expand = FALSE) +
+  coord_cartesian(
+    ylim = c(min_cota_año, max_cota_año),
+    expand = FALSE,
+    clip = "off"
+  ) +
   labs(x = NULL, y = "Nivel de presa (m)") +
-  theme_bw(base_size = 8, base_family = "Times New Roman") +
+  theme_bw(base_size = 8, base_family = "Arial") +
   theme(
-    plot.margin = margin(5, 10, 5, 5),
+    plot.margin = margin(10, 10, 5, 5),
     axis.text = element_text(color = "black"),
     axis.ticks.x = element_line(),
     panel.grid.minor = element_blank(),

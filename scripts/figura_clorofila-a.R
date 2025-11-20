@@ -26,7 +26,7 @@ g_clo <- ggplot(d_clo, aes(fecha, clo_m)) +
     aes(
       xmin = fecha_min,
       xmax = fecha_max,
-      ymin = I(1.05),
+      ymin = I(altura_estacion_label),
       ymax = I(1),
       fill = fill
     ),
@@ -83,9 +83,9 @@ g_clo <- ggplot(d_clo, aes(fecha, clo_m)) +
     x = NULL,
     color = NULL
   ) +
-  theme_bw(base_size = 8, base_family = "Times New Roman") +
+  theme_bw(base_size = 11, base_family = "Arial") +
   theme(
-    plot.margin = margin(10, 5, 5, 5),
+    plot.margin = margin(20, 5, 5, 5),
     legend.position = "bottom",
     legend.box.spacing = unit(0, "mm"),
     legend.key.spacing.x = unit(10, "mm"),
@@ -99,6 +99,10 @@ g_clo <- ggplot(d_clo, aes(fecha, clo_m)) +
     strip.text = ggtext::element_markdown(),
     strip.background = element_blank(),
     strip.clip = "off"
+  ) +
+  theme_sub_axis_x(text = element_text(angle = 45, hjust = 1)) +
+  theme_sub_legend(
+    text = element_text(margin = margin(r = 2), size = rel(tamaño_texto_legend))
   )
 
 # guardo -----------------------------------------------------------------

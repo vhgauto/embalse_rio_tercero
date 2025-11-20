@@ -107,7 +107,7 @@ g_rgb <- ggplot() +
   geom_spatvector_text(
     data = p,
     aes(label = id),
-    family = "Times New Roman",
+    family = "Arial",
     fontface = "bold",
     size = 4
   ) +
@@ -116,14 +116,14 @@ g_rgb <- ggplot() +
     aes(x, y - .0013, label = ciudad),
     lineheight = .8,
     vjust = 1,
-    family = "Times New Roman",
+    family = "Arial",
   ) +
   shadowtext::geom_shadowtext(
     data = terra::as.data.frame(lobulos, geom = "xy"),
     aes(x, y, label = id),
     color = "gold",
     vjust = 1,
-    family = "Times New Roman",
+    family = "Arial",
   ) +
   annotation_north_arrow(
     location = "tl",
@@ -140,7 +140,7 @@ g_rgb <- ggplot() +
     location = "bl",
     pad_x = unit(0.6, "cm"),
     pad_y = unit(0.6, "cm"),
-    text_family = "Times New Roman",
+    text_family = "Arial",
     line_col = "white",
     width_hint = .2
   ) +

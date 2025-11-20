@@ -1,6 +1,15 @@
 # variables --------------------------------------------------------------
 
-parametros_interes <- c("temperatura", "pH", "od", "ds", "cla", "cla_ciano")
+parametros_interes <- c(
+  "temperatura",
+  "pH",
+  "od",
+  "ds",
+  "cla",
+  "cla_ciano",
+  "sdt",
+  "turb"
+)
 
 parametros_label <- c(
   "Temperatura del agua (°C)",
@@ -8,7 +17,9 @@ parametros_label <- c(
   "Oxígeno Disuelto (mg/L)",
   "Transparencia<br>del Agua (m)",
   "Concentración de<br>Clorofila-a (mg/m<sup>3</sup>)",
-  "Clorofila-a de<br>Cianobacterias (mg/m<sup>3</sup>)"
+  "Clorofila-a de<br>Cianobacterias (mg/m<sup>3</sup>)",
+  "Sólidos disueltos totales (ppm)",
+  "Turbidez (UNT)"
 )
 
 parametros_tbl <- tibble(
@@ -62,7 +73,7 @@ g_param <- ggplot(d_comp, aes(fecha_label, param_m, fill = fecha_label)) +
     values = c("#990100", "#9BBB58", "#4F81BC")
   ) +
   labs(y = NULL, x = NULL) +
-  theme_bw(base_size = 9, base_family = "Times New Roman") +
+  theme_bw(base_size = 9, base_family = "Arial") +
   theme(
     plot.margin = margin(0, 5, 5, 5),
     legend.position = "none",
@@ -81,6 +92,6 @@ g_param <- ggplot(d_comp, aes(fecha_label, param_m, fill = fecha_label)) +
 guardar_png(
   plot = g_param,
   filename = "figura_parametros",
-  ancho = 5,
+  ancho = 6.7,
   alto = 3
 )

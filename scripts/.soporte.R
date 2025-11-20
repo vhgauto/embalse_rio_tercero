@@ -6,17 +6,17 @@ library(tidyverse)
 
 # funciones --------------------------------------------------------------
 
-formato <- function(Z) {
+formato <- function(Z, n = 1) {
   format(
-    round(Z, 1),
-    nsmall = 1,
+    round(Z, n),
+    nsmall = n,
     decimal.mark = ".",
     big.mark = "",
     trim = TRUE
   )
 }
 
-guardar_png <- function(plot, filename, ancho, alto) {
+guardar_png <- function(plot, filename, ancho, alto, formato = ".png") {
   ggsave(
     plot = plot,
     filename = paste0(
@@ -26,7 +26,7 @@ guardar_png <- function(plot, filename, ancho, alto) {
       año_actual,
       "_",
       mes_actual,
-      ".png"
+      formato
     ),
     width = ancho,
     height = alto
@@ -100,7 +100,7 @@ f_ratio <- function(df, var1, var2) {
   return(d)
 }
 
-f_fig <- function(MES = mes_actual, AÑO = año_actual, PARAM) {
+f_fig <- function(MES = mes_actual, AÑO = año_actual, PARAM, FORMATO = ".png") {
   cat(
     "![](",
     "fig/",
@@ -113,7 +113,8 @@ f_fig <- function(MES = mes_actual, AÑO = año_actual, PARAM) {
     AÑO,
     "_",
     MES,
-    ".png)",
+    FORMATO,
+    ")",
     sep = ""
   )
 }
@@ -128,7 +129,8 @@ font_add(
 showtext_auto()
 showtext_opts(dpi = 300)
 
-update_geom_defaults("text", aes(family = "Times New Roman"))
+# update_geom_defaults("text", aes(family = "Arial"))
+update_theme("text", aes(family = "Arial"))
 
 # datos ------------------------------------------------------------------
 
@@ -151,6 +153,11 @@ promedio_tbl <- filter(
 # vectores ---------------------------------------------------------------
 
 emb <- vect("vector/embalse.gpkg") |>
+  project("EPSG:32620")
+
+v <- filter(d, fecha == max(d$fecha) & param == "cla_ciano") |>
+  select(punto, latitud, longitud, valor) |>
+  vect(geom = c("longitud", "latitud"), crs = "EPSG:4326") |>
   project("EPSG:32620")
 
 # rásters ----------------------------------------------------------------
@@ -223,7 +230,11 @@ color_estaciones <- c(
   Verano = alpha("#FF0018", .4)
 )
 
-tamaño_label_est <- 2.5
+tamaño_label_est <- 3.5
+
+altura_estacion_label <- 1.09
+
+tamaño_texto_legend <- 1.01
 
 # estaciones -------------------------------------------------------------
 

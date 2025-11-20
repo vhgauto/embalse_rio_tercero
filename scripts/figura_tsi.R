@@ -46,7 +46,7 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
     aes(
       xmin = fecha_min,
       xmax = fecha_max,
-      ymin = I(1.05),
+      ymin = I(altura_estacion_label),
       ymax = I(1),
       fill = fill
     ),
@@ -96,10 +96,10 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
     data = d_area_tsi,
     aes(I(0), ymax, label = estado),
     inherit.aes = FALSE,
-    size = 2,
+    size = 3,
     hjust = 0,
-    fill = "white",
-    family = "Times New Roman",
+    fill = alpha("white", .5),
+    family = "Arial",
     label.r = unit(0, "pt"),
     color = "black",
     linewidth = 0,
@@ -118,9 +118,9 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
   ) +
   coord_cartesian(clip = "off") +
   labs(y = "TSI", x = NULL) +
-  theme_bw(base_size = 8, base_family = "Times New Roman") +
+  theme_bw(base_size = 11, base_family = "Arial") +
   theme(
-    plot.margin = margin(10, 5, 5, 5),
+    plot.margin = margin(11, 5, 5, 5),
     legend.position = "none",
     axis.text = element_text(color = "black"),
     axis.ticks.x = element_line(),
@@ -130,7 +130,8 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
     strip.text = ggtext::element_markdown(),
     strip.background = element_blank(),
     strip.clip = "off"
-  )
+  ) +
+  theme_sub_axis_x(text = element_text(angle = 45, hjust = 1))
 
 # guardo -----------------------------------------------------------------
 

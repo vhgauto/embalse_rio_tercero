@@ -39,14 +39,16 @@ g_ciano <- ggplot(d_micro, aes(sitio, suma, fill = algas)) +
       override.aes = list(color = "black", linewidth = .1)
     )
   ) +
-  theme_bw(base_size = 8, base_family = "Times New Roman") +
+  theme_bw(base_size = 11, base_family = "Arial") +
   theme(
-    plot.margin = margin(5, 5, 5, 5),
+    plot.margin = margin(5, 8, 5, 5),
     legend.position = "bottom",
     legend.title = element_blank(),
+    legend.text = element_text(size = rel(1.05), margin = margin(l = 1)),
     legend.key.spacing.x = unit(6, "mm"),
     legend.key.height = unit(4, "mm"),
     legend.box.margin = margin(0, 0, 0, 0),
+    legend.margin = margin(0, 40, 0, 0),
     axis.text = element_text(color = "black"),
     axis.ticks.x = element_line(),
     panel.grid.minor = element_blank(),
@@ -65,3 +67,5 @@ guardar_png(
   ancho = 5,
   alto = 3
 )
+
+# browseURL("fig/2025-10/figura_ciano_2025_10.png")

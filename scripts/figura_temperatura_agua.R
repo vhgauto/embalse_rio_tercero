@@ -9,9 +9,32 @@ d_temp <- filter(d, param == "temperatura") |>
     .by = fecha
   )
 
+# https://grafana.ohmc.ar/d/dr_IMbqWz/eml02-dique-los-molinos
+
+d_atm <- read_csv(
+  "datos/temperatura/Temperatura del aire-data-2025-11-20 10_58_50.csv",
+  show_col_types = FALSE
+) |>
+  rename(fecha = 1, temp = 2) |>
+  mutate(fecha = as.Date(fecha)) |>
+  mutate(temp = sub(" °C", "", temp)) |>
+  mutate(temp = as.numeric(temp)) |>
+  filter(between(fecha, fecha_i, fecha_f)) |>
+  reframe(temp = mean(temp), .by = fecha) |>
+  filter(temp != 0)
+
 # figura -----------------------------------------------------------------
 
 g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
+
+  geom_line(
+    data = d_atm,
+    aes(fecha, temp, linetype = "Temp. ambiente"),
+    inherit.aes = FALSE,
+    color = "#02AF4D",
+    linewidth = .4
+  ) +
+
   geom_segment(
     aes(color = "a"),
     x = fecha_i,
@@ -26,7 +49,7 @@ g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
     aes(
       xmin = fecha_min,
       xmax = fecha_max,
-      ymin = I(1.05),
+      ymin = I(altura_estacion_label),
       ymax = I(1),
       fill = fill
     ),
@@ -77,14 +100,22 @@ g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
     labels = c("Media mensual", "Media período 2015-2024")
   ) +
   scale_fill_identity() +
+  scale_linetype_manual(
+    name = NULL,
+    values = 1,
+    guide = guide_legend(
+      override.aes = list(linewidth = .7),
+      theme = theme_sub_legend(margin = margin(l = 20))
+    )
+  ) +
   coord_cartesian(clip = "off") +
   labs(y = "Temperatura del agua (°C)", x = NULL, color = NULL) +
-  theme_bw(base_size = 8, base_family = "Times New Roman") +
+  theme_bw(base_size = 11, base_family = "Arial") +
   theme(
-    plot.margin = margin(10, 5, 5, 5),
+    plot.margin = margin(11, 10, 5, 5),
     legend.position = "bottom",
     legend.box.spacing = unit(0, "mm"),
-    legend.key.spacing.x = unit(10, "mm"),
+    legend.key.spacing.x = unit(5, "mm"),
     legend.margin = margin(0, 0, 0, 0),
     axis.text = element_text(color = "black"),
     axis.ticks.x = element_line(),
@@ -94,6 +125,10 @@ g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
     strip.text = ggtext::element_markdown(),
     strip.background = element_blank(),
     strip.clip = "off"
+  ) +
+  theme_sub_axis_x(text = element_text(angle = 45, hjust = 1)) +
+  theme_sub_legend(
+    text = element_text(margin = margin(r = 2), size = rel(tamaño_texto_legend))
   )
 
 # guardo -----------------------------------------------------------------
@@ -101,8 +136,8 @@ g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
 guardar_png(
   plot = g_temp,
   filename = "figura_temperatura",
-  ancho = 5,
-  alto = 3
+  ancho = 6,
+  alto = 3.5
 )
 
 # promedios y desvíos ----------------------------------------------------
