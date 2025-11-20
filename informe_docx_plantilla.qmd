@@ -63,11 +63,7 @@ fecha_muestreo <- max(d$fecha, na.rm = TRUE)
 fecha_muestreo_etq <- format(fecha_muestreo, "%d de %B de %Y")
 ```
 
-En el marco del Programa de Monitoreo Sistemático de la Calidad del Agua del Embalse Río Tercero, y a solicitud de la **Autoridad de Cuencas**, el día **`{r} fecha_muestreo_etq`** se realizó la campaña de muestreo correspondiente a dicho mes, con el fin de monitorear y determinar el estado trófico y la calidad de sus aguas. 
-
-En estas campañas se monitorearon 11 sitios de muestreo predeterminados, en los cuales se evaluaron distintas variables físicas, químicas y biológicas a nivel sub-superficial (@fig-localizacion).
-
-![Localización de sitios de muestreo](fig/fig1.jpg){#fig-localizacion}
+Las campañas de muestreo fueron coordinadas por personal del **Instituto de Ciencia de la Tierra, Biodiversidad y Ambiente (ICBIA, CONICET-UNRC)** y la **Facultad de Ciencias Exactas, Físico-Químicas y Naturales, Universidad Nacional de Río Cuarto (FCEFQyN, UNRC)**. Además, se contó con el apoyo del **Instituto Gulich (IG, UNC-CONAE)**, el **Ministerio de Ambiente y Economía Circular** de la Provincia de Córdoba y la **Fundación Río Ctalamochita**. La embarcación y personal especializado fue aportado por el **Departamento Unidades de Alto Riesgo (DUAR)** perteneciente a la Policía de la Provincia de Córdoba y por la **Dirección de Seguridad Náutica (DSN)** provincial.
 
 ```{r}
 #| tbl-cap: Nombre de los sitios de muestreo
@@ -93,13 +89,7 @@ data.frame(
   knitr::kable(col.names = "**Sitios de muestreo (SM)**", align = "l")
 ```
 
-Las campañas de muestreo fueron coordinadas por personal del **Instituto de Ciencia de la Tierra, Biodiversidad y Ambiente (ICBIA, CONICET-UNRC)** y la **Facultad de Ciencias Exactas, Físico-Químicas y Naturales, Universidad Nacional de Río Cuarto (FCEFQyN, UNRC)**. Además, se contó con el apoyo del **Instituto Gulich (IG, UNC-CONAE)**, el **Ministerio de Ambiente y Economía Circular** de la Provincia de Córdoba y la **Fundación Río Ctalamochita**. La embarcación y personal especializado fue aportado por el **Departamento Unidades de Alto Riesgo (DUAR)** perteneciente a la Policía de la Provincia de Córdoba y por la **Dirección de Seguridad Náutica (DSN)** provincial.
-
-La campaña de muestre comenzó a las 10.00 hs y finalizó a las 13.30 hs. El día presentó condiciones meteorológicas óptimas para la realización del mismo. La temperatura ambiente registrada fue de 6 °C, los vientos de 4 km/h de intensidad, con dirección nor-noroeste (NNO). 
-
-El embalse presentó una coloración del agua clara, sin registrarse la presencia de florecimientos de algas/cianobacterias importantes en su superficie. 
-
-A partir de los datos aportados por  <https://www.cba.gov.ar/nivel-dediques-y-embalses/>, se determinó que en la fecha de muestreo el embalse presentó una cota de 45.8 m, localizándose 0.72 m por debajo de la cota vertedero (@fig-cota-año). Se estima que, en la fecha monitoreada, el embalse alcanzó una superficie aproximada de 4134 ha, es decir, 366 ha menos que la superficie correspondiente a la cota del vertedero (4500 ha).
+A partir de los datos aportados por  <https://omixom.redesclimaticas.com/next/station?s=30335>.
 
 En base al análisis temporal de la cota del embalse generada para el período comprendido entre los años 2010 a 2025, se observa que el nivel actual es la esperable para la época del año (@fig-cota-tendencia).
 
@@ -171,6 +161,8 @@ source("scripts/tabla_calidad_agua.R")
 tabla_calidad_md
 ```
 
+{{< pagebreak >}}
+
 A continuación se detalla la dinámica de las principales variables medidas: 
 
 ```{r}
@@ -207,12 +199,14 @@ Figura temperatura
 #| label: fig-mapa-temperatura
 
 source("scripts/mapa_temperatura.R")
-f_fig(PARAM = "mapa_temperatura")
+f_fig(PARAM = "mapa_temperatura", FORMATO = ".tif")
 ```
 
 Mapa temperatura
 
 :::
+
+R² (temperatura): `{r} formato(r2_temp, n = 3)`
 
 **- pH**:
 
@@ -245,12 +239,14 @@ Mapa temperatura
 #| label: fig-mapa-transparencia
 
 source("scripts/mapa_transparencia.R")
-f_fig(PARAM = "mapa_transparencia")
+f_fig(PARAM = "mapa_transparencia", FORMATO = ".tif")
 ```
 
 Mapa transparencia
 
 :::
+
+R² (transparencia): `{r} formato(r2_ds, n = 3)`
 
 ::: {#fig-transparencia}
 
@@ -305,12 +301,14 @@ Figura transparencia
 #| label: fig-mapa-clorofila
 
 source("scripts/mapa_clorofila.R")
-f_fig(PARAM = "mapa_clorofila")
+f_fig(PARAM = "mapa_clorofila", FORMATO = ".tif")
 ```
 
 Mapa clorofila-a
 
 :::
+
+R² (clorofila-a): `{r} formato(r2_cla, n = 3)`
 
 ::: {#fig-clorofila}
 
@@ -341,10 +339,26 @@ Figura clorofila-a
 #| label: fig-mapa-ciano
 
 source("scripts/mapa_ciano.R")
-f_fig(PARAM = "mapa_ciano")
+f_fig(PARAM = "mapa_ciano", FORMATO = ".tif")
 ```
 
 Mapa cianobacterias
+
+:::
+
+R² (ciano): `{r} formato(r2_ciano, n = 3)`
+
+::: {#fig-ciano-año}
+
+```{r}
+#| output: asis
+#| label: fig-ciano-año
+
+source("scripts/figura_ciano_año.R")
+f_fig(PARAM = "figura_ciano_año")
+```
+
+Figura cianobacterias
 
 :::
 
@@ -393,10 +407,6 @@ Figura TSI
 # Consideraciones finales {.unnumbered}
 
 A partir del análisis generado con la información de campo y en base a la información satelital se observó que durante el mes de X_MES_CHR de `{r} año_actual` el embalse Río Tercero presentó una buena calidad del agua y una condición de mesotrófía baja. Las variables medidas mostraron un comportamiento normal. Se destaca un aumento en la transparencia del agua progresivo desde los últimos meses. Además, se registró elevadas concentraciones de nutrientes: Sin embargo estas mediciones están siendo evaluadas. 
-
-Este trabajo constituye un estudio sistemático y a largo plazo realizado por el Grupo de Monitoreo de Aguas Superficiales Interiores (GMASI) conformado por investigadores y becarios del Instituto de Ciencias de la Tierra, Biodiversidad y Ambiente (ICBIA, CONICET-UNRC) y del Instituto Gulich (UNC-CONAE), junto a la colaboración de distintas instituciones con el fin de obtener datos adecuados para una correcta evaluación de la calidad del agua del embalse Río Tercero.
-
-Debido a la importancia social, económica y ecológica de este cuerpo de agua, es importante seguir monitoreando la calidad del agua y estado trófico del mismo, ya sea para obtener un mejor conocimiento del mismo, como así también para detectar o predecir cualquier modificación leve en las variables estudiadas, lo que podría traducirse en un desequilibrio del sistema. Los autores de este informe agradecen la participación de las diferentes instituciones en la realización y logística de los muestreos de rutina.
 
 # Referencias bibliográficas {.unnumbered}
 
