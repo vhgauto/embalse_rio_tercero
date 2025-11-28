@@ -18,6 +18,11 @@ template*
 vector/argentina*
 vector/dptos*
 vector/pcias*
+docs/fig/*
+gee/*
+docs/informe_*
+*test*
+plantilla*
 
 # History files
 .Rhistory
