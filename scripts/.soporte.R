@@ -120,6 +120,59 @@ f_fig <- function(MES = mes_actual, AÑO = año_actual, PARAM, FORMATO = ".png")
   )
 }
 
+f_promedio_actual <- function(parametro, estad) {
+  dplyr::filter(d, param == parametro & fecha == max(d$fecha)) |>
+    reframe(
+      m = mean(valor),
+      sd = sd(valor)
+    ) |>
+    mutate(across(.cols = everything(), .fns = formato)) |>
+    select(all_of(estad)) |>
+    pull()
+}
+
+f_promedio_mes_anterior <- function(parametro, estad) {
+  v <- filter(
+    d,
+    param == "temperatura" &
+      (month(fecha) == mes_actual - 1 & year(fecha) == año_actual)
+  ) |>
+    reframe(
+      m = mean(valor),
+      sd = sd(valor)
+    ) |>
+    mutate(across(.cols = everything(), .fns = formato)) |>
+    select(all_of(estad)) |>
+    pull()
+
+  if (v == "NA" | v == "NaN") {
+    return("No se hizo medición")
+  } else {
+    v
+  }
+}
+
+f_promedio_año_anterior <- function(parametro, estad) {
+  v <- filter(
+    d,
+    param == "temperatura" &
+      (month(fecha) == mes_actual & year(fecha) == año_actual - 1)
+  ) |>
+    reframe(
+      m = mean(valor),
+      sd = sd(valor)
+    ) |>
+    mutate(across(.cols = everything(), .fns = formato)) |>
+    select(all_of(estad)) |>
+    pull()
+
+  if (v == "NA" | v == "NaN") {
+    return("No se hizo medición")
+  } else {
+    v
+  }
+}
+
 # fuentes ----------------------------------------------------------------
 
 font_add(
@@ -325,306 +378,405 @@ flechas_y <- flechas_tbl |>
   ) |>
   select(id, y)
 
+
+# temperatura ------------------------------------------------------------
+
+# temp0 <- formato(temp0_tbl$temp_m)
+# temp0_sd <- formato(temp0_tbl$temp_sd)
+
+# temp1 <- formato(temp1_tbl$temp_m)
+# temp1_sd <- formato(temp1_tbl$temp_sd)
+
+# temp2 <- formato(temp2_tbl$temp_m)
+# temp2_sd <- formato(temp2_tbl$temp_sd)
+
+# temp_p <- formato(filter(promedio_tbl, param == "temperatura")$m)
+# temp_p_sd <- formato(filter(promedio_tbl, param == "temperatura")$sd)
+
+temp0 <- f_promedio_actual("temperatura", "m")
+temp0_sd <- f_promedio_actual("temperatura", "sd")
+
+temp1 <- f_promedio_mes_anterior("temperatura", "m")
+temp1_sd <- f_promedio_mes_anterior("temperatura", "sd")
+
+temp2 <- f_promedio_año_anterior("temperatura", "m")
+temp2_sd <- f_promedio_año_anterior("temperatura", "sd")
+
+temp_p <- formato(filter(promedio_tbl, param == "temperatura")$m)
+temp_p_sd <- formato(filter(promedio_tbl, param == "temperatura")$sd)
+
 # pH ---------------------------------------------------------------------
 
-d_ph <- filter(d, param == "pH") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    ph_m = median(valor, na.rm = TRUE),
-    ph_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_ph <- filter(d, param == "pH") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     ph_m = median(valor, na.rm = TRUE),
+#     ph_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-ph0_tbl <- filter(
-  d_ph,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# ph0_tbl <- filter(
+#   d_ph,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-ph1_tbl <- filter(
-  d_ph,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# ph1_tbl <- filter(
+#   d_ph,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-ph2_tbl <- filter(
-  d_ph,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# ph2_tbl <- filter(
+#   d_ph,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-ph0 <- formato(ph0_tbl$ph_m)
-ph0_sd <- formato(ph0_tbl$ph_sd)
+# ph0 <- formato(ph0_tbl$ph_m)
+# ph0_sd <- formato(ph0_tbl$ph_sd)
 
-ph1 <- formato(ph1_tbl$ph_m)
-ph1_sd <- formato(ph1_tbl$ph_sd)
+# ph1 <- formato(ph1_tbl$ph_m)
+# ph1_sd <- formato(ph1_tbl$ph_sd)
 
-ph2 <- formato(ph2_tbl$ph_m)
-ph2_sd <- formato(ph2_tbl$ph_sd)
+# ph2 <- formato(ph2_tbl$ph_m)
+# ph2_sd <- formato(ph2_tbl$ph_sd)
 
-ph_p <- formato(filter(promedio_tbl, param == "pH")$m)
-ph_p_sd <- formato(filter(promedio_tbl, param == "pH")$sd)
+# ph_p <- formato(filter(promedio_tbl, param == "pH")$m)
+# ph_p_sd <- formato(filter(promedio_tbl, param == "pH")$sd)
+
+ph0 <- f_promedio_actual("pH", "m")
+ph0_sd <- f_promedio_actual("pH", "sd")
+
+ph1 <- f_promedio_mes_anterior("pH", "m")
+ph1_sd <- f_promedio_mes_anterior("pH", "sd")
+
+ph2 <- f_promedio_año_anterior("pH", "m")
+ph2_sd <- f_promedio_año_anterior("pH", "sd")
 
 # oxígeno disuelto -------------------------------------------------------
 
-d_od <- filter(d, param == "od") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    od_m = median(valor, na.rm = TRUE),
-    od_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_od <- filter(d, param == "od") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     od_m = median(valor, na.rm = TRUE),
+#     od_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-od0_tbl <- filter(
-  d_od,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# od0_tbl <- filter(
+#   d_od,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-od1_tbl <- filter(
-  d_od,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# od1_tbl <- filter(
+#   d_od,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-od2_tbl <- filter(
-  d_od,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# od2_tbl <- filter(
+#   d_od,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-od0 <- formato(od0_tbl$od_m)
-od0_sd <- formato(od0_tbl$od_sd)
+# od0 <- formato(od0_tbl$od_m)
+# od0_sd <- formato(od0_tbl$od_sd)
 
-od1 <- formato(od1_tbl$od_m)
-od1_sd <- formato(od1_tbl$od_sd)
+# od1 <- formato(od1_tbl$od_m)
+# od1_sd <- formato(od1_tbl$od_sd)
 
-od2 <- formato(od2_tbl$od_m)
-od2_sd <- formato(od2_tbl$od_sd)
+# od2 <- formato(od2_tbl$od_m)
+# od2_sd <- formato(od2_tbl$od_sd)
+
+od0 <- f_promedio_actual("od", "m")
+od0_sd <- f_promedio_actual("od", "sd")
+
+od1 <- f_promedio_mes_anterior("od", "m")
+od1_sd <- f_promedio_mes_anterior("od", "sd")
+
+od2 <- f_promedio_año_anterior("od", "m")
+od2_sd <- f_promedio_año_anterior("od", "sd")
 
 od_p <- formato(filter(promedio_tbl, param == "od")$m)
 od_p_sd <- formato(filter(promedio_tbl, param == "od")$sd)
 
 # transparencia ----------------------------------------------------------
 
-d_ds <- filter(d, param == "ds") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    ds_m = median(valor, na.rm = TRUE),
-    ds_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_ds <- filter(d, param == "ds") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     ds_m = median(valor, na.rm = TRUE),
+#     ds_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-ds0_tbl <- filter(
-  d_ds,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# ds0_tbl <- filter(
+#   d_ds,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-ds1_tbl <- filter(
-  d_ds,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# ds1_tbl <- filter(
+#   d_ds,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-ds2_tbl <- filter(
-  d_ds,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# ds2_tbl <- filter(
+#   d_ds,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-ds0 <- formato(ds0_tbl$ds_m)
-ds0_sd <- formato(ds0_tbl$ds_sd)
+# ds0 <- formato(ds0_tbl$ds_m)
+# ds0_sd <- formato(ds0_tbl$ds_sd)
 
-ds1 <- formato(ds1_tbl$ds_m)
-ds1_sd <- formato(ds1_tbl$ds_sd)
+# ds1 <- formato(ds1_tbl$ds_m)
+# ds1_sd <- formato(ds1_tbl$ds_sd)
 
-ds2 <- formato(ds2_tbl$ds_m)
-ds2_sd <- formato(ds2_tbl$ds_sd)
+# ds2 <- formato(ds2_tbl$ds_m)
+# ds2_sd <- formato(ds2_tbl$ds_sd)
+
+ds0 <- f_promedio_actual("ds", "m")
+ds0_sd <- f_promedio_actual("ds", "sd")
+
+ds1 <- f_promedio_mes_anterior("ds", "m")
+ds1_sd <- f_promedio_mes_anterior("ds", "sd")
+
+ds2 <- f_promedio_año_anterior("ds", "m")
+ds2_sd <- f_promedio_año_anterior("ds", "sd")
 
 ds_p <- formato(filter(promedio_tbl, param == "ds")$m)
 ds_p_sd <- formato(filter(promedio_tbl, param == "ds")$sd)
 
 # sólidos disueltos totales ----------------------------------------------
 
-d_sdt <- filter(d, param == "sdt") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    sdt_m = median(valor, na.rm = TRUE),
-    sdt_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_sdt <- filter(d, param == "sdt") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     sdt_m = median(valor, na.rm = TRUE),
+#     sdt_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-sdt0_tbl <- filter(
-  d_sdt,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# sdt0_tbl <- filter(
+#   d_sdt,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-sdt1_tbl <- filter(
-  d_sdt,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# sdt1_tbl <- filter(
+#   d_sdt,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-sdt2_tbl <- filter(
-  d_sdt,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# sdt2_tbl <- filter(
+#   d_sdt,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-sdt0 <- formato(sdt0_tbl$sdt_m)
-sdt0_sd <- formato(sdt0_tbl$sdt_sd)
+# sdt0 <- formato(sdt0_tbl$sdt_m)
+# sdt0_sd <- formato(sdt0_tbl$sdt_sd)
 
-sdt1 <- formato(sdt1_tbl$sdt_m)
-sdt1_sd <- formato(sdt1_tbl$sdt_sd)
+# sdt1 <- formato(sdt1_tbl$sdt_m)
+# sdt1_sd <- formato(sdt1_tbl$sdt_sd)
 
-sdt2 <- formato(sdt2_tbl$sdt_m)
-sdt2_sd <- formato(sdt2_tbl$sdt_sd)
+# sdt2 <- formato(sdt2_tbl$sdt_m)
+# sdt2_sd <- formato(sdt2_tbl$sdt_sd)
+
+sdt0 <- f_promedio_actual("sdt", "m")
+sdt0_sd <- f_promedio_actual("sdt", "sd")
+
+sdt1 <- f_promedio_mes_anterior("sdt", "m")
+sdt1_sd <- f_promedio_mes_anterior("sdt", "sd")
+
+sdt2 <- f_promedio_año_anterior("sdt", "m")
+sdt2_sd <- f_promedio_año_anterior("sdt", "sd")
 
 sdt_p <- formato(filter(promedio_tbl, param == "sdt")$m)
 sdt_p_sd <- formato(filter(promedio_tbl, param == "sdt")$sd)
 
 # turbidez ---------------------------------------------------------------
 
-d_turb <- filter(d, param == "turb") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    turb_m = median(valor, na.rm = TRUE),
-    turb_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_turb <- filter(d, param == "turb") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     turb_m = median(valor, na.rm = TRUE),
+#     turb_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-turb0_tbl <- filter(
-  d_turb,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# turb0_tbl <- filter(
+#   d_turb,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-turb1_tbl <- filter(
-  d_turb,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# turb1_tbl <- filter(
+#   d_turb,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-turb2_tbl <- filter(
-  d_turb,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# turb2_tbl <- filter(
+#   d_turb,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-turb0 <- formato(turb0_tbl$turb_m)
-turb0_sd <- formato(turb0_tbl$turb_sd)
+# turb0 <- formato(turb0_tbl$turb_m)
+# turb0_sd <- formato(turb0_tbl$turb_sd)
 
-turb1 <- formato(turb1_tbl$turb_m)
-turb1_sd <- formato(turb1_tbl$turb_sd)
+# turb1 <- formato(turb1_tbl$turb_m)
+# turb1_sd <- formato(turb1_tbl$turb_sd)
 
-turb2 <- formato(turb2_tbl$turb_m)
-turb2_sd <- formato(turb2_tbl$turb_sd)
+# turb2 <- formato(turb2_tbl$turb_m)
+# turb2_sd <- formato(turb2_tbl$turb_sd)
+
+turb0 <- f_promedio_actual("turb", "m")
+turb0_sd <- f_promedio_actual("turb", "sd")
+
+turb1 <- f_promedio_mes_anterior("turb", "m")
+turb1_sd <- f_promedio_mes_anterior("turb", "sd")
+
+turb2 <- f_promedio_año_anterior("turb", "m")
+turb2_sd <- f_promedio_año_anterior("turb", "sd")
 
 turb_p <- formato(filter(promedio_tbl, param == "turb")$m)
 turb_p_sd <- formato(filter(promedio_tbl, param == "turb")$sd)
 
 # conductividad ----------------------------------------------------------
 
-d_ce <- filter(d, param == "ce") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    ce_m = median(valor, na.rm = TRUE),
-    ce_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_ce <- filter(d, param == "ce") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     ce_m = median(valor, na.rm = TRUE),
+#     ce_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-ce0_tbl <- filter(
-  d_ce,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# ce0_tbl <- filter(
+#   d_ce,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-ce1_tbl <- filter(
-  d_ce,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# ce1_tbl <- filter(
+#   d_ce,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-ce2_tbl <- filter(
-  d_ce,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# ce2_tbl <- filter(
+#   d_ce,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-ce0 <- formato(ce0_tbl$ce_m)
-ce0_sd <- formato(ce0_tbl$ce_sd)
+# ce0 <- formato(ce0_tbl$ce_m)
+# ce0_sd <- formato(ce0_tbl$ce_sd)
 
-ce1 <- formato(ce1_tbl$ce_m)
-ce1_sd <- formato(ce1_tbl$ce_sd)
+# ce1 <- formato(ce1_tbl$ce_m)
+# ce1_sd <- formato(ce1_tbl$ce_sd)
 
-ce2 <- formato(ce2_tbl$ce_m)
-ce2_sd <- formato(ce2_tbl$ce_sd)
+# ce2 <- formato(ce2_tbl$ce_m)
+# ce2_sd <- formato(ce2_tbl$ce_sd)
+
+ce0 <- f_promedio_actual("ce", "m")
+ce0_sd <- f_promedio_actual("ce", "sd")
+
+ce1 <- f_promedio_mes_anterior("ce", "m")
+ce1_sd <- f_promedio_mes_anterior("ce", "sd")
+
+ce2 <- f_promedio_año_anterior("ce", "m")
+ce2_sd <- f_promedio_año_anterior("ce", "sd")
 
 ce_p <- formato(filter(promedio_tbl, param == "ce")$m)
 ce_p_sd <- formato(filter(promedio_tbl, param == "ce")$sd)
 
 # clorofila-a ------------------------------------------------------------
 
-d_cla <- filter(d, param == "cla") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    cla_m = median(valor, na.rm = TRUE),
-    cla_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_cla <- filter(d, param == "cla") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     cla_m = median(valor, na.rm = TRUE),
+#     cla_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-cla0_tbl <- filter(
-  d_cla,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# cla0_tbl <- filter(
+#   d_cla,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-cla1_tbl <- filter(
-  d_cla,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# cla1_tbl <- filter(
+#   d_cla,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-cla2_tbl <- filter(
-  d_cla,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# cla2_tbl <- filter(
+#   d_cla,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-cla0 <- formato(cla0_tbl$cla_m)
-cla0_sd <- formato(cla0_tbl$cla_sd)
+# cla0 <- formato(cla0_tbl$cla_m)
+# cla0_sd <- formato(cla0_tbl$cla_sd)
 
-cla1 <- formato(cla1_tbl$cla_m)
-cla1_sd <- formato(cla1_tbl$cla_sd)
+# cla1 <- formato(cla1_tbl$cla_m)
+# cla1_sd <- formato(cla1_tbl$cla_sd)
 
-cla2 <- formato(cla2_tbl$cla_m)
-cla2_sd <- formato(cla2_tbl$cla_sd)
+# cla2 <- formato(cla2_tbl$cla_m)
+# cla2_sd <- formato(cla2_tbl$cla_sd)
+
+cla0 <- f_promedio_actual("cla", "m")
+cla0_sd <- f_promedio_actual("cla", "sd")
+
+cla1 <- f_promedio_mes_anterior("cla", "m")
+cla1_sd <- f_promedio_mes_anterior("cla", "sd")
+
+cla2 <- f_promedio_año_anterior("cla", "m")
+cla2_sd <- f_promedio_año_anterior("cla", "sd")
 
 cla_p <- formato(filter(promedio_tbl, param == "cla")$m)
 cla_p_sd <- formato(filter(promedio_tbl, param == "cla")$sd)
 
 # cianobacterias ---------------------------------------------------------
 
-d_ciano <- filter(d, param == "cla_ciano") |>
-  filter(between(fecha, fecha_i, fecha_f)) |>
-  drop_na(valor) |>
-  reframe(
-    ciano_m = median(valor, na.rm = TRUE),
-    ciano_sd = sd(valor, na.rm = TRUE),
-    .by = fecha
-  )
+# d_ciano <- filter(d, param == "cla_ciano") |>
+#   filter(between(fecha, fecha_i, fecha_f)) |>
+#   drop_na(valor) |>
+#   reframe(
+#     ciano_m = median(valor, na.rm = TRUE),
+#     ciano_sd = sd(valor, na.rm = TRUE),
+#     .by = fecha
+#   )
 
-ciano0_tbl <- filter(
-  d_ciano,
-  month(fecha) == mes_actual & year(fecha) == año_actual
-)
+# ciano0_tbl <- filter(
+#   d_ciano,
+#   month(fecha) == mes_actual & year(fecha) == año_actual
+# )
 
-ciano1_tbl <- filter(
-  d_ciano,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-)
+# ciano1_tbl <- filter(
+#   d_ciano,
+#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+# )
 
-ciano2_tbl <- filter(
-  d_ciano,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
-)
+# ciano2_tbl <- filter(
+#   d_ciano,
+#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
+# )
 
-ciano0 <- formato(ciano0_tbl$ciano_m)
-ciano0_sd <- formato(ciano0_tbl$ciano_sd)
+# ciano0 <- formato(ciano0_tbl$ciano_m)
+# ciano0_sd <- formato(ciano0_tbl$ciano_sd)
 
-ciano1 <- formato(ciano1_tbl$ciano_m)
-ciano1_sd <- formato(ciano1_tbl$ciano_sd)
+# ciano1 <- formato(ciano1_tbl$ciano_m)
+# ciano1_sd <- formato(ciano1_tbl$ciano_sd)
 
-ciano2 <- formato(ciano2_tbl$ciano_m)
-ciano2_sd <- formato(ciano2_tbl$ciano_sd)
+# ciano2 <- formato(ciano2_tbl$ciano_m)
+# ciano2_sd <- formato(ciano2_tbl$ciano_sd)
+
+ciano0 <- f_promedio_actual("cla_ciano", "m")
+ciano0_sd <- f_promedio_actual("cla_ciano", "sd")
+
+ciano1 <- f_promedio_mes_anterior("cla_ciano", "m")
+ciano1_sd <- f_promedio_mes_anterior("cla_ciano", "sd")
+
+ciano2 <- f_promedio_año_anterior("cla_ciano", "m")
+ciano2_sd <- f_promedio_año_anterior("cla_ciano", "sd")
 
 ciano_p <- formato(filter(promedio_tbl, param == "cla_ciano")$m)
 ciano_p_sd <- formato(filter(promedio_tbl, param == "cla_ciano")$sd)
