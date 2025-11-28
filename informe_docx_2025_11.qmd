@@ -1,9 +1,9 @@
 ---
-title: "**INFORME DE CALIDAD DEL AGUA DEL EMBALSE RIO TERCERO (Octubre de 2025)**"
+title: "**INFORME DE CALIDAD DEL AGUA DEL EMBALSE RIO TERCERO (Noviembre de 2025)**"
 subtitle: Informe I | ANEXO II
 author: "Dr. Matías BONANSEA, Dra. Anabella FERRAL, Dr. Lucio PINOTTI, Lic. Sofía GUTIERREZ, Geol. Mariana CORREA, Lic. Facundo PARODI, Dra. Rocío GUIDO, MsC. Giuliana BELTRAMONE, Lic. Sofía PANA, Lic. Francisco NEMIÑA, MsC. Víctor GAUTO, MsC. Facundo BONINO, Esp. Joel CARREÑO, Lic. Rossana VILLALBA"
 abstract-title: ""
-abstract: A Solicitud de la Autoridad de Cuencas | Octubre de 2025
+abstract: A Solicitud de la Autoridad de Cuencas | Noviembre de 2025
 format:
   docx:
     toc: false
@@ -34,7 +34,7 @@ date-format: iso
 #| label: inicio
 
 año_actual <- 2025
-mes_actual <- 10
+mes_actual <- 11
 
 mes_actual_chr <- if (mes_actual <= 9) {
   paste0("0", mes_actual)
@@ -129,13 +129,13 @@ La @tbl-parametros muestran los registros de la variables medidas In-situ en el 
 
 ```{r}
 #| label: tbl-parametros
-#| tbl-cap: Determinaciones fisico-químicas básicas obtenidas para el embalse Río Tercero **Octubre de 2025**.
+#| tbl-cap: Determinaciones fisico-químicas básicas obtenidas para el embalse Río Tercero **Noviembre de 2025**.
 
 source("scripts/tabla_parametros.R")
 tabla_parametros_md
 ```
 
-La @fig-param-campo muestra la dinámica de las principales variables medidas durante esta campaña, su comparación con el mes anterior (`{r} mes_prev_etq` 2025) y el mismo mes del año previo (Octubre de `{r} año_actual - 1`).
+La @fig-param-campo muestra la dinámica de las principales variables medidas durante esta campaña, su comparación con el mes anterior (`{r} mes_prev_etq` 2025) y el mismo mes del año previo (Noviembre de `{r} año_actual - 1`).
 
 ::: {#fig-param-campo}
 
@@ -155,7 +155,7 @@ La @tbl-calidad-agua muestra las concentraciones de aniones, cationes y nutrient
 
 ```{r}
 #| label: tbl-calidad-agua
-#| tbl-cap: Determinaciones fisico-químicas básicas obtenidas para el embalse Río Tercero **Octubre de 2025**.
+#| tbl-cap: Determinaciones fisico-químicas básicas obtenidas para el embalse Río Tercero **Noviembre de 2025**.
 
 source("scripts/tabla_calidad_agua.R")
 tabla_calidad_md
@@ -406,7 +406,7 @@ Figura TSI
 
 # Consideraciones finales {.unnumbered}
 
-A partir del análisis generado con la información de campo y en base a la información satelital se observó que durante el mes de Octubre de `{r} año_actual` el embalse Río Tercero presentó una buena calidad del agua y una condición de mesotrófía baja. Las variables medidas mostraron un comportamiento normal. Se destaca un aumento en la transparencia del agua progresivo desde los últimos meses. Además, se registró elevadas concentraciones de nutrientes: Sin embargo estas mediciones están siendo evaluadas. 
+A partir del análisis generado con la información de campo y en base a la información satelital se observó que durante el mes de Noviembre de `{r} año_actual` el embalse Río Tercero presentó una buena calidad del agua y una condición de mesotrófía baja. Las variables medidas mostraron un comportamiento normal. Se destaca un aumento en la transparencia del agua progresivo desde los últimos meses. Además, se registró elevadas concentraciones de nutrientes: Sin embargo estas mediciones están siendo evaluadas. 
 
 # Referencias bibliográficas {.unnumbered}
 
