@@ -49,7 +49,8 @@ fechas_items <- map_vec(1:length(items$features), f_fecha_item)
 
 fecha_i <- which.min(abs(fechas_items - fecha_actual))
 
-fecha_hls <- fechas_items[fecha_i]
+# fecha_hls <- fechas_items[fecha_i]
+fecha_hls <- fechas_items[1]
 
 sf_items <- items_as_sf(items)
 granule_id <- sapply(items$features, function(feature) feature$id)
@@ -283,7 +284,7 @@ items_temp <- s |>
   stac_search(
     collections = "HLSL30_2.0",
     bbox = bbox,
-    datetime = "2025-10-01T00:00:00Z/2025-10-03T23:59:59Z",
+    datetime = roi_datetime,
     limit = 100
   ) |>
   post_request()

@@ -27,12 +27,22 @@ gen_ciano <- c("Dolichospermum", "Microcystis", "Nostoc")
 
 gen_criptofitas <- c("Ceratium", "Peridinium")
 
+mes_actual_chr <- if (mes_actual <= 9) paste0("0", mes_actual) else mes_actual
+
 ex <- list.files(
   path = paste0("datos/algas_", año_actual, "_", mes_actual_chr),
   full.names = TRUE
 )
 
-archivo <- "datos/algas_2025_10/FitoERT_2025_10_08.xlsx"
+archivo <- list.files(
+  path = paste0(
+    "datos/algas_",
+    año_actual,
+    "_",
+    mes_actual
+  ),
+  full.names = TRUE
+)
 
 f_micro <- function(archivo, W) {
   ctes_tbl <- readxl::read_xlsx(

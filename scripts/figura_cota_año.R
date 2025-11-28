@@ -72,7 +72,8 @@ g_cota_año <- ggplot() +
       ymax = ymax,
       fill = fill
     ),
-    linewidth = 0
+    linewidth = 0,
+    show.legend = FALSE
   ) +
   geom_ribbon(
     data = d_cota_año,
@@ -102,11 +103,12 @@ g_cota_año <- ggplot() +
     aes(
       xmin = fecha_min,
       xmax = fecha_max,
-      ymin = I(1.075),
+      ymin = I(altura_estacion_label),
       ymax = I(1),
       fill = fill
     ),
-    inherit.aes = FALSE
+    inherit.aes = FALSE,
+    show.legend = FALSE
   ) +
   geom_text(
     data = d_est,
@@ -133,11 +135,12 @@ g_cota_año <- ggplot() +
   labs(x = NULL, y = "Nivel de presa (m)") +
   theme_bw(base_size = 8, base_family = "Arial") +
   theme(
+    plot.background = element_rect(fill = "white", color = NA),
     plot.margin = margin(10, 10, 5, 5),
     axis.text = element_text(color = "black"),
     axis.ticks.x = element_line(),
     panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank(),
+    panel.grid.major = element_blank(),
     panel.spacing.x = unit(14, "pt"),
     strip.text = ggtext::element_markdown(),
     strip.background = element_blank(),

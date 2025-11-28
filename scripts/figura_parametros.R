@@ -5,10 +5,10 @@ parametros_interes <- c(
   "pH",
   "od",
   "ds",
-  "cla",
-  "cla_ciano",
   "sdt",
-  "turb"
+  "turb",
+  "cla",
+  "cla_ciano"
 )
 
 parametros_label <- c(
@@ -16,16 +16,17 @@ parametros_label <- c(
   "pH",
   "Oxígeno Disuelto (mg/L)",
   "Transparencia<br>del Agua (m)",
-  "Concentración de<br>Clorofila-a (mg/m<sup>3</sup>)",
-  "Clorofila-a de<br>Cianobacterias (mg/m<sup>3</sup>)",
   "Sólidos disueltos totales (ppm)",
-  "Turbidez (UNT)"
+  "Turbidez (UNT)",
+  "Concentración de<br>Clorofila-a (mg/m<sup>3</sup>)",
+  "Clorofila-a de<br>Cianobacterias (mg/m<sup>3</sup>)"
 )
 
 parametros_tbl <- tibble(
   param = parametros_interes,
   parametros_label = parametros_label
-)
+) |>
+  mutate(across(.cols = everything(), .fns = fct_inorder))
 
 # datos ------------------------------------------------------------------
 
@@ -48,8 +49,6 @@ d_comp <- rbind(d_actual, d_mes_anterior, d_año_anterior) |>
   mutate(fecha_label = str_to_sentence(format(fecha, "%b '%y"))) |>
   mutate(fecha_label = fct_reorder(as.character(fecha_label), fecha)) |>
   inner_join(parametros_tbl, by = join_by(param)) |>
-  mutate(param = factor(param, levels = parametros_interes)) |>
-  mutate(parametros_label = fct_reorder(parametros_label, as.numeric(param))) |>
   reframe(
     param_m = mean(valor, na.rm = TRUE),
     param_sd = sd(valor, na.rm = TRUE),

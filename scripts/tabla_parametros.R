@@ -59,8 +59,8 @@ unidades_v <- c(
   "µS/cm",
   "ppm",
   "UNT",
-  "mg/m3",
-  "mg/m3"
+  "mg/m³",
+  "mg/m³"
 )
 
 tabla_parametros_unidad <- tibble(

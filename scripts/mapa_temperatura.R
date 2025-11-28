@@ -21,7 +21,12 @@ r_agua <- r * r_mask
 r_temp <- rast(r_actual_temp)
 r_temp_agua <- r_temp * r_mask
 
-fecha_temp <- "20251002"
+fecha_temp1 <- list.files("recortes/", full.names = TRUE, pattern = "_temp")
+fecha_temp <- fecha_temp1[str_detect(
+  fecha_temp1,
+  paste0(año_actual, mes_actual)
+)]
+
 
 etq_temp <- paste0(
   "Producto HSL\nFecha: ",

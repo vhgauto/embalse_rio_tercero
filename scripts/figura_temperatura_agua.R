@@ -12,7 +12,7 @@ d_temp <- filter(d, param == "temperatura") |>
 # https://grafana.ohmc.ar/d/dr_IMbqWz/eml02-dique-los-molinos
 
 d_atm <- read_csv(
-  "datos/temperatura/Temperatura del aire-data-2025-11-20 10_58_50.csv",
+  "datos/temperatura/Temperatura del aire-data-2025-11-25 17_28_44.csv",
   show_col_types = FALSE
 ) |>
   rename(fecha = 1, temp = 2) |>
@@ -23,18 +23,22 @@ d_atm <- read_csv(
   reframe(temp = mean(temp), .by = fecha) |>
   filter(temp != 0)
 
+# si hay fechas sin registro de datos de temperatura, queda el espacio vacío
+d_atm_na <- tibble(
+  fecha = seq.Date(min(d_atm$fecha), max(d_atm$fecha), by = "1 day")
+) |>
+  full_join(d_atm, by = join_by(fecha))
+
 # figura -----------------------------------------------------------------
 
 g_temp <- ggplot(d_temp, aes(fecha, temp_m)) +
-
   geom_line(
-    data = d_atm,
+    data = d_atm_na,
     aes(fecha, temp, linetype = "Temp. ambiente"),
     inherit.aes = FALSE,
     color = "#02AF4D",
     linewidth = .4
   ) +
-
   geom_segment(
     aes(color = "a"),
     x = fecha_i,

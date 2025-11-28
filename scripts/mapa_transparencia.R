@@ -44,7 +44,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ds = p$valor, .before = 1) |>
-  mutate(ratio = swir1 / green) |>
+  mutate(ratio = swir2 / green) |>
   select(ds, ratio)
 
 # workflow
@@ -58,7 +58,7 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(mod_tbl)
+  fit(mod_tbl) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
@@ -81,6 +81,9 @@ predict_ds <- terra::as.data.frame(r_agua$nir, xy = TRUE) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
 
+thresh(predict_ds, as.raster = FALSE)
+max(p$valor)
+
 # histograma
 ggplot() +
   geom_histogram(
@@ -89,13 +92,13 @@ ggplot() +
     binwidth = 1
   ) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, 20)) +
+  coord_cartesian(xlim = c(0, 30)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
 # lim_transparencia <- 9
-lim_transparencia <- 5.5
-predict_ds[predict_ds$.pred > lim_transparencia] <- lim_transparencia
+lim_transparencia <- 7.5
+predict_ds[predict_ds$.pred > lim_transparencia] <- NA
 
 # medido vs .pred
 # predict(
@@ -204,7 +207,7 @@ guardar_png(
   formato = ".tif"
 )
 
-# browseURL(paste0(getwd(), "/fig/2025-10/mapa_transparencia_2025_10.png"))
+# browseURL("fig/2025-11/mapa_transparencia_2025_11.tif")
 
 extract_ds <- terra::extract(predict_ds, v) |>
   as_tibble() |>

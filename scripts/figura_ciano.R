@@ -15,14 +15,14 @@ g_ciano <- ggplot(d_micro, aes(sitio, suma, fill = algas)) +
   ) +
   scale_y_continuous(
     expand = expansion(mult = c(0, .05), add = c(0, 0)),
-    breaks = scales::breaks_width(1e5),
+    breaks = scales::breaks_width(2e5),
     labels = \(Q) {
       if_else(
         Q == 0,
         "0",
         scales::label_number(
-          big.mark = ".",
-          decimal.mark = ",",
+          big.mark = ",",
+          decimal.mark = ".",
           suffix = "E+6",
           scale = 1e-6
         )(Q)

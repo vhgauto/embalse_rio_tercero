@@ -29,7 +29,8 @@ guardar_png <- function(plot, filename, ancho, alto, formato = ".png") {
       formato
     ),
     width = ancho,
-    height = alto
+    height = alto,
+    units = "in"
   )
 }
 
@@ -70,7 +71,7 @@ f_pdf2 <- function(punto) {
       pluck(1) |>
       str_replace_all("\r", "")
 
-    v <- nit_v[20:22] |>
+    v <- nit_v[18:20] |>
       str_replace_all(",", ".") |>
       str_remove_all(" mg/L")
   }

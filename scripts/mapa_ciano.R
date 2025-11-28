@@ -64,7 +64,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ciano = p$valor, .before = 1) |>
-  mutate(ratio = swir1 / green) |>
+  mutate(ratio = green / red) |>
   select(ciano, ratio)
 
 # workflow
@@ -79,7 +79,7 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(rr)
+  fit(rr) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
@@ -102,6 +102,9 @@ predict_ciano <- terra::as.data.frame(r_agua$nir, xy = TRUE) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
 
+thresh(predict_ciano, as.raster = FALSE)
+max(p$valor)
+
 # histograma
 ggplot() +
   geom_histogram(
@@ -110,12 +113,12 @@ ggplot() +
     binwidth = 1
   ) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, 20)) +
+  coord_cartesian(xlim = c(0, 50)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_ciano <- 3
-predict_ciano[predict_ciano$.pred > lim_ciano] <- NA
+lim_ciano <- 25
+predict_ciano[predict_ciano$.pred > lim_ciano] <- lim_ciano
 
 # medido vs .pred
 predict(

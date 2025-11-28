@@ -4,8 +4,8 @@ protocolos <- list.files(
   full.names = TRUE
 )
 
-sitio9 <- protocolos[str_detect(protocolos, "9")]
-sitio11 <- protocolos[str_detect(protocolos, "11")]
+sitio9 <- protocolos[str_detect(protocolos, " 9")]
+sitio11 <- protocolos[str_detect(protocolos, " 11")]
 
 d9 <- f_pdf1(sitio9)
 d11 <- f_pdf1(sitio11)
@@ -27,7 +27,7 @@ nit_l <- list.files(
   paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
   pattern = "W",
   full.names = TRUE
-)
+)[1]
 
 # tabulapdf::extract_text(nit_l[str_detect(nit_l, "11")]) |>
 #   str_split("\n") |>
@@ -53,11 +53,11 @@ tabla_calidad_tbl <- inner_join(d9, d11, by = join_by(param, unidad)) |>
   ) |>
   filter(!Determinación %in% c("Conductividad a 25 °C", "Nitrato"))
 
-nit_l <- list.files(
-  paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
-  pattern = "W",
-  full.names = TRUE
-)
+# nit_l <- list.files(
+#   paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
+#   pattern = "W",
+#   full.names = TRUE
+# )
 
 nit9 <- f_pdf2(9)
 nit11 <- f_pdf2(11)

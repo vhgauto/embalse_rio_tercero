@@ -77,7 +77,7 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(rr)
+  fit(rr) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
@@ -100,6 +100,9 @@ predict_cla <- terra::as.data.frame(r_agua$nir, xy = TRUE) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
 
+thresh(predict_cla, as.raster = FALSE) # 27.22419
+max(p$valor) # 7.2
+
 # histograma
 ggplot() +
   geom_histogram(
@@ -112,8 +115,8 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 10
-predict_cla[predict_cla$.pred > lim_clorofila] <- NA
+lim_clorofila <- 28
+predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
 
 # medido vs .pred
 predict(
