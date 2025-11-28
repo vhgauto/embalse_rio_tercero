@@ -121,7 +121,11 @@ f_fig <- function(MES = mes_actual, AÑO = año_actual, PARAM, FORMATO = ".png")
 }
 
 f_promedio_actual <- function(parametro, estad) {
-  dplyr::filter(d, param == parametro & fecha == max(d$fecha)) |>
+  dplyr::filter(
+    d,
+    param == parametro &
+      (month(fecha) == mes_actual & year(fecha) == año_actual)
+  ) |>
     reframe(
       m = mean(valor),
       sd = sd(valor)
@@ -134,7 +138,7 @@ f_promedio_actual <- function(parametro, estad) {
 f_promedio_mes_anterior <- function(parametro, estad) {
   v <- filter(
     d,
-    param == "temperatura" &
+    param == parametro &
       (month(fecha) == mes_actual - 1 & year(fecha) == año_actual)
   ) |>
     reframe(
@@ -155,7 +159,7 @@ f_promedio_mes_anterior <- function(parametro, estad) {
 f_promedio_año_anterior <- function(parametro, estad) {
   v <- filter(
     d,
-    param == "temperatura" &
+    param == parametro &
       (month(fecha) == mes_actual & year(fecha) == año_actual - 1)
   ) |>
     reframe(
@@ -381,18 +385,6 @@ flechas_y <- flechas_tbl |>
 
 # temperatura ------------------------------------------------------------
 
-# temp0 <- formato(temp0_tbl$temp_m)
-# temp0_sd <- formato(temp0_tbl$temp_sd)
-
-# temp1 <- formato(temp1_tbl$temp_m)
-# temp1_sd <- formato(temp1_tbl$temp_sd)
-
-# temp2 <- formato(temp2_tbl$temp_m)
-# temp2_sd <- formato(temp2_tbl$temp_sd)
-
-# temp_p <- formato(filter(promedio_tbl, param == "temperatura")$m)
-# temp_p_sd <- formato(filter(promedio_tbl, param == "temperatura")$sd)
-
 temp0 <- f_promedio_actual("temperatura", "m")
 temp0_sd <- f_promedio_actual("temperatura", "sd")
 
@@ -406,42 +398,6 @@ temp_p <- formato(filter(promedio_tbl, param == "temperatura")$m)
 temp_p_sd <- formato(filter(promedio_tbl, param == "temperatura")$sd)
 
 # pH ---------------------------------------------------------------------
-
-# d_ph <- filter(d, param == "pH") |>
-#   filter(between(fecha, fecha_i, fecha_f)) |>
-#   drop_na(valor) |>
-#   reframe(
-#     ph_m = median(valor, na.rm = TRUE),
-#     ph_sd = sd(valor, na.rm = TRUE),
-#     .by = fecha
-#   )
-
-# ph0_tbl <- filter(
-#   d_ph,
-#   month(fecha) == mes_actual & year(fecha) == año_actual
-# )
-
-# ph1_tbl <- filter(
-#   d_ph,
-#   month(fecha) == mes_actual - 1 & year(fecha) == año_actual
-# )
-
-# ph2_tbl <- filter(
-#   d_ph,
-#   month(fecha) == mes_actual & year(fecha) == año_actual - 1
-# )
-
-# ph0 <- formato(ph0_tbl$ph_m)
-# ph0_sd <- formato(ph0_tbl$ph_sd)
-
-# ph1 <- formato(ph1_tbl$ph_m)
-# ph1_sd <- formato(ph1_tbl$ph_sd)
-
-# ph2 <- formato(ph2_tbl$ph_m)
-# ph2_sd <- formato(ph2_tbl$ph_sd)
-
-# ph_p <- formato(filter(promedio_tbl, param == "pH")$m)
-# ph_p_sd <- formato(filter(promedio_tbl, param == "pH")$sd)
 
 ph0 <- f_promedio_actual("pH", "m")
 ph0_sd <- f_promedio_actual("pH", "sd")
