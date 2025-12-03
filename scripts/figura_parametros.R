@@ -69,7 +69,7 @@ g_param <- ggplot(d_comp, aes(fecha_label, param_m, fill = fecha_label)) +
     expand = expansion(mult = c(0, .05), add = c(0, 0))
   ) +
   scale_fill_manual(
-    values = c("#990100", "#9BBB58", "#4F81BC")
+    values = c("#9BBB58", "#990100", "#4F81BC")
   ) +
   labs(y = NULL, x = NULL) +
   theme_bw(base_size = 9, base_family = "Arial") +
