@@ -187,7 +187,6 @@ font_add(
 showtext_auto()
 showtext_opts(dpi = 300)
 
-# update_geom_defaults("text", aes(family = "Arial"))
 update_theme("text", aes(family = "Arial"))
 
 # datos ------------------------------------------------------------------
