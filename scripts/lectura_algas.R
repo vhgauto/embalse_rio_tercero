@@ -108,6 +108,10 @@ f_micro <- function(archivo, W) {
 
 algas_orden <- c("Diatomeas", "Clorofitas", "Cianobacterias", "Criptófitas")
 
+d_micro_actual <- read_csv(
+  "datos/base_de_datos_micro.csv", show_col_types = FALSE
+)
+
 if (FALSE) {
   d_micro <- map_dfr(1:10, ~ f_micro(archivo, .x)) |>
     mutate(
@@ -125,5 +129,5 @@ if (FALSE) {
     ) |>
     mutate(fecha = max(d$fecha), .before = 1)
 
-  write_csv(d_micro, "datos/base_de_datos_micro2.csv")
+  write_csv(rbind(d_micro_actual, d_micro), "datos/base_de_datos_micro.csv")
 }
