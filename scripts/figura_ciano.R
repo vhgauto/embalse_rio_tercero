@@ -2,8 +2,11 @@
 
 algas_orden <- c("Diatomeas", "Clorofitas", "Cianobacterias", "Criptófitas")
 
-d_micro <- read_csv("datos/base_de_datos_micro2.csv", show_col_types = FALSE) |>
-  mutate(algas = factor(algas, levels = algas_orden))
+d_micro <- read_csv("datos/base_de_datos_micro.csv", show_col_types = FALSE) |>
+  mutate(algas = factor(algas, levels = algas_orden)) |>
+  filter(
+    month(fecha) == mes_actual & year(fecha) == año_actual
+  )
 
 # figura -----------------------------------------------------------------
 
