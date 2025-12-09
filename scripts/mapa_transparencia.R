@@ -4,6 +4,11 @@ library(tidymodels)
 library(ggspatial)
 library(tidyterra)
 
+# mes_actual <- 12
+# año_actual <- 2025
+
+# source("scripts/.soporte.R")
+
 # datos ------------------------------------------------------------------
 
 p <- filter(d, fecha == max(d$fecha, na.rm = TRUE) & param == "ds") |>
@@ -17,6 +22,9 @@ ds_tbl <- terra::extract(r_agua, p) |>
 nombres_ds <- names(ds_tbl)
 
 # modelo -----------------------------------------------------------------
+
+rr <- ds_tbl |>
+  mutate(ds = p$valor)
 
 index_tbl <- expand_grid(
   var1 = 1:length(nombres_ds),
@@ -44,7 +52,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ds = p$valor, .before = 1) |>
-  mutate(ratio = swir2 / green) |>
+  mutate(ratio = blue / nir) |>
   select(ds, ratio)
 
 # workflow
@@ -66,7 +74,11 @@ glance(mod_lm)
 # ráster a tbl
 r_agua_tbl <- terra::as.data.frame(r_agua) |>
   as_tibble() |>
-  transmute(ratio = swir2 / green)
+
+  filter(nir != 0) |>
+  # mutate(nir = if_else(nir == 0, .00001, nir)) |> # condición de NO INFINITO
+
+  transmute(ratio = blue / nir) # <-------- cociente de bandas
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -76,6 +88,7 @@ pred_tbl <- predict(
 
 predict_ds <- terra::as.data.frame(r_agua$nir, xy = TRUE) |>
   as_tibble() |>
+  filter(nir != 0) |>
   bind_cols(pred_tbl) |>
   select(-nir) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
@@ -96,37 +109,8 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-# lim_transparencia <- 9
-lim_transparencia <- 7.5
-predict_ds[predict_ds$.pred > lim_transparencia] <- NA
-
-# medido vs .pred
-# predict(
-#   extract_fit_parsnip(mod_lm),
-#   datos_ds
-# ) |>
-#   bind_cols(select(datos_ds, ds)) |>
-#   ggplot(aes(ds, .pred)) +
-#   geom_abline() +
-#   geom_point(size = 3) +
-#   coord_equal(xlim = c(1, 5), ylim = c(1, 5)) +
-#   theme_bw(base_size = 5)
-
-# R2
-# predict(
-#   extract_fit_parsnip(mod_lm),
-#   datos_ds
-# ) |>
-#   bind_cols(select(datos_ds, ds)) |>
-#   rsq(truth = ds, estimate = .pred)
-
-# RMSE
-# predict(
-#   extract_fit_parsnip(mod_lm),
-#   datos_ds
-# ) |>
-#   bind_cols(select(datos_ds, ds)) |>
-#   rmse(truth = ds, estimate = .pred)
+lim_transparencia <- 7
+predict_ds[predict_ds$.pred > lim_transparencia] <- lim_transparencia
 
 # mapa -------------------------------------------------------------------
 
@@ -139,9 +123,6 @@ etq_transparencia <- paste0(
 )
 
 mapa_transparencia <- ggplot() +
-  # geom_spatraster(data = r$nir, show.legend = FALSE, interpolate = FALSE) +
-  # scale_fill_gradient(low = "grey50", high = "grey90") +
-  # ggnewscale::new_scale_fill() +
   geom_spatraster(data = predict_ds, interpolate = FALSE) +
   geom_segment(
     data = flechas_tbl,
@@ -149,12 +130,6 @@ mapa_transparencia <- ggplot() +
     arrow = arrow(angle = 10, length = unit(2, "mm"), type = "closed"),
     linewidth = .2
   ) +
-  # geom_spatvector(
-  #   data = emb,
-  #   fill = NA,
-  #   color = "grey30",
-  #   linewidth = .2
-  # ) +
   annotate(
     geom = "text",
     x = I(.99),
@@ -207,7 +182,19 @@ guardar_png(
   formato = ".tif"
 )
 
-# browseURL("fig/2025-11/mapa_transparencia_2025_11.tif")
+if (FALSE) {
+  browseURL(paste0(
+    "fig/",
+    año_actual,
+    "-",
+    mes_actual_chr,
+    "/mapa_transparencia_",
+    año_actual,
+    "_",
+    mes_actual_chr,
+    ".tif"
+  ))
+}
 
 extract_ds <- terra::extract(predict_ds, v) |>
   as_tibble() |>
@@ -219,69 +206,3 @@ r2_ds <- filter(d, fecha == max(d$fecha) & param == "ds") |>
   lm(valor ~ .pred, data = _) |>
   broom::glance() |>
   pull(r.squared)
-
-# .tif -------------------------------------------------------------------
-
-# mapa_transparencia_tif <- ggplot() +
-#   geom_spatraster(data = predict_ds, interpolate = FALSE) +
-#   geom_segment(
-#     data = flechas_tbl,
-#     aes(x = xi, y = yi, xend = xf, yend = yf, group = id),
-#     arrow = arrow(angle = 10, length = unit(2, "mm"), type = "closed"),
-#     linewidth = .2
-#   ) +
-#   geom_spatvector(
-#     data = emb,
-#     fill = NA,
-#     color = "grey30",
-#     linewidth = .2
-#   ) +
-#   annotate(
-#     geom = "text",
-#     x = I(.99),
-#     y = I(.01),
-#     label = etq_transparencia,
-#     size = 3,
-#     family = "Arial",
-#     hjust = 1,
-#     vjust = 0,
-#     lineheight = .8
-#   ) +
-#   scale_fill_hypso_c(palette = "meyers", direction = -1) +
-#   annotation_north_arrow(
-#     location = "tl",
-#     style = north_arrow_fancy_orienteering(),
-#     height = unit(.8, "cm"),
-#     width = unit(.8, "cm"),
-#     pad_x = unit(0.25, "cm"),
-#     pad_y = unit(0.25, "cm")
-#   ) +
-#   annotation_scale(
-#     location = "bl",
-#     pad_x = unit(0.2, "cm"),
-#     pad_y = unit(0.2, "cm"),
-#     width_hint = .1,
-#     text_family = "Arial"
-#   ) +
-#   coord_sf(expand = FALSE) +
-#   labs(fill = "Transparencia del agua<br>según disco de Secchi (m)") +
-#   theme_void(base_size = 8, base_family = "Arial") +
-#   theme(
-#     plot.background = element_rect(fill = "white", color = NA),
-#     legend.key.height = unit(7, "pt"),
-#     legend.box.margin = margin(0, 0, 0, 0),
-#     legend.position = "bottom",
-#     legend.text = element_text(size = 6, margin = margin(t = 2)),
-#     legend.title = ggtext::element_markdown(
-#       margin = margin(t = 0, b = 2, r = 15),
-#       lineheight = 1
-#     )
-#   )
-#
-# ggsave(
-#   plot = mapa_transparencia_tif,
-#   filename = "fig/2025-10/mapa_transparencia_2025_10.tif",
-#   width = 5,
-#   height = 5,
-#   units = "in"
-# )
