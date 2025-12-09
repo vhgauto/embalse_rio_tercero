@@ -5,12 +5,6 @@ library(tidyterra)
 
 # mapa -------------------------------------------------------------------
 
-# fecha_temp <- r_actual[!str_detect(r_actual, "temp")] |>
-#   basename() |>
-#   sub(".rds", "", x = _)
-
-r_actual_temp <- "recortes/20251002_temp.tif"
-
 ff_mascara <- function(S) {
   if_else(((S %/% 2^5) %% 2) == 1, 1, NA)
 }
