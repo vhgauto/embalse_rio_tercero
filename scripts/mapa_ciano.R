@@ -4,6 +4,11 @@ library(tidymodels)
 library(ggspatial)
 library(tidyterra)
 
+# mes_actual <- 12
+# año_actual <- 2025
+
+# source("scripts/.soporte.R")
+
 # datos ------------------------------------------------------------------
 
 p <- filter(d, fecha == max(d$fecha, na.rm = TRUE) & param == "cla_ciano") |>
@@ -15,8 +20,6 @@ ciano_tbl <- terra::extract(r_agua, p) |>
   select(-fmask, -ID)
 
 nombres_ciano <- names(ciano_tbl)
-
-nombres_ds <- names(ds_tbl)
 
 # modelo -----------------------------------------------------------------
 
@@ -45,6 +48,8 @@ index_tbl <- expand_grid(
   filter(var1 != var2) |>
   mutate(df = list(ciano_tbl), .before = 1)
 
+nombres_ds <- nombres_ciano
+
 ratio_tbl <- pmap(index_tbl, f_ratio) |>
   list_cbind()
 
@@ -64,7 +69,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ciano = p$valor, .before = 1) |>
-  mutate(ratio = green / red) |>
+  mutate(ratio = swir1 / green) |> # <-------- cociente de bandas
   select(ciano, ratio)
 
 # workflow
@@ -117,36 +122,8 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_ciano <- 25
+lim_ciano <- 10
 predict_ciano[predict_ciano$.pred > lim_ciano] <- lim_ciano
-
-# medido vs .pred
-predict(
-  extract_fit_parsnip(mod_lm),
-  rr
-) |>
-  bind_cols(select(rr, ciano)) |>
-  ggplot(aes(ciano, .pred)) +
-  geom_abline() +
-  geom_point(size = 3) +
-  coord_equal(xlim = c(1, 5), ylim = c(1, 5)) +
-  theme_bw(base_size = 5)
-
-# R2
-predict(
-  extract_fit_parsnip(mod_lm),
-  rr
-) |>
-  bind_cols(select(rr, ciano)) |>
-  rsq(truth = ciano, estimate = .pred)
-
-# RMSE
-predict(
-  extract_fit_parsnip(mod_lm),
-  rr
-) |>
-  bind_cols(select(rr, ciano)) |>
-  rmse(truth = ciano, estimate = .pred)
 
 # mapa -------------------------------------------------------------------
 
@@ -159,9 +136,6 @@ etq_ciano <- paste0(
 )
 
 mapa_ciano <- ggplot() +
-  # geom_spatraster(data = r$nir, show.legend = FALSE, interpolate = FALSE) +
-  # scale_fill_gradient(low = "grey50", high = "grey90") +
-  # ggnewscale::new_scale_fill() +
   geom_spatraster(data = predict_ciano, interpolate = FALSE) +
   geom_segment(
     data = flechas_tbl,
@@ -169,12 +143,6 @@ mapa_ciano <- ggplot() +
     arrow = arrow(angle = 10, length = unit(2, "mm"), type = "closed"),
     linewidth = .2
   ) +
-  # geom_spatvector(
-  #   data = emb,
-  #   fill = NA,
-  #   color = "grey30",
-  #   linewidth = .2
-  # ) +
   annotate(
     geom = "text",
     x = I(.99),
@@ -228,7 +196,19 @@ guardar_png(
   formato = ".tif"
 )
 
-# browseURL(paste0(getwd(), "/fig/2025-10/mapa_ciano_2025_10.png"))
+if (FALSE) {
+  browseURL(paste0(
+    "fig/",
+    año_actual,
+    "-",
+    mes_actual_chr,
+    "/mapa_ciano_",
+    año_actual,
+    "_",
+    mes_actual_chr,
+    ".tif"
+  ))
+}
 
 extract_ciano <- terra::extract(predict_ciano, v) |>
   as_tibble() |>
