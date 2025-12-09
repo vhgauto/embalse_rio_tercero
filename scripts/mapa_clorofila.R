@@ -4,6 +4,11 @@ library(tidymodels)
 library(ggspatial)
 library(tidyterra)
 
+# mes_actual <- 12
+# año_actual <- 2025
+
+# source("scripts/.soporte.R")
+
 # datos ------------------------------------------------------------------
 
 p <- filter(d, fecha == max(d$fecha, na.rm = TRUE) & param == "cla") |>
@@ -43,6 +48,8 @@ index_tbl <- expand_grid(
   filter(var1 != var2) |>
   mutate(df = list(cla_tbl), .before = 1)
 
+nombres_ds <- nombres_cla
+
 ratio_tbl <- pmap(index_tbl, f_ratio) |>
   list_cbind()
 
@@ -62,8 +69,8 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(cla = p$valor, .before = 1) |>
-  mutate(ratio1 = nir / red, ratio2 = swir2 / green) |>
-  select(cla, ratio1, ratio2)
+  mutate(ratio = nir / blue) |> # <-------- cociente de bandas
+  select(cla, ratio)
 
 # workflow
 base_wf <- workflow() |>
@@ -77,15 +84,18 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(rr) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
+  fit(mod_tbl) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
 
 # ráster a tbl
 r_agua_tbl <- terra::as.data.frame(r_agua) |>
-  as_tibble() #|>
-# transmute(ratio = swir2 / green)
+  as_tibble() |>
+
+  filter(blue != 0) |>
+
+  transmute(ratio = nir / blue)
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -93,10 +103,13 @@ pred_tbl <- predict(
 ) |>
   tibble(.pred = _)
 
-predict_cla <- terra::as.data.frame(r_agua$nir, xy = TRUE) |>
+predict_cla <- terra::as.data.frame(r_agua$blue, xy = TRUE) |>
   as_tibble() |>
+
+  filter(blue != 0) |>
+
   bind_cols(pred_tbl) |>
-  select(-nir) |>
+  select(-blue) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
 
@@ -115,36 +128,8 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 28
-predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
-
-# medido vs .pred
-predict(
-  extract_fit_parsnip(mod_lm),
-  rr
-) |>
-  bind_cols(select(rr, cla)) |>
-  ggplot(aes(cla, .pred)) +
-  geom_abline() +
-  geom_point(size = 3) +
-  coord_equal(xlim = c(1, 5), ylim = c(1, 5)) +
-  theme_bw(base_size = 5)
-
-# R2
-predict(
-  extract_fit_parsnip(mod_lm),
-  rr
-) |>
-  bind_cols(select(rr, cla)) |>
-  rsq(truth = cla, estimate = .pred)
-
-# RMSE
-predict(
-  extract_fit_parsnip(mod_lm),
-  rr
-) |>
-  bind_cols(select(rr, cla)) |>
-  rmse(truth = cla, estimate = .pred)
+lim_clorofila <- 10
+predict_cla[predict_cla$.pred > lim_clorofila] <- NA
 
 # mapa -------------------------------------------------------------------
 
@@ -157,9 +142,6 @@ etq_clorofila <- paste0(
 )
 
 mapa_clorofila <- ggplot() +
-  # geom_spatraster(data = r$nir, show.legend = FALSE, interpolate = FALSE) +
-  # scale_fill_gradient(low = "grey50", high = "grey90") +
-  # ggnewscale::new_scale_fill() +
   geom_spatraster(data = predict_cla, interpolate = FALSE) +
   geom_segment(
     data = flechas_tbl,
@@ -167,12 +149,6 @@ mapa_clorofila <- ggplot() +
     arrow = arrow(angle = 10, length = unit(2, "mm"), type = "closed"),
     linewidth = .2
   ) +
-  # geom_spatvector(
-  #   data = emb,
-  #   fill = NA,
-  #   color = "grey30",
-  #   linewidth = .2
-  # ) +
   annotate(
     geom = "text",
     x = I(.99),
@@ -224,7 +200,19 @@ guardar_png(
   formato = ".tif"
 )
 
-# browseURL(paste0(getwd(), "/fig/2025-10/mapa_clorofila_2025_10.png"))
+if (FALSE) {
+  browseURL(paste0(
+    "fig/",
+    año_actual,
+    "-",
+    mes_actual_chr,
+    "/mapa_clorofila_",
+    año_actual,
+    "_",
+    mes_actual_chr,
+    ".tif"
+  ))
+}
 
 extract_cla <- terra::extract(predict_cla, v) |>
   as_tibble() |>
