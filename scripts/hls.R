@@ -1,7 +1,10 @@
 # paquetes ---------------------------------------------------------------
 
 library(rstac)
+library(tidyverse)
 library(terra)
+
+source(file = "scripts/.soporte.R")
 
 # datos ------------------------------------------------------------------
 
@@ -49,8 +52,8 @@ fechas_items <- map_vec(1:length(items$features), f_fecha_item)
 
 fecha_i <- which.min(abs(fechas_items - fecha_actual))
 
-# fecha_hls <- fechas_items[fecha_i]
-fecha_hls <- fechas_items[1]
+fecha_hls <- fechas_items[fecha_i]
+# fecha_hls <- fechas_items[1]
 
 sf_items <- items_as_sf(items)
 granule_id <- sapply(items$features, function(feature) feature$id)
@@ -210,7 +213,11 @@ f_masked <- function(W) {
 }
 
 ff_mascara <- function(S) {
-  if_else(((S %/% 2^5) %% 2) == 1, 1, NA)
+  if_else(
+    ((S %/% 2^1) %% 2) != 1 & ((S %/% 2^3) %% 2) != 1,
+    1,
+    NA
+  )
 }
 
 ff_bit <- app(fmask_stack[[1]], ff_mascara)
