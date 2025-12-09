@@ -95,15 +95,15 @@ if (mes_d == mes_actual & año_d == año_actual) {
       latitud = 4,
       longitud = 5,
       fecha = 6,
-      temperatura = 13,
-      pH = 14,
-      od = 15,
-      ds = 16,
-      ce = 18,
-      sdt = 19,
-      turb = 20,
-      cla = 25,
-      cla_ciano = 26
+      temperatura = 14,
+      pH = 15,
+      od = 16,
+      ds = 17,
+      ce = 19,
+      sdt = 20,
+      turb = 21,
+      cla = 26,
+      cla_ciano = 27
     ) |>
     mutate(
       across(
