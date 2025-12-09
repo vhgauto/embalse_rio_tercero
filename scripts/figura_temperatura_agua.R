@@ -12,9 +12,10 @@ d_temp <- filter(d, param == "temperatura") |>
 # https://grafana.ohmc.ar/d/dr_IMbqWz/eml02-dique-los-molinos
 
 d_atm <- read_csv(
-  "datos/temperatura/Temperatura del aire-data-2025-11-25 17_28_44.csv",
+  list.files("datos/temperatura/", full.names = TRUE),
   show_col_types = FALSE
 ) |>
+  distinct() |>
   rename(fecha = 1, temp = 2) |>
   mutate(fecha = as.Date(fecha)) |>
   mutate(temp = sub(" °C", "", temp)) |>
