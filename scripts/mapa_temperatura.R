@@ -21,7 +21,6 @@ fecha_temp <- fecha_temp1[str_detect(
   paste0(año_actual, mes_actual)
 )]
 
-
 etq_temp <- paste0(
   "Producto HSL\nFecha: ",
   ymd(fecha_temp),
@@ -29,9 +28,6 @@ etq_temp <- paste0(
 )
 
 mapa_temperatura <- ggplot() +
-  # geom_spatraster(data = r$nir, show.legend = FALSE, interpolate = FALSE) +
-  # scale_fill_gradient(low = "grey50", high = "grey90") +
-  # ggnewscale::new_scale_fill() +
   geom_spatraster(data = r_temp_agua, interpolate = FALSE) +
   geom_segment(
     data = flechas_tbl,
@@ -39,12 +35,6 @@ mapa_temperatura <- ggplot() +
     arrow = arrow(angle = 10, length = unit(2, "mm"), type = "closed"),
     linewidth = .2
   ) +
-  # geom_spatvector(
-  #   data = emb,
-  #   fill = NA,
-  #   color = "grey30",
-  #   linewidth = .2
-  # ) +
   annotate(
     geom = "text",
     x = I(.99),
@@ -57,7 +47,6 @@ mapa_temperatura <- ggplot() +
     lineheight = .8
   ) +
   scale_fill_gradientn(
-    # colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")),
     colors = viridis::turbo(500),
     na.value = NA
   ) +
@@ -98,7 +87,19 @@ guardar_png(
   formato = ".tif"
 )
 
-# browseURL(paste0(getwd(), "/fig/2025-10/mapa_temperatura_2025_10.png"))
+if (FALSE) {
+  browseURL(paste0(
+    "fig/",
+    año_actual,
+    "-",
+    mes_actual_chr,
+    "/mapa_temperatura_",
+    año_actual,
+    "_",
+    mes_actual_chr,
+    ".tif"
+  ))
+}
 
 extract_temp <- terra::extract(r_temp_agua, v) |>
   as_tibble() |>

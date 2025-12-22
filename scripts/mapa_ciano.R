@@ -107,7 +107,8 @@ predict_ciano <- terra::as.data.frame(r_agua$nir, xy = TRUE) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
 
-thresh(predict_ciano, as.raster = FALSE)
+tr <- thresh(predict_ciano, as.raster = FALSE, method = "median")
+tr
 max(p$valor)
 
 # histograma
@@ -117,12 +118,13 @@ ggplot() +
     aes(x = .pred),
     binwidth = 1
   ) +
+  geom_vline(xintercept = tr, color = "red", linewidth = 1) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, 50)) +
+  coord_cartesian(xlim = c(0, tr * 20)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_ciano <- 10
+lim_ciano <- 5
 predict_ciano[predict_ciano$.pred > lim_ciano] <- lim_ciano
 
 # mapa -------------------------------------------------------------------

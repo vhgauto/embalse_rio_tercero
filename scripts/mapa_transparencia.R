@@ -75,8 +75,7 @@ glance(mod_lm)
 r_agua_tbl <- terra::as.data.frame(r_agua) |>
   as_tibble() |>
 
-  filter(nir != 0) |>
-  # mutate(nir = if_else(nir == 0, .00001, nir)) |> # condición de NO INFINITO
+  # filter(nir != 0) |>
 
   transmute(ratio = blue / nir) # <-------- cociente de bandas
 
@@ -88,13 +87,16 @@ pred_tbl <- predict(
 
 predict_ds <- terra::as.data.frame(r_agua$nir, xy = TRUE) |>
   as_tibble() |>
-  filter(nir != 0) |>
+  # dplyr::filter(nir != 0) |>
   bind_cols(pred_tbl) |>
   select(-nir) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
 
-thresh(predict_ds, as.raster = FALSE)
+predict_ds[is.infinite(predict_ds)] <- NA
+
+tr <- thresh(predict_ds, as.raster = FALSE, method = "otsu")
+tr
 max(p$valor)
 
 # histograma
@@ -104,12 +106,13 @@ ggplot() +
     aes(x = .pred),
     binwidth = 1
   ) +
+  geom_vline(xintercept = tr, color = "red", linewidth = 1) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, 30)) +
+  coord_cartesian(xlim = c(0, tr * 2)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_transparencia <- 7
+lim_transparencia <- 10
 predict_ds[predict_ds$.pred > lim_transparencia] <- lim_transparencia
 
 # mapa -------------------------------------------------------------------
@@ -200,7 +203,7 @@ extract_ds <- terra::extract(predict_ds, v) |>
   as_tibble() |>
   rename(punto = ID)
 
-r2_ds <- filter(d, fecha == max(d$fecha) & param == "ds") |>
+r2_ds <- dplyr::filter(d, fecha == max(d$fecha) & param == "ds") |>
   select(punto, valor) |>
   inner_join(extract_ds, by = join_by(punto)) |>
   lm(valor ~ .pred, data = _) |>

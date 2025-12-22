@@ -287,11 +287,27 @@ f_write_raster(lista_recortes)
 
 # temperatura ------------------------------------------------------------
 
+earthdatalogin::edl_netrc()
+
+s <- stac("https://cmr.earthdata.nasa.gov/stac/LPCLOUD/")
+
+roi_datetime_temp <- paste0(
+  ymd(20251213) - 2,
+  "T00:00:00Z/",
+  ymd(20251213) + 2,
+  "T23:59:59Z"
+)
+
+roi <- terra::vect("vector/roi_embalse.geojson") |>
+  project("EPSG:4326")
+roi_extent <- terra::ext(roi)
+bbox <- c(roi_extent$xmin, roi_extent$ymin, roi_extent$xmax, roi_extent$ymax)
+
 items_temp <- s |>
   stac_search(
     collections = "HLSL30_2.0",
     bbox = bbox,
-    datetime = roi_datetime,
+    datetime = roi_datetime_temp,
     limit = 100
   ) |>
   post_request()

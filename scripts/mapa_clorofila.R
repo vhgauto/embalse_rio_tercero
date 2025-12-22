@@ -84,18 +84,18 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(mod_tbl) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
+  fit(rr) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
 
 # ráster a tbl
 r_agua_tbl <- terra::as.data.frame(r_agua) |>
-  as_tibble() |>
+  as_tibble() #|>
 
-  filter(blue != 0) |>
+# filter(blue != 0) |>
 
-  transmute(ratio = nir / blue)
+# transmute(ratio = nir / blue)
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -106,15 +106,16 @@ pred_tbl <- predict(
 predict_cla <- terra::as.data.frame(r_agua$blue, xy = TRUE) |>
   as_tibble() |>
 
-  filter(blue != 0) |>
+  # filter(blue != 0) |>
 
   bind_cols(pred_tbl) |>
   select(-blue) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
 
-thresh(predict_cla, as.raster = FALSE) # 27.22419
-max(p$valor) # 7.2
+tr <- thresh(predict_cla, as.raster = FALSE, method = "mean")
+tr
+max(p$valor)
 
 # histograma
 ggplot() +
@@ -123,13 +124,14 @@ ggplot() +
     aes(x = .pred),
     binwidth = 1
   ) +
+  geom_vline(xintercept = tr, color = "red", linewidth = 1) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, 20)) +
+  coord_cartesian(xlim = c(0, tr * 10)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 10
-predict_cla[predict_cla$.pred > lim_clorofila] <- NA
+lim_clorofila <- 15
+predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
 
 # mapa -------------------------------------------------------------------
 
