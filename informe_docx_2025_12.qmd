@@ -384,6 +384,14 @@ Coincidiendo con la información satelital, se observó que las concentraciones 
 
 Las diatomeas (*Chrysophytas*) estuvieron presentes en todos los sitios, pero en menor proporción que las cianobacterias. Mientras que los grupos representados por criptófitas (*Pyrrophytas*) y clorófitas (*Chlorophytas*) presentaron valores muy bajos en todo el embalse, sin encontrarse diferencias entre los sitios de muestreo y aportando muy poco a la abundancia general del reservorio.
 
+```{r}
+#| output: asis
+#| label: fig-ciano-mensual
+
+source("scripts/figura_ciano_mensual.R")
+f_fig(PARAM = "figura_ciano_mensual")
+```
+
 # Determinación del estado trófico 
 
 Si bien la evaluación trófica se realiza como un valor promedio de todo un año monitoreado, al realizar una estimación mensual del Índice de Estado Trófico [@carlson1977trophic], se determinó que en los últimos meses el embalse está presentando una disminución en su estado trófico. Cabe mencionar que para este análisis no se consideró la variable fósforo total, ya que la concentración medida es atípica. 
