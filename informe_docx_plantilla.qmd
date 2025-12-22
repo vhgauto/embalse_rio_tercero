@@ -384,6 +384,8 @@ Coincidiendo con la información satelital, se observó que las concentraciones 
 
 Las diatomeas (*Chrysophytas*) estuvieron presentes en todos los sitios, pero en menor proporción que las cianobacterias. Mientras que los grupos representados por criptófitas (*Pyrrophytas*) y clorófitas (*Chlorophytas*) presentaron valores muy bajos en todo el embalse, sin encontrarse diferencias entre los sitios de muestreo y aportando muy poco a la abundancia general del reservorio.
 
+::: {#fig-ciano-mensual}
+
 ```{r}
 #| output: asis
 #| label: fig-ciano-mensual
@@ -391,6 +393,10 @@ Las diatomeas (*Chrysophytas*) estuvieron presentes en todos los sitios, pero en
 source("scripts/figura_ciano_mensual.R")
 f_fig(PARAM = "figura_ciano_mensual")
 ```
+
+Figura cianobacterias por mes y especie
+
+:::
 
 # Determinación del estado trófico 
 
