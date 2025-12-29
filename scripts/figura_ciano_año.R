@@ -16,8 +16,8 @@ g_ciano_año <- ggplot(d_ciano, aes(fecha, ciano_m)) +
     aes(color = "a"),
     x = fecha_i,
     xend = fecha_f,
-    y = filter(promedio_tbl, param == "cla")$m,
-    yend = filter(promedio_tbl, param == "cla")$m,
+    y = filter(promedio_tbl, param == "cla_ciano")$m,
+    yend = filter(promedio_tbl, param == "cla_ciano")$m,
     linetype = "22",
     linewidth = .5
   ) +
