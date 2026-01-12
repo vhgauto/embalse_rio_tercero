@@ -6,6 +6,9 @@ library(tidyverse)
 
 # funciones --------------------------------------------------------------
 
+mes_anterior_X <- if (mes_actual == 1) 12 else mes_actual - 1
+año_anterior_X <- if (mes_actual == 1) año_actual - 1 else año_actual
+
 formato <- function(Z, n = 1) {
   format(
     round(Z, n),
@@ -25,7 +28,7 @@ guardar_png <- function(plot, filename, ancho, alto, formato = ".png") {
       "_",
       año_actual,
       "_",
-      mes_actual,
+      mes_actual_chr,
       formato
     ),
     width = ancho,
@@ -101,7 +104,12 @@ f_ratio <- function(df, var1, var2) {
   return(d)
 }
 
-f_fig <- function(MES = mes_actual, AÑO = año_actual, PARAM, FORMATO = ".png") {
+f_fig <- function(
+  MES = mes_actual_chr,
+  AÑO = año_actual,
+  PARAM,
+  FORMATO = ".png"
+) {
   cat(
     "![](",
     "fig/",
@@ -139,7 +147,7 @@ f_promedio_mes_anterior <- function(parametro, estad) {
   v <- filter(
     d,
     param == parametro &
-      (month(fecha) == mes_actual - 1 & year(fecha) == año_actual)
+      (month(fecha) == mes_anterior_X & year(fecha) == año_anterior_X)
   ) |>
     reframe(
       m = mean(valor),
@@ -160,7 +168,7 @@ f_promedio_año_anterior <- function(parametro, estad) {
   v <- filter(
     d,
     param == parametro &
-      (month(fecha) == mes_actual & year(fecha) == año_actual - 1)
+      (month(fecha) == mes_actual & year(fecha) == año_anterior_X)
   ) |>
     reframe(
       m = mean(valor),
@@ -254,7 +262,7 @@ r_temp_agua <- r_temp * r_mask
 
 # figuras ----------------------------------------------------------------
 
-carpeta_fig <- paste0("fig/", año_actual, "-", mes_actual, "/")
+carpeta_fig <- paste0("fig/", año_actual, "-", mes_actual_chr, "/")
 
 if (!dir.exists(carpeta_fig)) {
   dir.create(carpeta_fig)
