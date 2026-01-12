@@ -42,7 +42,9 @@ mes_actual_chr <- if (mes_actual <= 9) {
   as.character(mes_actual)
 }
 
-mes_prev_chr <- if ((mes_actual - 1) <= 9) {
+mes_prev_chr <- if (mes_actual == 1) {
+  "12"
+} else if ((mes_actual - 1) <= 9) {
   paste0("0", mes_actual - 1)
 } else {
   as.character(mes_actual - 1)
