@@ -125,12 +125,18 @@ ggplot() +
     binwidth = 1
   ) +
   geom_vline(xintercept = tr, color = "red", linewidth = 1) +
-  scale_x_continuous(breaks = scales::breaks_width(1)) +
+  geom_vline(
+    xintercept = max(p$valor),
+    color = "blue",
+    linewidth = .3,
+    linetype = 2
+  ) +
+  scale_x_continuous(breaks = scales::breaks_width(5)) +
   coord_cartesian(xlim = c(0, tr * 10)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 15
+lim_clorofila <- 70
 predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
 
 # mapa -------------------------------------------------------------------

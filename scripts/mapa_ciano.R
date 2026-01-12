@@ -75,7 +75,6 @@ mod_tbl <- terra::extract(r_agua, p) |>
 # workflow
 base_wf <- workflow() |>
   add_formula(ciano ~ .)
-# add_recipe()
 
 # especificación
 lm_spec <- linear_reg() |>
@@ -124,7 +123,7 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_ciano <- 5
+lim_ciano <- 20
 predict_ciano[predict_ciano$.pred > lim_ciano] <- lim_ciano
 
 # mapa -------------------------------------------------------------------

@@ -90,6 +90,7 @@ colnames(asset_urls) <- bandas_nombres
 sf_items <- cbind(sf_items, asset_urls) |>
   filter(fecha_feature == fecha_hls)
 
+# selección de LANDSAT en caso de haber dos productos para la misma fecha
 if (nrow(sf_items) > 1) {
   sf_items <- dplyr::filter(sf_items, str_detect(granule, "L30"))
 }
@@ -292,9 +293,9 @@ earthdatalogin::edl_netrc()
 s <- stac("https://cmr.earthdata.nasa.gov/stac/LPCLOUD/")
 
 roi_datetime_temp <- paste0(
-  ymd(20251213) - 2,
+  max(d$fecha) - 2,
   "T00:00:00Z/",
-  ymd(20251213) + 2,
+  max(d$fecha) + 2,
   "T23:59:59Z"
 )
 

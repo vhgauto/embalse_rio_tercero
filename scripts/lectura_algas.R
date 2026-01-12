@@ -39,7 +39,7 @@ archivo <- list.files(
     "datos/algas_",
     año_actual,
     "_",
-    mes_actual
+    mes_actual_chr
   ),
   full.names = TRUE
 )
@@ -109,7 +109,8 @@ f_micro <- function(archivo, W) {
 algas_orden <- c("Diatomeas", "Clorofitas", "Cianobacterias", "Criptófitas")
 
 d_micro_actual <- read_csv(
-  "datos/base_de_datos_micro.csv", show_col_types = FALSE
+  "datos/base_de_datos_micro.csv",
+  show_col_types = FALSE
 )
 
 if (FALSE) {

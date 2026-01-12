@@ -36,11 +36,11 @@ d_actual <- filter(
 )
 d_mes_anterior <- filter(
   d,
-  month(fecha) == mes_actual - 1 & year(fecha) == año_actual
+  month(fecha) == mes_anterior_X & year(fecha) == año_anterior_X
 )
 d_año_anterior <- filter(
   d,
-  month(fecha) == mes_actual & year(fecha) == año_actual - 1
+  month(fecha) == mes_actual & year(fecha) == año_anterior_X
 )
 
 d_comp <- rbind(d_actual, d_mes_anterior, d_año_anterior) |>
@@ -57,6 +57,12 @@ d_comp <- rbind(d_actual, d_mes_anterior, d_año_anterior) |>
 
 # figura -----------------------------------------------------------------
 
+col_param <- if (length(unique(d_comp$fecha_label)) == 3) {
+  c("#9BBB58", "#4F81BC", "#990100")
+} else {
+  c("#4F81BC", "#990100")
+}
+
 g_param <- ggplot(d_comp, aes(fecha_label, param_m, fill = fecha_label)) +
   geom_col() +
   geom_errorbar(
@@ -69,7 +75,7 @@ g_param <- ggplot(d_comp, aes(fecha_label, param_m, fill = fecha_label)) +
     expand = expansion(mult = c(0, .05), add = c(0, 0))
   ) +
   scale_fill_manual(
-    values = c("#9BBB58", "#4F81BC", "#990100")
+    values = col_param
   ) +
   labs(y = NULL, x = NULL) +
   theme_bw(base_size = 9, base_family = "Arial") +
