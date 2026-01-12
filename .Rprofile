@@ -21,6 +21,18 @@ informe <- function(MES, AÑO) {
   ))
 }
 
+documento <- function(MES = mes_actual, AÑO = año_actual) {
+  MES <- if (MES <= 9) paste0("0", MES) else MES
+  paste0(
+    getwd(),
+    "/docs/informe_docx_",
+    AÑO,
+    "_",
+    MES,
+    ".docx"
+  )
+}
+
 txt1 <- "Ejecutar "
 txt2 <- "informe(MES, AÑO) "
 txt3 <- "para crear archivos .docx"
