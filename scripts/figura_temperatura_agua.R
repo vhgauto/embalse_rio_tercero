@@ -1,15 +1,16 @@
+# https://grafana.ohmc.ar/d/U8oH3kKVz/eml03-embalse-rio-3
+# https://grafana.ohmc.ar/d/dr_IMbqWz/eml02-dique-los-molinos
+
 # datos ------------------------------------------------------------------
 
 d_temp <- filter(d, param == "temperatura") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
   drop_na(valor) |>
   reframe(
-    temp_m = median(valor, na.rm = TRUE),
+    temp_m = mean(valor, na.rm = TRUE),
     temp_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )
-
-# https://grafana.ohmc.ar/d/dr_IMbqWz/eml02-dique-los-molinos
 
 d_atm <- read_csv(
   list.files("datos/temperatura/", full.names = TRUE),

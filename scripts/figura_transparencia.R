@@ -4,7 +4,7 @@ d_ds <- filter(d, param == "ds") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
   drop_na(valor) |>
   reframe(
-    ds_m = median(valor, na.rm = TRUE),
+    ds_m = mean(valor, na.rm = TRUE),
     ds_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )

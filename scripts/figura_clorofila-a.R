@@ -4,7 +4,7 @@ d_clo <- filter(d, param == "cla") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
   drop_na(valor) |>
   reframe(
-    clo_m = median(valor, na.rm = TRUE),
+    clo_m = mean(valor, na.rm = TRUE),
     clo_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )

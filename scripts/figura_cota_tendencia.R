@@ -3,22 +3,6 @@
 # https://cordoba.redesclimaticas.com/next/reports?mss=30335
 
 cota_vertedero <- 46.5
-# cota_vertedero <- readxl::read_xlsx(
-#   "datos/Base_ERT_OriginalActualizada.xlsx",
-#   sheet = "3-Nivel_Diques-Cba"
-# ) |>
-#   select(fecha = 1, altura = "Embalse") |>
-#   filter(fecha == "h labio de Vertedero") |>
-#   pull(altura)
-
-# d_cota <- readxl::read_xlsx(
-#   "datos/Base_ERT_OriginalActualizada.xlsx",
-#   sheet = "3-Nivel_Diques-Cba"
-# ) |>
-#   select(fecha = 1, altura = "Embalse") |>
-#   filter(fecha != "h labio de Vertedero") |>
-#   drop_na() |>
-#   mutate(fecha = janitor::excel_numeric_to_date(as.numeric(fecha)))
 
 d_cota <- read_csv("datos/base_de_datos_cotas.csv", show_col_types = FALSE)
 
@@ -88,7 +72,7 @@ g_cota_hist <- ggplot() +
   labs(x = NULL, y = "Nivel de presa (m)") +
   theme_bw(base_size = 8, base_family = "Arial") +
   theme(
-    plot.margin = margin(10, 5, 5, 5),
+    plot.margin = margin(10, 7, 5, 5),
     axis.text = element_text(color = "black"),
     axis.ticks.x = element_line(),
     panel.grid.minor = element_blank(),

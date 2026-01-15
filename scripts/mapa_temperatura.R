@@ -18,7 +18,7 @@ r_temp_agua <- r_temp * r_mask
 fecha_temp1 <- list.files("recortes/", full.names = TRUE, pattern = "_temp")
 fecha_temp <- fecha_temp1[str_detect(
   fecha_temp1,
-  paste0(año_actual, mes_actual)
+  paste0(año_actual, mes_actual_chr)
 )]
 
 etq_temp <- paste0(

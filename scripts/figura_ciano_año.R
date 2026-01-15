@@ -4,7 +4,7 @@ d_ciano <- filter(d, param == "cla_ciano") |>
   filter(between(fecha, fecha_i, fecha_f)) |>
   drop_na(valor) |>
   reframe(
-    ciano_m = median(valor, na.rm = TRUE),
+    ciano_m = mean(valor, na.rm = TRUE),
     ciano_sd = sd(valor, na.rm = TRUE),
     .by = fecha
   )
