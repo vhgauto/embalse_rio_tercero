@@ -6,6 +6,7 @@ library(tidyterra)
 # mapa -------------------------------------------------------------------
 
 ff_mascara <- function(S) {
+  S <- as.numeric(S)
   if_else(((S %/% 2^5) %% 2) == 1, 1, NA)
 }
 

@@ -52,7 +52,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ds = p$valor, .before = 1) |>
-  mutate(ratio = blue / aerosol) |>
+  mutate(ratio = swir1 / nir) |>
   select(ds, ratio)
 
 # workflow
@@ -66,18 +66,18 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(rr) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
+  fit(mod_tbl) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
 
 # ráster a tbl
 r_agua_tbl <- terra::as.data.frame(r_agua) |>
-  as_tibble() #|>
+  as_tibble() |>
 
-# filter(nir != 0) |>
+  # filter(nir != 0) |>
 
-# transmute(ratio = blue / aerosol) # <-------- cociente de bandas
+  transmute(ratio = swir1 / nir) # <-------- cociente de bandas
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -108,12 +108,12 @@ ggplot() +
   ) +
   geom_vline(xintercept = tr, color = "red", linewidth = 1) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, tr * 2)) +
+  coord_cartesian(xlim = c(0, tr * 5)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_transparencia <- 7
-predict_ds[predict_ds$.pred > lim_transparencia] <- NA
+lim_transparencia <- 9
+predict_ds[predict_ds$.pred > lim_transparencia] <- lim_transparencia
 
 # mapa -------------------------------------------------------------------
 

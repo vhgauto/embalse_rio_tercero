@@ -132,11 +132,11 @@ ggplot() +
     linetype = 2
   ) +
   scale_x_continuous(breaks = scales::breaks_width(5)) +
-  coord_cartesian(xlim = c(0, tr * 10)) +
+  coord_cartesian(xlim = c(0, tr * 5)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 70
+lim_clorofila <- 11
 predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
 
 # mapa -------------------------------------------------------------------
