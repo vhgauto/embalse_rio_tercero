@@ -7,7 +7,9 @@ library(tidyverse)
 # funciones --------------------------------------------------------------
 
 mes_anterior_X <- if (mes_actual == 1) 12 else mes_actual - 1
-año_anterior_X <- if (mes_actual == 1) año_actual - 1 else año_actual
+# año_anterior_X <- if (mes_actual == 1) año_actual - 1 else año_actual
+año_anterior_X <- año_actual - 1
+año_actual_X <- if (mes_actual == 1) año_actual - 1 else año_actual
 
 formato <- function(Z, n = 1) {
   format(
@@ -147,7 +149,7 @@ f_promedio_mes_anterior <- function(parametro, estad) {
   v <- filter(
     d,
     param == parametro &
-      (month(fecha) == mes_anterior_X & year(fecha) == año_anterior_X)
+      (month(fecha) == mes_anterior_X & year(fecha) == año_actual_X)
   ) |>
     reframe(
       m = mean(valor),
@@ -251,6 +253,7 @@ r_actual_temp <- r_files[str_detect(
 r_actual_temp <- r_actual_temp[str_detect(r_actual_temp, "temp")]
 
 ff_mascara <- function(S) {
+  S <- as.numeric(S)
   if_else(((S %/% 2^5) %% 2) == 1, 1, NA)
 }
 
