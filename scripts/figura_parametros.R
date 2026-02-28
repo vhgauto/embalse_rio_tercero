@@ -36,7 +36,7 @@ d_actual <- filter(
 )
 d_mes_anterior <- filter(
   d,
-  month(fecha) == mes_anterior_X & year(fecha) == año_anterior_X
+  month(fecha) == mes_anterior_X & year(fecha) == año_actual_X
 )
 d_año_anterior <- filter(
   d,
