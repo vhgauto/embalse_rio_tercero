@@ -3,7 +3,7 @@
 library(tidyverse)
 
 lista_xlsx <- list.files(
-  "datos/",
+  "datos/altura_cota/",
   pattern = "resumenes_diarios",
   full.names = TRUE
 )
