@@ -214,6 +214,7 @@ f_masked <- function(W) {
 }
 
 ff_mascara <- function(S) {
+  S <- as.numeric(S)
   if_else(
     ((S %/% 2^1) %% 2) != 1 & ((S %/% 2^3) %% 2) != 1,
     1,
@@ -221,7 +222,7 @@ ff_mascara <- function(S) {
   )
 }
 
-ff_bit <- app(fmask_stack[[1]], ff_mascara)
+ff_bit <- terra::app(fmask_stack[[1]], ff_mascara)
 
 # aerosol_masked <- f_masked(aerosol_stack)
 # blue_masked <- f_masked(blue_stack)
@@ -293,9 +294,9 @@ earthdatalogin::edl_netrc()
 s <- stac("https://cmr.earthdata.nasa.gov/stac/LPCLOUD/")
 
 roi_datetime_temp <- paste0(
-  max(d$fecha) - 2,
+  max(d$fecha) - 3,
   "T00:00:00Z/",
-  max(d$fecha) + 2,
+  max(d$fecha) + 3,
   "T23:59:59Z"
 )
 
