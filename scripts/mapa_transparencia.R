@@ -23,6 +23,18 @@ nombres_ds <- names(ds_tbl)
 
 # modelo -----------------------------------------------------------------
 
+ds_tbl |>
+  mutate(ds = p$valor) |>
+  corrr::correlate(
+    use = "pairwise.complete.obs",
+    method = "pearson",
+    quiet = TRUE
+  ) |>
+  filter(term == "ds") |>
+  pivot_longer(cols = -term) |>
+  drop_na() |>
+  arrange(desc(value))
+
 rr <- ds_tbl |>
   mutate(ds = p$valor)
 
