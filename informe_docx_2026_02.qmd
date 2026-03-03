@@ -1,0 +1,430 @@
+---
+title: "**INFORME DE CALIDAD DEL AGUA DEL EMBALSE RIO TERCERO (Febrero de 2026)**"
+subtitle: Informe I | ANEXO II
+author: "Dr. Matías BONANSEA, Dra. Anabella FERRAL, Dr. Lucio PINOTTI, Lic. Sofía GUTIERREZ, Geol. Mariana CORREA, Lic. Facundo PARODI, Dra. Rocío GUIDO, MsC. Giuliana BELTRAMONE, Lic. Sofía PANA, Lic. Francisco NEMIÑA, MsC. Víctor GAUTO, MsC. Facundo BONINO, Esp. Joel CARREÑO, Lic. Rossana VILLALBA"
+abstract-title: ""
+abstract: A Solicitud de la Autoridad de Cuencas | Febrero de 2026
+format:
+  docx:
+    toc: false
+    number-sections: true
+    cover-image: cover.png
+    reference-doc: custom-reference-doc.docx
+    table-of-contents: false
+    fig-dpi: 300
+    fig-height: 3
+    fig-width: 5
+    lang: es
+    bibliography: bibliografia/biblio.bib
+execute: 
+  eval: true
+  echo: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+nocite: |
+  @*
+date: last-modified
+date-format: iso
+---
+
+# Consideraciones generales
+
+```{r}
+#| label: inicio
+
+año_actual <- 2026
+mes_actual <- 02
+
+mes_actual_chr <- if (mes_actual <= 9) {
+  paste0("0", mes_actual)
+} else {
+  as.character(mes_actual)
+}
+
+mes_prev_chr <- if (mes_actual == 1) {
+  "12"
+} else if ((mes_actual - 1) <= 9) {
+  paste0("0", mes_actual - 1)
+} else {
+  as.character(mes_actual - 1)
+}
+
+año_previo_mensual <- if (mes_actual == 1) año_actual - 1 else año_actual
+año_previo_anual <- año_actual - 1
+
+fecha_actual <- as.Date(paste0(año_actual, "-", mes_actual_chr, "-01"))
+mes_etq <- stringr::str_to_sentence(format(fecha_actual, "%B"))
+
+fecha_prev <- as.Date(paste0(año_actual, "-", mes_prev_chr, "-01"))
+mes_prev_etq <- stringr::str_to_sentence(format(fecha_prev, "%B"))
+
+source("scripts/.soporte.R")
+
+fecha_muestreo <- max(d$fecha, na.rm = TRUE)
+fecha_muestreo_etq <- format(fecha_muestreo, "%d de %B de %Y")
+```
+
+Las campañas de muestreo fueron coordinadas por personal del **Instituto de Ciencia de la Tierra, Biodiversidad y Ambiente (ICBIA, CONICET-UNRC)** y la **Facultad de Ciencias Exactas, Físico-Químicas y Naturales, Universidad Nacional de Río Cuarto (FCEFQyN, UNRC)**. Además, se contó con el apoyo del **Instituto Gulich (IG, UNC-CONAE)**, el **Ministerio de Ambiente y Economía Circular** de la Provincia de Córdoba y la **Fundación Río Ctalamochita**. La embarcación y personal especializado fue aportado por el **Departamento Unidades de Alto Riesgo (DUAR)** perteneciente a la Policía de la Provincia de Córdoba y por la **Dirección de Seguridad Náutica (DSN)** provincial.
+
+```{r}
+#| tbl-cap: Nombre de los sitios de muestreo
+#| label: tbl-localizacion
+
+data.frame(
+  x = 1:11,
+  s = c(
+    "Club Almafuerte",
+    "Hoteles",
+    "Garganta",
+    "Entrada Ríos y CNE",
+    "Canal de enfriamiento",
+    "Confluencia ríos",
+    "Ingreso río Grande",
+    "Ingreso río Santa Rosa",
+    "Centro",
+    "Villa del dique",
+    "Presa"
+  )
+) |>
+  transmute(s = paste0(x, ".- ", s)) |>
+  knitr::kable(col.names = "**Sitios de muestreo (SM)**", align = "l")
+```
+
+A partir de los datos aportados por  <https://omixom.redesclimaticas.com/next/station?s=30335>.
+
+En base al análisis temporal de la cota del embalse generada para el período comprendido entre los años 2010 a 2025, se observa que el nivel actual es la esperable para la época del año (@fig-cota-tendencia).
+
+::: {#fig-cota-año}
+
+```{r}
+#| output: asis
+#| label: fig-cota-año
+
+source("scripts/figura_cota_año.R")
+f_fig(PARAM = "figura_cota_año")
+```
+
+Figura de cota anual
+
+:::
+
+::: {#fig-cota-tendencia}
+
+```{r}
+#| output: asis
+#| label: fig-cota-tendencia
+
+source("scripts/figura_cota_tendencia.R")
+f_fig(PARAM = "figura_cota_historica")
+```
+
+Figura de cota histórica.
+
+:::
+
+Se espera que el nivel de agua continúe descendiendo hasta los meses de octubre-noviembre que es cuando alcanza los valores de cota mínimos, para luego aumentar el nivel embalsado producto de la regulación del mismo y las precipitaciones en la cuenca. Esta tendencia coincide con lo que se registra en los demás embalses de la provincia.
+
+# Mediciones y observaciones a campo 
+
+La @tbl-parametros muestran los registros de la variables medidas In-situ en el embalse Río Tercero durante la última campañas de muestreo.
+
+```{r}
+#| label: tbl-parametros
+#| tbl-cap: Determinaciones fisico-químicas básicas obtenidas para el embalse Río Tercero **Febrero de 2026**.
+
+source("scripts/tabla_parametros.R")
+tabla_parametros_md
+```
+
+La @fig-param-campo muestra la dinámica de las principales variables medidas durante esta campaña, su comparación con el mes anterior (`{r} mes_prev_etq` 2026) y el mismo mes del año previo (Febrero de `{r} año_actual - 1`).
+
+::: {#fig-param-campo}
+
+```{r}
+#| output: asis
+#| label: fig-param-campo
+
+source("scripts/figura_parametros.R")
+f_fig(PARAM = "figura_parametros")
+```
+
+Variación temporal de las variables medidas a campo
+
+:::
+
+La @tbl-calidad-agua muestra las concentraciones de aniones, cationes y nutrientes más importantes  registrados para dicho monitoreo. Para este análisis, se evaluó un sitio representativo de cada Lóbulo del embalse, con el fin de obtener una visión general de la calidad del agua en todo el reservorio.
+
+```{r}
+#| label: tbl-calidad-agua
+#| tbl-cap: Determinaciones fisico-químicas básicas obtenidas para el embalse Río Tercero **Febrero de 2026**.
+
+source("scripts/tabla_calidad_agua.R")
+tabla_calidad_md
+```
+
+{{< pagebreak >}}
+
+A continuación se detalla la dinámica de las principales variables medidas: 
+
+```{r}
+#| label: script-temperatura
+
+source("scripts/figura_temperatura_agua.R")
+```
+
+**- Temperatura del agua (Temp)**:
+
+`{r} mes_etq` `{r} año_actual`: `{r} temp0` ± `{r} temp0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} temp1` ± `{r} temp1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} temp2` ± `{r} temp2_sd`
+
+::: {#fig-temperatura}
+
+```{r}
+#| output: asis
+#| label: fig-temperatura
+
+f_fig(PARAM = "figura_temperatura")
+```
+
+Figura temperatura
+
+:::
+
+::: {#fig-mapa-temperatura}
+
+```{r}
+#| output: asis
+#| label: fig-mapa-temperatura
+
+source("scripts/mapa_temperatura.R")
+f_fig(PARAM = "mapa_temperatura", FORMATO = ".tif")
+```
+
+Mapa temperatura
+
+:::
+
+R² (temperatura): `{r} formato(r2_temp, n = 3)`
+
+**- pH**:
+
+`{r} mes_etq` `{r} año_actual`: `{r} ph0` ± `{r} ph0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} ph1` ± `{r} ph1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} ph2` ± `{r} ph2_sd`
+
+**- Oxígeno disuelto (OD)**:
+
+`{r} mes_etq` `{r} año_actual`: `{r} od0` ± `{r} od0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} od1` ± `{r} od1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} od2` ± `{r} od2_sd`
+
+**- Transparencia del agua (DS)**
+
+`{r} mes_etq` `{r} año_actual`: `{r} ds0` ± `{r} ds0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} ds1` ± `{r} ds1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} ds2` ± `{r} ds2_sd`
+
+::: {#fig-mapa-transparencia}
+
+```{r}
+#| output: asis
+#| label: fig-mapa-transparencia
+
+source("scripts/mapa_transparencia.R")
+f_fig(PARAM = "mapa_transparencia", FORMATO = ".tif")
+```
+
+Mapa transparencia
+
+:::
+
+R² (transparencia): `{r} formato(r2_ds, n = 3)`
+
+::: {#fig-transparencia}
+
+```{r}
+#| output: asis
+#| label: fig-transparencia
+
+source("scripts/figura_transparencia.R")
+f_fig(PARAM = "figura_transparencia")
+```
+
+Figura transparencia
+
+:::
+
+**- Sólidos Disueltos Totales (SDT)**:
+
+`{r} mes_etq` `{r} año_actual`: `{r} sdt0` ± `{r} sdt0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} sdt1` ± `{r} sdt1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} sdt2` ± `{r} sdt2_sd`
+
+**- Turbidez (Turb)**:
+
+`{r} mes_etq` `{r} año_actual`: `{r} turb0` ± `{r} turb0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} turb1` ± `{r} turb1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} turb2` ± `{r} turb2_sd`
+
+**- Conductividad Eléctrica (CE)**:
+
+`{r} mes_etq` `{r} año_actual`: `{r} ce0` ± `{r} ce0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} ce1` ± `{r} ce1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} ce2` ± `{r} ce2_sd`
+
+**- Concentración de Clorofila-a (Cl-a)**:
+
+`{r} mes_etq` `{r} año_actual`: `{r} cla0` ± `{r} cla0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} cla1` ± `{r} cla1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} cla2` ± `{r} cla2_sd`
+
+::: {#fig-mapa-clorofila}
+
+```{r}
+#| output: asis
+#| label: fig-mapa-clorofila
+
+source("scripts/mapa_clorofila.R")
+f_fig(PARAM = "mapa_clorofila", FORMATO = ".tif")
+```
+
+Mapa clorofila-a
+
+:::
+
+R² (clorofila-a): `{r} formato(r2_cla, n = 3)`
+
+::: {#fig-clorofila}
+
+```{r}
+#| output: asis
+#| label: fig-clorofila
+
+source("scripts/figura_clorofila-a.R")
+f_fig(PARAM = "figura_clorofila")
+```
+
+Figura clorofila-a
+
+:::
+
+**- Concentración de Clorofila-a de Cianobacetrias (Cl-aCiano)**: 
+
+`{r} mes_etq` `{r} año_actual`: `{r} ciano0` ± `{r} ciano0_sd`
+
+`{r} mes_prev_etq` `{r} año_previo_mensual`: `{r} ciano1` ± `{r} ciano1_sd`
+
+`{r} mes_etq` `{r} año_previo_anual`: `{r} ciano2` ± `{r} ciano2_sd`
+
+::: {#fig-mapa-ciano}
+
+```{r}
+#| output: asis
+#| label: fig-mapa-ciano
+
+source("scripts/mapa_ciano.R")
+f_fig(PARAM = "mapa_ciano", FORMATO = ".tif")
+```
+
+Mapa cianobacterias
+
+:::
+
+R² (ciano): `{r} formato(r2_ciano, n = 3)`
+
+::: {#fig-ciano-año}
+
+```{r}
+#| output: asis
+#| label: fig-ciano-año
+
+source("scripts/figura_ciano_año.R")
+f_fig(PARAM = "figura_ciano_año")
+```
+
+Figura cianobacterias
+
+:::
+
+# Recuento de fitoplancton 
+
+En base a la evaluación de la abundancia de fitoplancton (@fig-ciano) se observa que, aunque en baja densidad, las cianobacterias (Cyanophytas) son el grupo que más contribuyen a la biomasa total del embalse.
+
+::: {#fig-ciano}
+
+```{r}
+#| output: asis
+#| label: fig-ciano
+
+source("scripts/figura_ciano.R")
+f_fig(PARAM = "figura_ciano")
+```
+
+Figura cianobacterias
+
+:::
+
+Coincidiendo con la información satelital, se observó que las concentraciones más importantes de fitoplancton se encontraron en el Lóbulo Este (SM 1 y 2). En estos sitios se encontraron dominancia de cianobacterias (*Cyanophytas*). Este grupo fitoplanctónico también estuvo presente, aunque en menor proporción, en la zona de ingreso de los ríos tributarios Grande y Santa Rosa (SM 7 y 8). 
+
+Las diatomeas (*Chrysophytas*) estuvieron presentes en todos los sitios, pero en menor proporción que las cianobacterias. Mientras que los grupos representados por criptófitas (*Pyrrophytas*) y clorófitas (*Chlorophytas*) presentaron valores muy bajos en todo el embalse, sin encontrarse diferencias entre los sitios de muestreo y aportando muy poco a la abundancia general del reservorio.
+
+::: {#fig-ciano-mensual}
+
+```{r}
+#| output: asis
+#| label: fig-ciano-mensual
+
+source("scripts/figura_ciano_mensual.R")
+f_fig(PARAM = "figura_ciano_mensual")
+```
+
+Figura cianobacterias por mes y especie
+
+:::
+
+# Determinación del estado trófico 
+
+Si bien la evaluación trófica se realiza como un valor promedio de todo un año monitoreado, al realizar una estimación mensual del Índice de Estado Trófico [@carlson1977trophic], se determinó que en los últimos meses el embalse está presentando una disminución en su estado trófico. Cabe mencionar que para este análisis no se consideró la variable fósforo total, ya que la concentración medida es atípica. 
+
+En la actualidad, el embalse se encuentra en una situación mesotrófica baja. Esto, además de estar favorecido por la estación climática de Otoño, está estrechamente relacionado con los altos valores de transparencia del agua y bajas concentraciones de clorofila-a que se vienen registrando en las últimas campañas de monitoreo (@fig-tsi).
+
+::: {#fig-tsi}
+
+```{r}
+#| output: asis
+#| label: fig-tsi
+
+source("scripts/figura_tsi.R")
+f_fig(PARAM = "figura_tsi")
+```
+
+Figura TSI
+
+:::
+
+# Consideraciones finales {.unnumbered}
+
+A partir del análisis generado con la información de campo y en base a la información satelital se observó que durante el mes de Febrero de `{r} año_actual` el embalse Río Tercero presentó una buena calidad del agua y una condición de mesotrófía baja. Las variables medidas mostraron un comportamiento normal. Se destaca un aumento en la transparencia del agua progresivo desde los últimos meses. Además, se registró elevadas concentraciones de nutrientes: Sin embargo estas mediciones están siendo evaluadas. 
+
+# Referencias bibliográficas {.unnumbered}
+
+::: {#refs}
+:::
