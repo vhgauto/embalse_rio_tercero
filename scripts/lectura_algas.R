@@ -2,7 +2,7 @@ library(tidyverse)
 
 gen_diatomeas <- c(
   "Aulacoseira",
-  "Cyclotela",
+  "Stephanocyclus (Cyclotella)",
   "Asterionella",
   "Fragillaria",
   "Navicula",
