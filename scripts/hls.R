@@ -325,14 +325,39 @@ sf_items_temp <- cbind(
   sf_items_temp
 )
 
+bandas_l30 <- c(
+  "B01",
+  "B02",
+  "B03",
+  "B04",
+  "B05",
+  "B06",
+  "B07",
+  "B10",
+  "B11",
+  "Fmask"
+)
+bandas_l30_label <- c(
+  "B01",
+  "B02",
+  "B03",
+  "B04",
+  "B05",
+  "B06",
+  "B07",
+  "temp_10",
+  "temp_11",
+  "fmask"
+)
+
 extract_asset_urls_temp <- function(feature) {
-  sapply(c("B02", "B03", "B04", "B10", "B11"), function(band) {
+  sapply(bandas_l30, function(band) {
     feature$assets[[band]]$href
   })
 }
 
 asset_urls_temp <- t(sapply(items_temp$features, extract_asset_urls_temp))
-colnames(asset_urls_temp) <- c("B02", "B03", "B04", "temp_10", "temp_11")
+colnames(asset_urls_temp) <- bandas_l30_label
 sf_items_temp <- cbind(sf_items_temp, asset_urls_temp)
 
 open_hls_temp <- function(url, roi = NULL, nombre) {
@@ -349,75 +374,110 @@ open_hls_temp <- function(url, roi = NULL, nombre) {
   return(r)
 }
 
-stack_b2 <- open_hls_temp(
+temp_stack_b1 <- open_hls_temp(
+  url = sf_items_temp$B01,
+  roi = roi,
+  nombre = bandas_l30_label[1]
+)
+
+temp_stack_b2 <- open_hls_temp(
   url = sf_items_temp$B02,
   roi = roi,
-  nombre = "b02"
+  nombre = bandas_l30_label[2]
 )
-# stack_b2[stack_b2$b02 < 0] <- 0
 
-stack_b3 <- open_hls_temp(
+temp_stack_b3 <- open_hls_temp(
   url = sf_items_temp$B03,
   roi = roi,
-  nombre = "b03"
+  nombre = bandas_l30_label[3]
 )
 
-stack_b4 <- open_hls_temp(
+temp_stack_b4 <- open_hls_temp(
   url = sf_items_temp$B04,
   roi = roi,
-  nombre = "b04"
+  nombre = bandas_l30_label[4]
 )
 
-temp_stack_10 <- open_hls_temp(
+temp_stack_b5 <- open_hls_temp(
+  url = sf_items_temp$B05,
+  roi = roi,
+  nombre = bandas_l30_label[5]
+)
+
+temp_stack_b6 <- open_hls_temp(
+  url = sf_items_temp$B06,
+  roi = roi,
+  nombre = bandas_l30_label[6]
+)
+
+temp_stack_b7 <- open_hls_temp(
+  url = sf_items_temp$B07,
+  roi = roi,
+  nombre = bandas_l30_label[7]
+)
+
+temp_stack_b10 <- open_hls_temp(
   url = sf_items_temp$temp_10,
   roi = roi,
-  nombre = "temp_b10"
+  nombre = bandas_l30_label[8]
 )
 
-temp_stack_11 <- open_hls_temp(
+temp_stack_b11 <- open_hls_temp(
   url = sf_items_temp$temp_11,
   roi = roi,
-  nombre = "temp_b11"
+  nombre = bandas_l30_label[9]
 )
 
-# temp_stack <- open_hls_temp(
-#   url = sf_items_temp$temperatura,
-#   roi = roi,
-#   nombre = "temperatura"
-# )
+temp_stack_fmask <- open_hls_temp(
+  url = sf_items_temp$fmask,
+  roi = roi,
+  nombre = bandas_l30_label[10]
+)
 
-# temp_masked <- f_masked(temp_stack)[[1]]
-# temp_masked <- temp_stack * ff_bit
-# temp_masked <- temp_stack * .01
-temp_masked <- temp_stack_10
+ff_bit_temp <- terra::app(temp_stack_fmask, ff_mascara)
+
+r_temp_masked <- rast(
+  list(
+    temp_stack_b1 * ff_bit_temp,
+    temp_stack_b2 * ff_bit_temp,
+    temp_stack_b3 * ff_bit_temp,
+    temp_stack_b4 * ff_bit_temp,
+    temp_stack_b5 * ff_bit_temp,
+    temp_stack_b6 * ff_bit_temp,
+    temp_stack_b7 * ff_bit_temp,
+    temp_stack_b10 * ff_bit_temp,
+    temp_stack_b11 * ff_bit_temp,
+    temp_stack_fmask * ff_bit_temp
+  )
+)
 
 fecha_recorte_temp <- filter(
   sf_items_temp,
-  str_detect(granule, str_sub(unique(varnames(temp_masked))[1], 1, 29))
+  str_detect(granule, str_sub(unique(varnames(r_temp_masked))[1], 1, 29))
 )$datetime |>
   str_sub(1, 10) |>
   gsub(pattern = "-", replacement = "", x = _)
 
 writeRaster(
-  temp_masked,
+  r_temp_masked,
   paste0("recortes/", fecha_recorte_temp, "_temp.tif"),
   overwrite = TRUE
 )
 
-pp <- c(stack_b2, stack_b3, stack_b4, temp_stack_10)
-writeRaster(pp, "recortes/pp.tif")
+# pp <- c(stack_b2, stack_b3, stack_b4, temp_stack_10)
+# writeRaster(pp, "recortes/pp.tif")
 
-plotRGB(pp, r = 3, g = 2, b = 1, scale = .1, stretch = "lin")
+# plotRGB(pp, r = 3, g = 2, b = 1, scale = .1, stretch = "lin")
 
-library(tidyterra)
+# library(tidyterra)
 
-ggplot() +
-  geom_spatraster_rgb(
-    data = pp,
-    r = 3,
-    g = 2,
-    b = 1,
-    max_col_value = .2,
-    # stretch = "hist",
-    interpolate = FALSE
-  )
+# ggplot() +
+#   geom_spatraster_rgb(
+#     data = pp,
+#     r = 3,
+#     g = 2,
+#     b = 1,
+#     max_col_value = .2,
+#     # stretch = "hist",
+#     interpolate = FALSE
+#   )
