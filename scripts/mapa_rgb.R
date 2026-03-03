@@ -1,5 +1,5 @@
-ggplot() +
-  geom_spatraster_rgb(
+ggplot2::ggplot() +
+  tidyterra::geom_spatraster_rgb(
     data = r,
     r = 4,
     g = 3,
