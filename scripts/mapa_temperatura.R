@@ -29,7 +29,7 @@ etq_temp <- paste0(
 )
 
 mapa_temperatura <- ggplot() +
-  geom_spatraster(data = r_temp_agua, interpolate = FALSE) +
+  geom_spatraster(data = r_temp_agua$temp_10, interpolate = FALSE) +
   geom_segment(
     data = flechas_tbl,
     aes(x = xi, y = yi, xend = xf, yend = yf, group = id),
@@ -102,13 +102,13 @@ if (FALSE) {
   ))
 }
 
-extract_temp <- terra::extract(r_temp_agua, v) |>
+extract_temp <- terra::extract(r_temp_agua$temp_10, v) |>
   as_tibble() |>
   rename(punto = ID)
 
 r2_temp <- filter(d, fecha == max(d$fecha) & param == "temperatura") |>
   select(punto, valor) |>
   inner_join(extract_temp, by = join_by(punto)) |>
-  lm(valor ~ temp_b10, data = _) |>
+  lm(valor ~ temp_10, data = _) |>
   broom::glance() |>
   pull(r.squared)
