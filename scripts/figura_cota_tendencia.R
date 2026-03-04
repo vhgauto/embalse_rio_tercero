@@ -37,7 +37,8 @@ g_cota_hist <- ggplot() +
       ymax = ymax,
       fill = fill
     ),
-    linewidth = 0
+    linewidth = 0,
+    show.legend = FALSE
   ) +
   geom_ribbon(
     data = d_cota,
@@ -68,7 +69,10 @@ g_cota_hist <- ggplot() +
     labels = scales::label_number(big.mark = ".", decimal.mark = ",")
   ) +
   scale_fill_identity() +
-  coord_cartesian(ylim = c(min_cota, max_cota), expand = FALSE) +
+  coord_cartesian(
+    ylim = c(min_cota, max_cota),
+    expand = FALSE
+  ) +
   labs(x = NULL, y = "Nivel de presa (m)") +
   theme_bw(base_size = 8, base_family = "Arial") +
   theme(
@@ -91,3 +95,17 @@ guardar_png(
   ancho = 5,
   alto = 2
 )
+
+if (FALSE) {
+  browseURL(paste0(
+    "fig/",
+    año_actual,
+    "-",
+    mes_actual_chr,
+    "/figura_cota_historica_",
+    año_actual,
+    "_",
+    mes_actual_chr,
+    ".png"
+  ))
+}
