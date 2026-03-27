@@ -47,16 +47,16 @@ parametros_tbl <- tibble(
 
 sitio_nombre <- c(
   "club Almafuerte",
-  "S.5 = HOTELES",
+  "S,5 = HOTELES",
   "Garganta",
   "Entrada Rios y CNE",
-  "S.2 = CANAL ENFRIAMIENTO",
-  "S.1 = CONFLUENCIA RIOS",
+  "S,2 = CANAL ENFRIAMIENTO",
+  "S,1 = CONFLUENCIA RIOS",
   "entrada rio Grande",
   "rio Santa Rosa",
-  "S.4 = CENTRO",
-  "S.6 = VILLA DEL DIQUE",
-  "S.7 = MURALLON"
+  "S,4 = CENTRO",
+  "S,6 = VILLA DEL DIQUE",
+  "S,7 = MURALLON"
 )
 
 sitio_etq <- c(
