@@ -133,6 +133,63 @@ open_hls <- function(url, roi = NULL, nombre) {
   return(r)
 }
 
+f_descarga <- function(X) {
+  links <- as_tibble(sf_items) |>
+    select(any_of(X)) |>
+    pull()
+
+  map(links, ~ open_hls(.x, roi = roi, nombre = X))
+}
+
+rasters <- map(bandas_nombres, f_descarga)
+names(rasters) <- bandas_nombres
+
+f_mascara <- function(X) {
+  X <- as.numeric(X)
+  if_else(
+    # ((X %/% 2^1) %% 2) != 1 & ((X %/% 2^3) %% 2) != 1, <---- QUITO NUBES
+    ((X %/% 2^5) %% 2) == 1, # <----- CONSERVO ÚNICAMENTE AGUA
+    1,
+    NA
+  )
+}
+
+r_mask <- map(
+  seq_along(rasters$fmask),
+  ~ terra::app(rasters$fmask[[.x]], f_mascara)
+) |>
+  pluck(1)
+
+raster_hls <- map(
+  rasters,
+  ~ pluck(.x) |>
+    pluck(1)
+) |>
+  rast()
+
+raster_hls_masked <- raster_hls * r_mask
+
+fecha_recorte <- filter(
+  sf_items,
+  str_detect(granule, str_sub(unique(varnames(raster_hls))[1], 1, 29))
+)$datetime |>
+  str_sub(1, 10) |>
+  gsub(pattern = "-", replacement = "", x = _)
+
+f_write_raster <- function(Y) {
+  terra::saveRDS(
+    Y,
+    paste0("recortes/", fecha_recorte, ".rds"),
+    # overwrite = TRUE
+    # datatype = "INT8U"
+  )
+  print(ymd(fecha_recorte))
+}
+
+f_write_raster(raster_hls_masked)
+
+# XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ---------------------------------------
+
 aerosol_stack <- lapply(
   sf_items$aerosol,
   open_hls,
@@ -325,7 +382,7 @@ sf_items_temp <- cbind(
   sf_items_temp
 )
 
-bandas_l30 <- c(
+bandas_nombres_temp <- c(
   "B01",
   "B02",
   "B03",
@@ -337,7 +394,7 @@ bandas_l30 <- c(
   "B11",
   "Fmask"
 )
-bandas_l30_label <- c(
+bandas_nombres_temp_label <- c(
   "B01",
   "B02",
   "B03",
@@ -351,13 +408,13 @@ bandas_l30_label <- c(
 )
 
 extract_asset_urls_temp <- function(feature) {
-  sapply(bandas_l30, function(band) {
+  sapply(bandas_nombres_temp, function(band) {
     feature$assets[[band]]$href
   })
 }
 
 asset_urls_temp <- t(sapply(items_temp$features, extract_asset_urls_temp))
-colnames(asset_urls_temp) <- bandas_l30_label
+colnames(asset_urls_temp) <- bandas_nombres_temp_label
 sf_items_temp <- cbind(sf_items_temp, asset_urls_temp)
 
 open_hls_temp <- function(url, roi = NULL, nombre) {
@@ -373,6 +430,57 @@ open_hls_temp <- function(url, roi = NULL, nombre) {
   }
   return(r)
 }
+
+
+f_descarga_temp <- function(X) {
+  links <- as_tibble(sf_items_temp) |>
+    select(any_of(X)) |>
+    pull()
+
+  map(links, ~ open_hls_temp(.x, roi = roi, nombre = X))
+}
+
+rasters_temp <- map(bandas_nombres_temp_label, f_descarga_temp)
+names(rasters_temp) <- bandas_nombres_temp_label
+
+f_mascara_temp <- function(X) {
+  X <- as.numeric(X)
+  if_else(
+    # ((X %/% 2^1) %% 2) != 1 & ((X %/% 2^3) %% 2) != 1, <---- QUITO NUBES
+    ((X %/% 2^5) %% 2) == 1, # <----- CONSERVO ÚNICAMENTE AGUA
+    1,
+    NA
+  )
+}
+
+r_mask_temp <- map(
+  seq_along(rasters_temp$fmask),
+  ~ terra::app(rasters_temp$fmask[[.x]], f_mascara_temp)
+) |>
+  pluck(1)
+
+raster_hls_temp <- map(
+  rasters_temp,
+  ~ pluck(.x) |>
+    pluck(1)
+) |>
+  rast()
+
+raster_hls_masked_temp <- raster_hls_temp * r_mask_temp
+
+fecha_recorte_temp <- filter(
+  sf_items_temp,
+  str_detect(granule, str_sub(unique(varnames(raster_hls_temp))[1], 1, 29))
+)$datetime |>
+  str_sub(1, 10) |>
+  gsub(pattern = "-", replacement = "", x = _)
+
+writeRaster(
+  raster_hls_masked_temp,
+  paste0("recortes/", fecha_recorte_temp, "_temp.tif"),
+  overwrite = TRUE
+)
+
 
 temp_stack_b1 <- open_hls_temp(
   url = sf_items_temp$B01,
