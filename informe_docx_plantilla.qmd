@@ -22,8 +22,6 @@ execute:
   warning: false
 editor_options: 
   chunk_output_type: console
-nocite: |
-  @*
 date: last-modified
 date-format: iso
 ---
@@ -402,7 +400,7 @@ Figura cianobacterias por mes y especie
 
 # Determinación del estado trófico 
 
-Si bien la evaluación trófica se realiza como un valor promedio de todo un año monitoreado, al realizar una estimación mensual del Índice de Estado Trófico [@carlson1977trophic], se determinó que en los últimos meses el embalse está presentando una disminución en su estado trófico. Cabe mencionar que para este análisis no se consideró la variable fósforo total, ya que la concentración medida es atípica. 
+Si bien la evaluación trófica se realiza como un valor promedio de todo un año monitoreado, al realizar una estimación mensual del Índice de Estado Trófico, se determinó que en los últimos meses el embalse está presentando una disminución en su estado trófico. Cabe mencionar que para este análisis no se consideró la variable fósforo total, ya que la concentración medida es atípica. 
 
 En la actualidad, el embalse se encuentra en una situación mesotrófica baja. Esto, además de estar favorecido por la estación climática de Otoño, está estrechamente relacionado con los altos valores de transparencia del agua y bajas concentraciones de clorofila-a que se vienen registrando en las últimas campañas de monitoreo (@fig-tsi).
 
@@ -418,13 +416,4 @@ f_fig(PARAM = "figura_tsi")
 
 Figura TSI
 
-:::
-
-# Consideraciones finales {.unnumbered}
-
-A partir del análisis generado con la información de campo y en base a la información satelital se observó que durante el mes de X_MES_CHR de `{r} año_actual` el embalse Río Tercero presentó una buena calidad del agua y una condición de mesotrófía baja. Las variables medidas mostraron un comportamiento normal. Se destaca un aumento en la transparencia del agua progresivo desde los últimos meses. Además, se registró elevadas concentraciones de nutrientes: Sin embargo estas mediciones están siendo evaluadas. 
-
-# Referencias bibliográficas {.unnumbered}
-
-::: {#refs}
 :::
