@@ -69,7 +69,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(cla = p$valor, .before = 1) |>
-  mutate(ratio = nir / blue) |> # <-------- cociente de bandas
+  mutate(ratio = red / swir1) |> # <-------- cociente de bandas
   select(cla, ratio)
 
 # workflow
@@ -84,18 +84,18 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(rr) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
+  fit(mod_tbl) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
 
 # ráster a tbl
 r_agua_tbl <- terra::as.data.frame(r_agua) |>
-  as_tibble() #|>
+  as_tibble() |>
 
-# filter(blue != 0) |>
+  # filter(blue != 0) |>
 
-# transmute(ratio = nir / blue)
+  transmute(ratio = red / swir1)
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -106,12 +106,14 @@ pred_tbl <- predict(
 predict_cla <- terra::as.data.frame(r_agua$blue, xy = TRUE) |>
   as_tibble() |>
 
-  # filter(blue != 0) |>
+  # filter(swir1 != 0) |>
 
   bind_cols(pred_tbl) |>
   select(-blue) |>
   mutate(.pred = if_else(.pred <= 0, 0, .pred)) |>
   rast()
+
+predict_cla[is.infinite(predict_cla)] <- NA
 
 tr <- thresh(predict_cla, as.raster = FALSE, method = "mean")
 tr
@@ -136,7 +138,7 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 15
+lim_clorofila <- 20
 predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
 
 # mapa -------------------------------------------------------------------
