@@ -123,7 +123,7 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_ciano <- 20
+lim_ciano <- 15
 predict_ciano[predict_ciano$.pred > lim_ciano] <- lim_ciano
 
 # mapa -------------------------------------------------------------------

@@ -138,7 +138,7 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 20
+lim_clorofila <- 25
 predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
 
 # mapa -------------------------------------------------------------------

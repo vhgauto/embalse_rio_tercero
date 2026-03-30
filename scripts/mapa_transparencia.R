@@ -124,7 +124,7 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_transparencia <- 10
+lim_transparencia <- 8
 predict_ds[predict_ds$.pred > lim_transparencia] <- lim_transparencia
 
 # mapa -------------------------------------------------------------------
