@@ -76,7 +76,7 @@ f_pdf2 <- function(punto) {
       pluck(1) |>
       str_replace_all("\r", "")
 
-    v <- nit_v[18:20] |>
+    v <- nit_v[17:18] |>
       str_replace_all(",", ".") |>
       str_remove_all(" mg/L")
   }
@@ -84,13 +84,13 @@ f_pdf2 <- function(punto) {
   if (punto == 9) {
     nit_v <- tabulapdf::extract_text(nit_l[str_detect(
       nit_l,
-      as.character(punto)
+      paste0("Sitio ", as.character(punto))
     )]) |>
       str_split("\n") |>
       pluck(1) |>
       str_replace_all("\r", "")
 
-    v <- nit_v[18:20] |>
+    v <- nit_v[15:16] |>
       str_replace_all(",", ".") |>
       str_remove_all(" mg/L")
   }
