@@ -7,7 +7,8 @@ d_ds <- filter(d, param == "ds") |>
     ds_m = mean(valor, na.rm = TRUE),
     ds_sd = sd(valor, na.rm = TRUE),
     .by = fecha
-  )
+  ) |>
+  mutate(fecha = update(fecha, day = 1))
 
 # figura -----------------------------------------------------------------
 
@@ -64,7 +65,7 @@ g_ds <- ggplot(d_ds, aes(fecha, ds_m)) +
   scale_x_date(
     breaks = scales::breaks_width("1 month"),
     labels = \(x) str_to_sentence(format(x, "%b '%y")),
-    expand = c(0, 0)
+    expand = expansion(mult = 0, add = c(0, 0))
   ) +
   scale_y_continuous(
     expand = expansion(mult = c(0, .05), add = c(0, 0)),
@@ -108,6 +109,20 @@ guardar_png(
   ancho = 5,
   alto = 3
 )
+
+if (FALSE) {
+  browseURL(paste0(
+    "fig/",
+    año_actual,
+    "-",
+    mes_actual_chr,
+    "/figura_transparencia_",
+    año_actual,
+    "_",
+    mes_actual_chr,
+    ".png"
+  ))
+}
 
 # promedios y desvíos ----------------------------------------------------
 
