@@ -77,4 +77,16 @@ guardar_png(
   alto = 3
 )
 
-# browseURL("fig/2025-10/figura_ciano_2025_10.png")
+if (FALSE) {
+  browseURL(paste0(
+    "fig/",
+    año_actual,
+    "-",
+    mes_actual_chr,
+    "/figura_ciano_",
+    año_actual,
+    "_",
+    mes_actual_chr,
+    ".png"
+  ))
+}
