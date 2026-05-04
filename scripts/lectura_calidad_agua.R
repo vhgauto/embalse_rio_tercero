@@ -1,6 +1,6 @@
 protocolos <- list.files(
   paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
-  pattern = "protocolo",
+  pattern = "Protocolo",
   full.names = TRUE
 )
 
