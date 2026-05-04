@@ -76,7 +76,7 @@ f_pdf2 <- function(punto) {
       pluck(1) |>
       str_replace_all("\r", "")
 
-    v <- nit_v[17:18] |>
+    v <- nit_v[21:22] |>
       str_replace_all(",", ".") |>
       str_remove_all(" mg/L")
   }
@@ -90,7 +90,7 @@ f_pdf2 <- function(punto) {
       pluck(1) |>
       str_replace_all("\r", "")
 
-    v <- nit_v[15:16] |>
+    v <- nit_v[21:22] |>
       str_replace_all(",", ".") |>
       str_remove_all(" mg/L")
   }
@@ -345,7 +345,9 @@ d_est <- tibble(
   mutate(
     estacion_label = if_else(fecha_dif < 60, "", estacion)
   ) |>
-  mutate(fill = color_estaciones[estacion])
+  mutate(fill = color_estaciones[estacion]) |>
+
+  mutate(fecha_min = if_else(row_number() == 1, fecha_min - days(7), fecha_min))
 
 # flechas ----------------------------------------------------------------
 
