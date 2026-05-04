@@ -1,6 +1,6 @@
 protocolos <- list.files(
   paste0("datos/calidad_agua_", año_actual, "_", mes_actual_chr),
-  pattern = "protocolo",
+  pattern = "Protocolo",
   full.names = TRUE
 )
 
@@ -54,8 +54,7 @@ nit9 <- f_pdf2(9)
 nit11 <- f_pdf2(11)
 
 nit_tbl <- tibble(
-  # "1" = c("Nitrógeno Kjeldahl", "Nitratos", "Fósforo Total"),
-  "1" = c("Nitrógeno Kjeldahl", "Nitratos"),
+  "1" = c("Nitrógeno Kjeldahl", "Fósforo Total"),
   "2" = "mg/L",
   "3" = nit9,
   "4" = nit11,
