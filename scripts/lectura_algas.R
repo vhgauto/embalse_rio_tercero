@@ -114,7 +114,7 @@ d_micro_actual <- read_csv(
 )
 
 if (FALSE) {
-  d_micro <- map_dfr(1:11, ~ f_micro(archivo, .x)) |>
+  d_micro <- map_dfr(1:9, ~ f_micro(archivo, .x)) |>
     mutate(
       algas = case_when(
         generos %in% gen_diatomeas ~ "Diatomeas",
