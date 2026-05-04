@@ -116,7 +116,7 @@ g_tsi <- ggplot(d_tsi, aes(fecha, tsi)) +
     labels = scales::label_number(big.mark = ".", decimal.mark = ","),
     limits = c(0, 100)
   ) +
-  coord_cartesian(clip = "off") +
+  coord_cartesian(clip = "off", xlim = c(fecha_i, fecha_f)) +
   labs(y = "TSI", x = NULL) +
   theme_bw(base_size = 11, base_family = "Arial") +
   theme(
