@@ -69,7 +69,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ciano = p$valor, .before = 1) |>
-  mutate(ratio = swir2) |> # <-------- cociente de bandas
+  mutate(ratio = nir / green) |> # <-------- cociente de bandas
   select(ciano, ratio)
 
 # workflow
@@ -83,15 +83,15 @@ lm_spec <- linear_reg() |>
 # modelos
 mod_lm <- base_wf |>
   add_model(lm_spec) |>
-  fit(rr) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
+  fit(mod_tbl) # <---------- uso un cociente (mod_tbl) ó todas las bandas (rr)
 
 # verifico
 glance(mod_lm)
 
 # ráster a tbl
 r_agua_tbl <- terra::as.data.frame(r_agua) |>
-  as_tibble() # |>
-# transmute(ratio = swir2)
+  as_tibble() |>
+  transmute(ratio = nir / green) # <-- cociente de bandas
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -119,11 +119,11 @@ ggplot() +
   ) +
   geom_vline(xintercept = tr, color = "red", linewidth = 1) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, tr * 6)) +
+  coord_cartesian(xlim = c(0, tr * 10)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_ciano <- 15
+lim_ciano <- 7
 predict_ciano[predict_ciano$.pred > lim_ciano] <- lim_ciano
 
 # mapa -------------------------------------------------------------------

@@ -64,7 +64,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(ds = p$valor, .before = 1) |>
-  mutate(ratio = nir / red) |>
+  mutate(ratio = swir1 / nir) |> # <---- mejor cociente de bandas
   select(ds, ratio)
 
 # workflow
@@ -89,7 +89,7 @@ r_agua_tbl <- terra::as.data.frame(r_agua) |>
 
   # filter(nir != 0) |>
 
-  transmute(ratio = nir / red) # <-------- cociente de bandas
+  transmute(ratio = swir1 / nir) # <-------- cociente de bandas
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -120,11 +120,11 @@ ggplot() +
   ) +
   geom_vline(xintercept = tr, color = "red", linewidth = 1) +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  coord_cartesian(xlim = c(0, tr * 2.5)) +
+  coord_cartesian(xlim = c(0, tr * 1.5)) +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_transparencia <- 8
+lim_transparencia <- 7
 predict_ds[predict_ds$.pred > lim_transparencia] <- lim_transparencia
 
 # mapa -------------------------------------------------------------------
