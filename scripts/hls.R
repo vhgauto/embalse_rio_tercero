@@ -87,8 +87,8 @@ bandas_nombres <- c(
   "fmask"
 )
 colnames(asset_urls) <- bandas_nombres
-sf_items <- cbind(sf_items, asset_urls) |>
-  filter(fecha_feature == fecha_hls)
+sf_items <- cbind(sf_items, asset_urls) #|>
+# filter(fecha_feature == fecha_hls)
 
 # selección de LANDSAT en caso de haber dos productos para la misma fecha
 if (nrow(sf_items) > 1) {
