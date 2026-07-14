@@ -59,7 +59,7 @@ sitio_nombre <- c(
   "S,7 = MURALLON"
 )
 
-sitio_etq <- c(
+sitio_etq_v <- c(
   "Club Almafuerte",
   "Hoteles",
   "Garganta",
@@ -73,7 +73,7 @@ sitio_etq <- c(
   "Prensa"
 )
 
-sitio_tbl <- tibble(sitio = sitio_nombre, sitio_etq = sitio_etq)
+sitio_tbl <- tibble(sitio = sitio_nombre, sitio_etq = sitio_etq_v)
 
 mes_d <- month(max(d1$fecha))
 año_d <- year(max(d1$fecha))
@@ -123,5 +123,6 @@ if (mes_d == mes_actual & año_d == año_actual) {
     full_join(sitio_tbl, by = join_by(sitio)) |>
     drop_na(valor) |>
     fill(fecha) |>
+    filter(sitio_etq %in% sitio_etq_v) |>
     write_csv("datos/base_de_datos.csv")
 }
