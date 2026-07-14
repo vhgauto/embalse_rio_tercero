@@ -58,7 +58,7 @@ unidades_v <- c(
   "m",
   "µS/cm",
   "ppm",
-  "UNT",
+  # "UNT",
   "mg/m³",
   "mg/m³"
 )
