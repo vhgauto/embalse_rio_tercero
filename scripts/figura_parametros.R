@@ -77,6 +77,7 @@ g_param <- ggplot(d_comp, aes(fecha_label, param_m, fill = fecha_label)) +
   scale_fill_manual(
     values = col_param
   ) +
+  coord_cartesian(ylim = c(0, NA)) +
   labs(y = NULL, x = NULL) +
   theme_bw(base_size = 9, base_family = "Arial") +
   theme(
