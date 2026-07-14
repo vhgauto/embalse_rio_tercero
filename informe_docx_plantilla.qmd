@@ -121,8 +121,6 @@ Figura de cota histórica.
 
 :::
 
-Se espera que el nivel de agua continúe descendiendo hasta los meses de octubre-noviembre que es cuando alcanza los valores de cota mínimos, para luego aumentar el nivel embalsado producto de la regulación del mismo y las precipitaciones en la cuenca. Esta tendencia coincide con lo que se registra en los demás embalses de la provincia.
-
 # Mediciones y observaciones a campo 
 
 La @tbl-parametros muestran los registros de la variables medidas In-situ en el embalse Río Tercero durante la última campañas de muestreo.
@@ -380,8 +378,6 @@ Figura cianobacterias
 
 :::
 
-Coincidiendo con la información satelital, se observó que las concentraciones más importantes de fitoplancton se encontraron en el Lóbulo Este (SM 1 y 2). En estos sitios se encontraron dominancia de cianobacterias (*Cyanophytas*). Este grupo fitoplanctónico también estuvo presente, aunque en menor proporción, en la zona de ingreso de los ríos tributarios Grande y Santa Rosa (SM 7 y 8). 
-
 Las diatomeas (*Chrysophytas*) estuvieron presentes en todos los sitios, pero en menor proporción que las cianobacterias. Mientras que los grupos representados por criptófitas (*Pyrrophytas*) y clorófitas (*Chlorophytas*) presentaron valores muy bajos en todo el embalse, sin encontrarse diferencias entre los sitios de muestreo y aportando muy poco a la abundancia general del reservorio.
 
 ::: {#fig-ciano-mensual}
@@ -399,10 +395,6 @@ Figura cianobacterias por mes y especie
 :::
 
 # Determinación del estado trófico 
-
-Si bien la evaluación trófica se realiza como un valor promedio de todo un año monitoreado, al realizar una estimación mensual del Índice de Estado Trófico, se determinó que en los últimos meses el embalse está presentando una disminución en su estado trófico. Cabe mencionar que para este análisis no se consideró la variable fósforo total, ya que la concentración medida es atípica. 
-
-En la actualidad, el embalse se encuentra en una situación mesotrófica baja. Esto, además de estar favorecido por la estación climática de Otoño, está estrechamente relacionado con los altos valores de transparencia del agua y bajas concentraciones de clorofila-a que se vienen registrando en las últimas campañas de monitoreo (@fig-tsi).
 
 ::: {#fig-tsi}
 
