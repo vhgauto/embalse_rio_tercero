@@ -69,7 +69,7 @@ mod_tbl <- terra::extract(r_agua, p) |>
   as_tibble() |>
   select(-fmask, -ID) |>
   mutate(cla = p$valor, .before = 1) |>
-  mutate(ratio = nir / green) |> # <-------- cociente de bandas
+  mutate(ratio = nir / blue) |> # <-------- cociente de bandas
   select(cla, ratio)
 
 # workflow
@@ -95,7 +95,7 @@ r_agua_tbl <- terra::as.data.frame(r_agua) |>
 
   # filter(blue != 0) |>
 
-  transmute(ratio = nir / green)
+  transmute(ratio = nir / blue)
 
 pred_tbl <- predict(
   extract_fit_engine(mod_lm),
@@ -138,7 +138,7 @@ ggplot() +
   theme_bw(base_size = 4)
 
 # remuevo valores extremos
-lim_clorofila <- 30
+lim_clorofila <- 50
 predict_cla[predict_cla$.pred > lim_clorofila] <- lim_clorofila
 
 # mapa -------------------------------------------------------------------
