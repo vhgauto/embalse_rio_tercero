@@ -67,9 +67,9 @@ sf_items <- cbind(
 extract_asset_urls <- function(feature) {
   collection_id <- feature$collection
   if (collection_id == "HLSS30_2.0") {
-    bands = c("B01", "B02", "B03", "B04", "B8A", "B11", "B12", "Fmask")
+    bands <- c("B01", "B02", "B03", "B04", "B8A", "B11", "B12", "Fmask")
   } else if (collection_id == "HLSL30_2.0") {
-    bands = c("B01", "B02", "B03", "B04", "B05", "B06", "B07", "Fmask")
+    bands <- c("B01", "B02", "B03", "B04", "B05", "B06", "B07", "Fmask")
   }
   sapply(bands, function(band) feature$assets[[band]]$href)
 }
@@ -87,12 +87,13 @@ bandas_nombres <- c(
   "fmask"
 )
 colnames(asset_urls) <- bandas_nombres
-sf_items <- cbind(sf_items, asset_urls) #|>
-# filter(fecha_feature == fecha_hls)
+sf_items <- cbind(sf_items, asset_urls) # |>
+# filter(fecha_feature == fecha_hls & str_detect(granule, "S30"))
 
 # selección de LANDSAT en caso de haber dos productos para la misma fecha
 if (nrow(sf_items) > 1) {
   sf_items <- dplyr::filter(sf_items, str_detect(granule, "L30"))
+  # sf_items <- sf_items[1, ]
 }
 
 setGDALconfig("GDAL_HTTP_UNSAFESSL", value = "YES")
@@ -103,7 +104,7 @@ setGDALconfig("CPL_VSIL_CURL_ALLOWED_EXTENSIONS", value = "TIF")
 
 open_hls <- function(url, roi = NULL, nombre) {
   # Add VSICURL prefix
-  url <- paste0('/vsicurl/', url)
+  # url <- paste0('/vsicurl/', url)
   # Retrieve metadata
   meta <- describe(url)
   # Check if dataset is Quality Layer (Fmask) - no scaling this asset (int8 datatype)
@@ -111,7 +112,7 @@ open_hls <- function(url, roi = NULL, nombre) {
   # Check if Scale is present in band metadata
   will_autoscale <- any(grep("Scale:", meta))
   # Read the raster
-  r <- rast(url)
+  r <- rast(url, vsi = TRUE)
   names(r) <- nombre
   # Apply Scale Factor if necessary
   if (!will_autoscale && !is_fmask) {
@@ -142,7 +143,19 @@ f_descarga <- function(X) {
 }
 
 rasters <- map(bandas_nombres, f_descarga)
+rasters <- as.list(
+  list.files(
+    "c://Users/victo/Downloads/",
+    pattern = "HLS.L30",
+    full.names = TRUE
+  )
+) |>
+  map(rast)
 names(rasters) <- bandas_nombres
+
+roi_reproj <- project(roi, crs(rasters[[1]]))
+rasters <- map(rasters, ~ mask(crop(.x, roi_reproj), roi_reproj))
+# names(r) <- nombre
 
 f_mascara <- function(X) {
   X <- as.numeric(X)
@@ -160,13 +173,13 @@ r_mask <- map(
 ) |>
   pluck(1)
 
-raster_hls <- map(
-  rasters,
-  ~ pluck(.x) |>
-    pluck(1)
-) |>
-  rast()
-
+# raster_hls <- map(
+#   rasters,
+#   ~ pluck(.x) |>
+#     pluck(1)
+# ) |>
+#   rast()
+raster_hls <- rast(rasters)
 raster_hls_masked <- raster_hls * r_mask
 
 fecha_recorte <- filter(
@@ -443,6 +456,20 @@ f_descarga_temp <- function(X) {
 rasters_temp <- map(bandas_nombres_temp_label, f_descarga_temp)
 names(rasters_temp) <- bandas_nombres_temp_label
 
+
+rasters_temp <- as.list(
+  list.files(
+    "c://Users/victo/Downloads/",
+    pattern = "HLS.L30",
+    full.names = TRUE
+  )
+) |>
+  map(rast)
+names(rasters_temp) <- bandas_nombres_temp_label
+
+roi_reproj <- project(roi, crs(rasters_temp[[1]]))
+rasters_temp <- map(rasters_temp, ~ mask(crop(.x, roi_reproj), roi_reproj))
+
 f_mascara_temp <- function(X) {
   X <- as.numeric(X)
   if_else(
@@ -468,6 +495,10 @@ raster_hls_temp <- map(
 
 raster_hls_masked_temp <- raster_hls_temp * r_mask_temp
 
+raster_hls_temp <- rast(rasters_temp)
+raster_hls_masked_temp <- raster_hls_temp * r_mask_temp
+
+
 fecha_recorte_temp <- filter(
   sf_items_temp,
   str_detect(granule, str_sub(unique(varnames(raster_hls_temp))[1], 1, 29))
@@ -481,96 +512,95 @@ writeRaster(
   overwrite = TRUE
 )
 
+# temp_stack_b1 <- open_hls_temp(
+#   url = sf_items_temp$B01,
+#   roi = roi,
+#   nombre = bandas_l30_label[1]
+# )
 
-temp_stack_b1 <- open_hls_temp(
-  url = sf_items_temp$B01,
-  roi = roi,
-  nombre = bandas_l30_label[1]
-)
+# temp_stack_b2 <- open_hls_temp(
+#   url = sf_items_temp$B02,
+#   roi = roi,
+#   nombre = bandas_l30_label[2]
+# )
 
-temp_stack_b2 <- open_hls_temp(
-  url = sf_items_temp$B02,
-  roi = roi,
-  nombre = bandas_l30_label[2]
-)
+# temp_stack_b3 <- open_hls_temp(
+#   url = sf_items_temp$B03,
+#   roi = roi,
+#   nombre = bandas_l30_label[3]
+# )
 
-temp_stack_b3 <- open_hls_temp(
-  url = sf_items_temp$B03,
-  roi = roi,
-  nombre = bandas_l30_label[3]
-)
+# temp_stack_b4 <- open_hls_temp(
+#   url = sf_items_temp$B04,
+#   roi = roi,
+#   nombre = bandas_l30_label[4]
+# )
 
-temp_stack_b4 <- open_hls_temp(
-  url = sf_items_temp$B04,
-  roi = roi,
-  nombre = bandas_l30_label[4]
-)
+# temp_stack_b5 <- open_hls_temp(
+#   url = sf_items_temp$B05,
+#   roi = roi,
+#   nombre = bandas_l30_label[5]
+# )
 
-temp_stack_b5 <- open_hls_temp(
-  url = sf_items_temp$B05,
-  roi = roi,
-  nombre = bandas_l30_label[5]
-)
+# temp_stack_b6 <- open_hls_temp(
+#   url = sf_items_temp$B06,
+#   roi = roi,
+#   nombre = bandas_l30_label[6]
+# )
 
-temp_stack_b6 <- open_hls_temp(
-  url = sf_items_temp$B06,
-  roi = roi,
-  nombre = bandas_l30_label[6]
-)
+# temp_stack_b7 <- open_hls_temp(
+#   url = sf_items_temp$B07,
+#   roi = roi,
+#   nombre = bandas_l30_label[7]
+# )
 
-temp_stack_b7 <- open_hls_temp(
-  url = sf_items_temp$B07,
-  roi = roi,
-  nombre = bandas_l30_label[7]
-)
+# temp_stack_b10 <- open_hls_temp(
+#   url = sf_items_temp$temp_10,
+#   roi = roi,
+#   nombre = bandas_l30_label[8]
+# )
 
-temp_stack_b10 <- open_hls_temp(
-  url = sf_items_temp$temp_10,
-  roi = roi,
-  nombre = bandas_l30_label[8]
-)
+# temp_stack_b11 <- open_hls_temp(
+#   url = sf_items_temp$temp_11,
+#   roi = roi,
+#   nombre = bandas_l30_label[9]
+# )
 
-temp_stack_b11 <- open_hls_temp(
-  url = sf_items_temp$temp_11,
-  roi = roi,
-  nombre = bandas_l30_label[9]
-)
+# temp_stack_fmask <- open_hls_temp(
+#   url = sf_items_temp$fmask,
+#   roi = roi,
+#   nombre = bandas_l30_label[10]
+# )
 
-temp_stack_fmask <- open_hls_temp(
-  url = sf_items_temp$fmask,
-  roi = roi,
-  nombre = bandas_l30_label[10]
-)
+# ff_bit_temp <- terra::app(temp_stack_fmask, ff_mascara)
 
-ff_bit_temp <- terra::app(temp_stack_fmask, ff_mascara)
+# r_temp_masked <- rast(
+#   list(
+#     temp_stack_b1 * ff_bit_temp,
+#     temp_stack_b2 * ff_bit_temp,
+#     temp_stack_b3 * ff_bit_temp,
+#     temp_stack_b4 * ff_bit_temp,
+#     temp_stack_b5 * ff_bit_temp,
+#     temp_stack_b6 * ff_bit_temp,
+#     temp_stack_b7 * ff_bit_temp,
+#     temp_stack_b10 * ff_bit_temp,
+#     temp_stack_b11 * ff_bit_temp,
+#     temp_stack_fmask * ff_bit_temp
+#   )
+# )
 
-r_temp_masked <- rast(
-  list(
-    temp_stack_b1 * ff_bit_temp,
-    temp_stack_b2 * ff_bit_temp,
-    temp_stack_b3 * ff_bit_temp,
-    temp_stack_b4 * ff_bit_temp,
-    temp_stack_b5 * ff_bit_temp,
-    temp_stack_b6 * ff_bit_temp,
-    temp_stack_b7 * ff_bit_temp,
-    temp_stack_b10 * ff_bit_temp,
-    temp_stack_b11 * ff_bit_temp,
-    temp_stack_fmask * ff_bit_temp
-  )
-)
+# fecha_recorte_temp <- filter(
+#   sf_items_temp,
+#   str_detect(granule, str_sub(unique(varnames(r_temp_masked))[1], 1, 29))
+# )$datetime |>
+#   str_sub(1, 10) |>
+#   gsub(pattern = "-", replacement = "", x = _)
 
-fecha_recorte_temp <- filter(
-  sf_items_temp,
-  str_detect(granule, str_sub(unique(varnames(r_temp_masked))[1], 1, 29))
-)$datetime |>
-  str_sub(1, 10) |>
-  gsub(pattern = "-", replacement = "", x = _)
-
-writeRaster(
-  r_temp_masked,
-  paste0("recortes/", fecha_recorte_temp, "_temp.tif"),
-  overwrite = TRUE
-)
+# writeRaster(
+#   r_temp_masked,
+#   paste0("recortes/", fecha_recorte_temp, "_temp.tif"),
+#   overwrite = TRUE
+# )
 
 # pp <- c(stack_b2, stack_b3, stack_b4, temp_stack_10)
 # writeRaster(pp, "recortes/pp.tif")
