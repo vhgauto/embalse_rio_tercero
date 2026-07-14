@@ -30,17 +30,14 @@ gen_criptofitas <- c("Ceratium", "Peridinium")
 mes_actual_chr <- if (mes_actual <= 9) paste0("0", mes_actual) else mes_actual
 
 ex <- list.files(
-  path = paste0("datos/algas_", año_actual, "_", mes_actual_chr),
+  path = paste0("datos/algas/"),
+  pattern = paste0(año_actual, "_", mes_actual_chr),
   full.names = TRUE
 )
 
 archivo <- list.files(
-  path = paste0(
-    "datos/algas_",
-    año_actual,
-    "_",
-    mes_actual_chr
-  ),
+  path = paste0("datos/algas/"),
+  pattern = paste0(año_actual, "_", mes_actual_chr),
   full.names = TRUE
 )
 
@@ -114,7 +111,7 @@ d_micro_actual <- read_csv(
 )
 
 if (FALSE) {
-  d_micro <- map_dfr(1:9, ~ f_micro(archivo, .x)) |>
+  d_micro <- map_dfr(1:11, ~ f_micro(archivo, .x)) |>
     mutate(
       algas = case_when(
         generos %in% gen_diatomeas ~ "Diatomeas",
