@@ -4,7 +4,7 @@ ggplot2::ggplot() +
     r = 4,
     g = 3,
     b = 2,
-    max_col_value = .2,
+    max_col_value = .03,
     interpolate = FALSE,
     # stretch = "hist"
   ) +
