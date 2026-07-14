@@ -14,8 +14,11 @@ d_temp <- filter(d, param == "temperatura") |>
   mutate(fecha = update(fecha, day = 1))
 
 d_atm <- read_csv(
-  # list.files("datos/temperatura/", full.names = TRUE),
-  "datos/temperatura/Temperatura del aire-data-2026-03-02 15_18_44.csv",
+  list.files("datos/temperatura/", full.names = TRUE),
+  # c(
+  #   "datos/temperatura/Temperatura del aire-data-2026-05-15 12_33_26.csv",
+  #   "datos/temperatura/Temperatura del aire-data-2026-05-15 12_34_50.csv"
+  # ),
   show_col_types = FALSE
 ) |>
   distinct() |>
