@@ -39,7 +39,7 @@ g_ciano_mensual <- ggplot(d_micro, aes(fecha, suma, fill = algas)) +
   ) +
   scale_y_continuous(
     expand = expansion(mult = c(0, .05), add = c(0, 0)),
-    breaks = scales::breaks_width(2 * escala_ciano),
+    breaks = scales::breaks_width(10 * escala_ciano),
     limits = c(0, max_ciano_y),
     labels = \(Q) {
       if_else(

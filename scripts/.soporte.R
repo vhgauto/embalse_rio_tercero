@@ -236,6 +236,7 @@ r_actual <- r_files[str_detect(r_files, paste0(año_actual, mes_actual_chr))]
 r_actual <- r_actual[str_detect(r_actual, "rds")]
 
 r <- readRDS(r_actual)
+
 writeRaster(
   r,
   paste0(
